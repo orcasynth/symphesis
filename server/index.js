@@ -119,6 +119,24 @@ if (require.main === module) {
     runServer();
 }
 
+const io = require('socket.io')(server);
+io.on('connection', (socket) => {
+    console.log('a user connected')
+
+    socket.on('disconnect', () => {
+        console.log('a user disconnected')
+    })
+    socket.on('room', (data) => {
+        socket.join(data.room)
+    })
+    socket.on('leave', (data) => {
+        socket.leave(data.room)
+    })
+    socket.on('add music', data => {
+        socket.broadcast.to(data.room).emit('SOMETHING HERE', data)
+    })
+})
+
 module.exports = {
     app, runServer, closeServer
 };

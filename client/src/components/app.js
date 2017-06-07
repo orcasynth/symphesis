@@ -3,6 +3,11 @@ import * as Cookies from 'js-cookie';
 
 import QuestionPage from './question-page';
 import LoginPage from './login-page';
+import Room from './room';
+
+import io from 'socket.io-client';
+
+const socket = io();
 
 class App extends React.Component {
     constructor(props) {
@@ -13,6 +18,9 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        const socket = io();
+          socket.emit('room', {room: 'yolt'})
+          console.log('hi')
         // Job 4: Redux-ify all of the state and fetch calls to async actions.
         const accessToken = Cookies.get('accessToken');
         if (accessToken) {
