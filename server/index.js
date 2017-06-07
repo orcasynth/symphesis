@@ -38,7 +38,7 @@ passport.use(
         { googleId: profile.id, displayName: profile.displayName },
         { $set: { accessToken: accessToken, googleId: profile.id } }, { upsert: true, new: true })
         .then((user) => {
-          console.log('displayName ->', displayName)
+          console.log('displayName ->', profile.displayName)
           return cb(null, user);
         })
         .catch(err => {
