@@ -38,13 +38,10 @@ export default class QuestionPage extends React.Component {
         const questions = this.state.questions.map((question, index) =>
             <li key={index}>{question}</li>
         );
-                // socket.on('message', (msg) => console.log(msg))
         return (
             <div>
             <button onClick={() => socket.emit('room', {room: 'yolt'})}>JOINROOM</button> 
-            {/*<button onClick={() => {console.log('second button fired')
-                socket.emit('message', {room: 'yolt', message: 'hi'})}}>SENDMESSAGE</button>*/}
-            <button onClick={() => socket.emit('shit fucker', {room: 'yolo'})}>msg2</button> 
+            <button onClick={() => socket.emit('test1', {room: 'yolo'})}>msg2</button> 
             </div>
         );
     }
