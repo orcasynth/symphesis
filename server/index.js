@@ -7,6 +7,7 @@ const passport = require('passport');
 const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
+const socketRooms = require('./server/socket').socketRooms;
 
 mongoose.Promise = global.Promise
 
@@ -27,8 +28,8 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Credentials', 'true');
     next();
 })
-const server2 = require('http').createServer(app);
-const io = require('socket.io')(server2);
+// const server2 = require('http').createServer(app);
+// const io = require('socket.io')(server2);
 
 const database = {
 };
@@ -153,22 +154,22 @@ if (require.main === module) {
 }
 
 // const io = require('socket.io')(server);
-io.on('connection', (socket) => {
-    console.log('a user connected')
+// io.on('connection', (socket) => {
+//     console.log('a user connected')
 
-    socket.on('disconnect', () => {
-        console.log('a user disconnected')
-    })
-    socket.on('room', (data) => {
-        socket.join(data.room)
-    })
-    socket.on('leave', (data) => {
-        socket.leave(data.room)
-    })
-    socket.on('add music', data => {
-        socket.broadcast.to(data.room).emit('SOMETHING HERE', data)
-    })
-})
+//     socket.on('disconnect', () => {
+//         console.log('a user disconnected')
+//     })
+//     socket.on('room', (data) => {
+//         socket.join(data.room)
+//     })
+//     socket.on('leave', (data) => {
+//         socket.leave(data.room)
+//     })
+//     socket.on('add music', data => {
+//         socket.broadcast.to(data.room).emit('SOMETHING HERE', data)
+//     })
+// })
 
 module.exports = {
   app, runServer, closeServer
