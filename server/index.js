@@ -7,7 +7,7 @@ const passport = require('passport');
 const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
-const socketRooms = require('./server/socket').socketRooms;
+const socketRooms = require('./socket').socketRooms;
 
 mongoose.Promise = global.Promise
 
@@ -48,7 +48,7 @@ passport.use(
         { googleId: profile.id, displayName: profile.displayName },
         { $set: { accessToken: accessToken, googleId: profile.id } }, { upsert: true, new: true })
         .then((user) => {
-          console.log('displayName ->', profile.displayName)
+          // console.log('displayName ->', profile.displayName)
           return cb(null, user);
         })
         .catch(err => {
@@ -63,7 +63,7 @@ passport.use(
       User
         .findOne({ accessToken: token })
         .then((user) => {
-          console.log('user ->', user)
+          // console.log('user ->', user)
           if (user) {
             return done(null, user);
           }
