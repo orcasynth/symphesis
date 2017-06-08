@@ -20,6 +20,8 @@ if (process.env.NODE_ENV != 'production') {
 }
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 const database = {
 };
@@ -106,14 +108,14 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
   res.sendFile(index);
 });
 
-let server;
+let server2;
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
       if (err) {
         return reject(err);
       }
-      server = app.listen(port, () => {
+      server2 = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
@@ -129,7 +131,7 @@ function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
       console.log('Closing server');
-      server.close(err => {
+      server2.close(err => {
         if (err) {
           return reject(err);
         }
@@ -143,7 +145,7 @@ if (require.main === module) {
   runServer();
 }
 
-const io = require('socket.io')(server);
+// const io = require('socket.io')(server);
 io.on('connection', (socket) => {
     console.log('a user connected')
 
