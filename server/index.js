@@ -20,8 +20,15 @@ if (process.env.NODE_ENV != 'production') {
 }
 
 const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept-Type');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+})
+const server2 = require('http').createServer(app);
+const io = require('socket.io')(server2);
 
 const database = {
 };
@@ -108,14 +115,14 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
   res.sendFile(index);
 });
 
-let server2;
+let server;
 function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl, err => {
       if (err) {
         return reject(err);
       }
-      server2 = app.listen(port, () => {
+      server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
@@ -131,7 +138,7 @@ function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
       console.log('Closing server');
-      server2.close(err => {
+      server.close(err => {
         if (err) {
           return reject(err);
         }
