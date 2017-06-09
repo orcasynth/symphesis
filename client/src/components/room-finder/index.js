@@ -6,7 +6,7 @@ import './index.css';
 
 import io from 'socket.io-client';
 const socket = io();
-export default class RoomFinder extends React.Component {
+export class RoomFinder extends React.Component {
     constructor(props) {
         super(props);
         socket.on('message', msg => console.log(msg))
@@ -43,3 +43,8 @@ export default class RoomFinder extends React.Component {
         );
     }
 }
+
+const mapStateToProps = (state)  => ({
+})
+
+export default connect(mapStateToProps)(RoomFinder);
