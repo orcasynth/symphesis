@@ -7,8 +7,6 @@ import {connect} from 'react-redux';
 import {} from './actions';
 import './index.css';
 
-import io from 'socket.io-client';
-
 class App extends React.Component {
     constructor(props) {
         super(props);
