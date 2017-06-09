@@ -1,8 +1,13 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
 
-import QuestionPage from './question-page';
-import LoginPage from './login-page';
+import RoomFinder from '../room-finder';
+import LoginPage from '../login-page';
+import {connect} from 'react-redux';
+import {} from './actions';
+import './index.css';
+
+import io from 'socket.io-client';
 
 class App extends React.Component {
     constructor(props) {
@@ -44,7 +49,7 @@ class App extends React.Component {
             return <LoginPage />;
         }
 
-        return <QuestionPage />;
+        return <RoomFinder />;
     }
 }
 
