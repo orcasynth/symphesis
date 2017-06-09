@@ -23,4 +23,8 @@ class Room extends React.Component {
     }
 }
 
-export default Room;
+const mapStateToProps = (state)  => ({
+})
+
+export default connect(mapStateToProps)(Room);
+
