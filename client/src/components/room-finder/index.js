@@ -1,22 +1,20 @@
 import React from 'react';
 import * as Cookies from 'js-cookie';
+import {connect} from 'react-redux';
+import {} from './actions';
+import './index.css';
 
 import io from 'socket.io-client';
 const socket = io();
-export default class QuestionPage extends React.Component {
+export default class RoomFinder extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            questions: []
-        };
+        socket.on('message', msg => console.log(msg))
+        socket.on('checkroom', info => console.log(info))
     }
     componentWillMount() {
     }
     componentDidMount() {
-        socket.on('connect', () => {
-            console.log('we have connected')
-            socket.emit('test1', 'test1')
-        })
         const accessToken = Cookies.get('accessToken');
         fetch('/api/questions', {
                 headers: {
@@ -35,13 +33,12 @@ export default class QuestionPage extends React.Component {
     }
 
     render() {
-        const questions = this.state.questions.map((question, index) =>
-            <li key={index}>{question}</li>
-        );
         return (
             <div>
-            <button onClick={() => socket.emit('room', {room: 'yolt'})}>JOINROOM</button> 
-            <button onClick={() => socket.emit('test1', {room: 'yolo'})}>msg2</button> 
+                <button onClick={() => socket.emit('message', {room: 'yolt', message: 'greetings from mars'})}>msg</button> 
+                <button onClick={() => socket.emit('room', {room: 'yolt'})}>joinroom</button> 
+                <button onClick={() => socket.emit('checkroom', {room: 'yolt'})}>checkroom</button> 
+                <button onClick={() => socket.emit('leave', {room: 'yolt'})}>leaveroom</button>
             </div>
         );
     }
