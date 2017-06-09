@@ -9,3 +9,9 @@ export const setRoom = (room) => ({
     type: SET_ROOM,
     room
 });
+
+export const SOCKET_ERROR = 'SOCKET_ERROR';
+export const socketError = (socketError) => ({
+    type: SOCKET_ERROR,
+    socketError
+});
