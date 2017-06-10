@@ -1,29 +1,20 @@
 import React from 'react';
-import io from 'socket.io-client';
 import {connect} from 'react-redux';
 import {} from './actions';
 import './index.css';
 
-const socket = io();
-
 class Room extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            currentUser: null
-        };
     }
-
-    componentDidMount() {
-      socket.emit('room', {room: 'yolt'})
-    }
-
+    
     render() {
-
+        return (<div>You are in room {this.props.room} <button onClick={() => this.props.leaveRoom()}>click to Brexit</button></div>)
     }
 }
 
 const mapStateToProps = (state)  => ({
+        room: state.socketWrapper.room,
 })
 
 export default connect(mapStateToProps)(Room);
