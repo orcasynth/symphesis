@@ -14,6 +14,17 @@ function socketRooms(io) {
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');
+      for (let key in rooms) {
+        if (io.sockets.adapter.rooms[key]) {
+          if (io.sockets.adapter.rooms[key].length !== rooms[key]) {
+            rooms[key] = io.sockets.adapter.rooms[key].length;
+          }
+        }
+        else {
+          delete rooms[key];
+        }
+      }
+      io.emit('checkRooms', rooms);
     });
 
     socket.on('joinRoom', (data) => {
@@ -47,8 +58,6 @@ function socketRooms(io) {
     });
 
     socket.on('leave', (data) => {
-      console.log('attempted to leave');
-            console.log(io.sockets.adapter.rooms)
       socket.leave(data.room);
       if (io.sockets.adapter.rooms[data.room]) {
         rooms[data.room] = io.sockets.adapter.rooms[data.room].length;
