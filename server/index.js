@@ -23,10 +23,10 @@ if (process.env.NODE_ENV != 'production') {
 const app = express();
 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept-Type');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    next();
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept-Type');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
 })
 // const server2 = require('http').createServer(app);
 // const io = require('socket.io')(server2);
@@ -123,7 +123,10 @@ function runServer(databaseUrl = DATABASE_URL, port = PORT) {
       if (err) {
         return reject(err);
       }
-      server = app.listen(port, () => {
+      const nodeServer = require('http').createServer(app);
+      const io = require('socket.io')(nodeServer);
+      socketRooms(io);
+      server = nodeServer.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
