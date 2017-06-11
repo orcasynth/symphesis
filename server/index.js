@@ -113,7 +113,10 @@ function runServer(databaseUrl = DATABASE_URL, port = PORT) {
       if (err) {
         return reject(err);
       }
-      server = app.listen(port, () => {
+      const nodeServer = require('http').createServer(app);
+      const io = require('socket.io')(nodeServer);
+      socketRooms(io);
+      server = nodeServer.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
