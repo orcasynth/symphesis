@@ -1,9 +1,9 @@
 var Moniker = require('moniker');
+let rooms = {};
 
 function socketRooms(io) {
   io.on('connection', (socket) => {
     console.log('a user connected');
-    let rooms = {};
 
     socket.on('message', (data) => {
       console.log('message', data);
@@ -39,8 +39,7 @@ function socketRooms(io) {
       else {
         socket.join(data.room);
         rooms[data.room] = io.sockets.adapter.rooms[data.room].length;
-        socket.emit('hasJoined', data.room)
-        console.log('room  ->', data);
+        socket.emit('hasJoined', data.room);
         io.emit('checkRooms', rooms);
       }
     });
@@ -56,8 +55,6 @@ function socketRooms(io) {
         rooms[room] = io.sockets.adapter.rooms[room].length;
         socket.emit('hasJoined', room);
         io.emit('checkRooms', rooms);
-        console.log('rooms', rooms)
-        console.log(io.sockets.adapter.rooms)
       }
     });
 
@@ -70,7 +67,6 @@ function socketRooms(io) {
         delete rooms[data.room]
       }
       io.emit('checkRooms', rooms);
-      console.log(io.sockets.adapter.rooms)
     })
     // socket.on('add music', data => {
     //     io.broadcast.to(data.room).emit('SOMETHING HERE', data)

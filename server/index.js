@@ -53,7 +53,6 @@ passport.use(
       User
         .findOne({ accessToken: token })
         .then((user) => {
-          console.log('user ->', user.displayName)
           if (user) {
             return done(null, user);
           }

@@ -18,6 +18,7 @@ export class SocketWrapper extends React.Component {
     }
 
     componentDidMount() {
+        console.log('ran componentdidmount')
         socket.emit('checkRooms')
         const accessToken = Cookies.get('accessToken');
         fetch('/api/questions', {
