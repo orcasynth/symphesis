@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-import roomFinder from './components/room-finder/reducers';
+import socketWrapper from './components/socket-wrapper/reducers';
+import app from './components/app/reducers';
 
 
 export default combineReducers({
-  roomFinder,
+  socketWrapper,
+  app,
 });
