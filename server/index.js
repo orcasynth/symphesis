@@ -22,15 +22,6 @@ if (process.env.NODE_ENV != 'production') {
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept-Type');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  next();
-})
-// const server2 = require('http').createServer(app);
-// const io = require('socket.io')(server2);
-
 const database = {
 };
 
@@ -48,7 +39,6 @@ passport.use(
         { googleId: profile.id, displayName: profile.displayName },
         { $set: { accessToken: accessToken, googleId: profile.id } }, { upsert: true, new: true })
         .then((user) => {
-          // console.log('displayName ->', profile.displayName)
           return cb(null, user);
         })
         .catch(err => {
@@ -63,7 +53,7 @@ passport.use(
       User
         .findOne({ accessToken: token })
         .then((user) => {
-          // console.log('user ->', user)
+          console.log('user ->', user.displayName)
           if (user) {
             return done(null, user);
           }
@@ -123,10 +113,7 @@ function runServer(databaseUrl = DATABASE_URL, port = PORT) {
       if (err) {
         return reject(err);
       }
-      const nodeServer = require('http').createServer(app);
-      const io = require('socket.io')(nodeServer);
-      socketRooms(io);
-      server = nodeServer.listen(port, () => {
+      server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
@@ -155,24 +142,6 @@ function closeServer() {
 if (require.main === module) {
   runServer();
 }
-
-// const io = require('socket.io')(server);
-// io.on('connection', (socket) => {
-//     console.log('a user connected')
-
-//     socket.on('disconnect', () => {
-//         console.log('a user disconnected')
-//     })
-//     socket.on('room', (data) => {
-//         socket.join(data.room)
-//     })
-//     socket.on('leave', (data) => {
-//         socket.leave(data.room)
-//     })
-//     socket.on('add music', data => {
-//         socket.broadcast.to(data.room).emit('SOMETHING HERE', data)
-//     })
-// })
 
 module.exports = {
   app, runServer, closeServer
