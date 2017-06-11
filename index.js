@@ -3,6 +3,8 @@ const proxy = require('http-proxy-middleware');
 
 const app = express();
 const runServer = require('./server').runServer;
+const socketRooms = require('./server/socket').socketRooms;
+
 
 if (process.env.NODE_ENV === 'production') {
     // Just run the server
@@ -19,5 +21,9 @@ else {
             'localhost:8080/api': 'http://localhost:3001'
         }
     }));
-    app.listen(process.env.PORT || 8080);
+    const server = require('http').createServer(app);
+    server.listen(process.env.PORT || 8080);
+    const io = require('socket.io')(server);
+    socketRooms(io);
 }
+

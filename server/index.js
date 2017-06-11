@@ -7,10 +7,7 @@ const passport = require('passport');
 const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
-var Moniker = require('moniker');
-
-var names = Moniker.generator([Moniker.adjective, Moniker.adjective, Moniker.noun]);
-console.log(names.choose());
+const socketRooms = require('./socket').socketRooms;
 
 mongoose.Promise = global.Promise
 
