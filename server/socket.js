@@ -44,7 +44,7 @@ function socketRooms(io) {
       }
     });
 
-    socket.on('createRoom', data => {
+    socket.on('createRoom', () => {
       var names = Moniker.generator([Moniker.adjective, Moniker.noun]);
       let room = names.choose()
       if (io.sockets.adapter.rooms[room]) {

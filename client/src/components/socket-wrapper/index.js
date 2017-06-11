@@ -18,7 +18,6 @@ export class SocketWrapper extends React.Component {
     }
 
     componentDidMount() {
-        console.log('ran componentdidmount')
         socket.emit('checkRooms')
         const accessToken = Cookies.get('accessToken');
         fetch('/api/questions', {
@@ -42,9 +41,8 @@ export class SocketWrapper extends React.Component {
         this.props.dispatch(leaveRoom())
     }
 
-    createRoom(e) {
-        e.preventDefault();
-        socket.emit('createRoom', {room: e.target.room.value});
+    createRoom() {
+        socket.emit('createRoom');
     }
 
     joinRoom(room) {
