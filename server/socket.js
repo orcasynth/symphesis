@@ -1,3 +1,5 @@
+var Moniker = require('moniker');
+
 function socketRooms(io) {
   io.on('connection', (socket) => {
     console.log('a user connected');
@@ -44,13 +46,15 @@ function socketRooms(io) {
     });
 
     socket.on('createRoom', data => {
-      if (io.sockets.adapter.rooms[data.room]) {
+      var names = Moniker.generator([Moniker.adjective, Moniker.noun]);
+      let room = names.choose()
+      if (io.sockets.adapter.rooms[room]) {
         socket.emit('roomError', 'Room already exists')
       }
       else {
-        socket.join(data.room);
-        rooms[data.room] = io.sockets.adapter.rooms[data.room].length;
-        socket.emit('hasJoined', data.room);
+        socket.join(room);
+        rooms[room] = io.sockets.adapter.rooms[room].length;
+        socket.emit('hasJoined', room);
         io.emit('checkRooms', rooms);
         console.log('rooms', rooms)
         console.log(io.sockets.adapter.rooms)
