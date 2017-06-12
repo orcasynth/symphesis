@@ -12,9 +12,10 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case SET_IS_PLAYING: 
+            let newPlayState = !state.isPlaying
             return {
                 ...state,
-                    isPlaying: !state.isPlaying
+                    isPlaying: newPlayState
             }
         case SET_BPM: 
             return {
@@ -22,14 +23,18 @@ export default (state = initialState, action) => {
                     bpm: action.bpm
             }
         case SET_NEXT_TICK_TIME:
+            let newTickTime = state.nextTickTime + action.nextTickTime
             return {
                 ...state,
-                    nextTickTime: action.nextTickTime
+                    nextTickTime: newTickTime
             }
         case SET_CURRENT_SUBDIVISION:
+            let newCurrentSubdivision = state.currentSubdivision + action.currentSubdivision
+            console.log('newCurrentSubdivision: ', newCurrentSubdivision)
+            console.log('action.currentSubdivision: ', action.currentSubdivision)
             return {
                 ...state,
-                    currentSubdivision: action.currentSubdivision
+                    currentSubdivision: newCurrentSubdivision
             }
         default: 
             return state;

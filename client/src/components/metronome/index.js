@@ -14,7 +14,7 @@ class Metronome extends React.Component {
     nextTick() {
         var secondsPerBeat = 60 / this.props.bpm;
         this.props.dispatch(setNextTickTime(
-            this.props.nextTickTime+(1/this.props.timeSignature) * secondsPerBeat
+            this.props.nextTickTime+1/this.props.timeSignature * secondsPerBeat
         ))
         this.props.dispatch(setCurrentSubdivision(
             this.props.currentSubdivision+1
@@ -60,17 +60,17 @@ class Metronome extends React.Component {
     play() {
         this.props.dispatch(setIsPlaying())
 
-        if(this.props.isPlaying){
+        if(!this.props.isPlaying){
             console.log('before setcurrent sub ',this.props.bpm)
             this.props.dispatch(setCurrentSubdivision(1))//reset the current tick time.
             console.log('before setnextticktime ', this.props.nextTickTime)
             this.props.dispatch(setNextTickTime(this.audioContext.currentTime))
             this.scheduler();
-            return "stop"; 
+            return;
         } else {
             window.clearTimeout(this.timerID);
             console.log("notplaying.")
-            return "play";
+            return;
         }
         
     }
