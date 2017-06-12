@@ -41,9 +41,8 @@ export class SocketWrapper extends React.Component {
         this.props.dispatch(leaveRoom())
     }
 
-    createRoom(e) {
-        e.preventDefault();
-        socket.emit('createRoom', {room: e.target.room.value});
+    createRoom() {
+        socket.emit('createRoom');
     }
 
     joinRoom(room) {

@@ -3,17 +3,12 @@ import {connect} from 'react-redux';
 import './index.css';
 
 export class RoomFinder extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         let rooms = [];
         for (let key in this.props.availableRooms) {
             let obj = this.props.availableRooms;
-            let name = key;
             let number = (obj[key] < 6) ? obj[key] : "Full";
-            rooms.push(<li key={name}>Room {name}: {number}<button onClick={() => this.props.joinRoom({name})}>Join</button></li>)
+            rooms.push(<li key={key}>Room {key}: {number}<button onClick={() => this.props.joinRoom(key)}>Join</button></li>)
         }
         if (rooms.length < 1) {
             rooms = (<li>No rooms exist</li>)
@@ -21,11 +16,7 @@ export class RoomFinder extends React.Component {
         let socketError = (this.props.socketError) ? (<li>Error: {this.props.socketError}</li>) : ''
         return (
             <div>
-                <form onSubmit={e => this.props.createRoom(e)}>
-                    <input type="text" name="room" autoComplete="off"
-                        placeholder="Create a room" required />
-                    <input type="submit" name="submit" value="Submit" />
-                </form>
+                <button onClick={() => this.props.createRoom()}>Create a new room</button>
                 <ul>
                     {socketError}
                     {rooms}

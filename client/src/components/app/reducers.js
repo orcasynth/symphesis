@@ -1,4 +1,4 @@
-import { SET_USER, LOGGING_IN,  TOGGLE_SIGN_OUT  } from './actions';
+import { SET_USER, LOGGING_IN  } from './actions';
 
 const initialState = { 
   currentUser: null,
