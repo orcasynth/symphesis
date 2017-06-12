@@ -44,18 +44,20 @@ function socketRooms(io) {
       }
     });
 
+    function roomGenerator () {
+      let roomName = Moniker.generator([Moniker.adjective, Moniker.noun]).choose();
+      if (io.sockets.adapter.rooms[roomName]) {
+        return roomGenerator();
+      }
+      return roomName;
+    }
+
     socket.on('createRoom', () => {
-      var names = Moniker.generator([Moniker.adjective, Moniker.noun]);
-      let room = names.choose()
-      if (io.sockets.adapter.rooms[room]) {
-        socket.emit('roomError', 'Room already exists')
-      }
-      else {
-        socket.join(room);
-        rooms[room] = io.sockets.adapter.rooms[room].length;
-        socket.emit('hasJoined', room);
-        io.emit('checkRooms', rooms);
-      }
+      let room = roomGenerator();
+      socket.join(room);
+      rooms[room] = io.sockets.adapter.rooms[room].length;
+      socket.emit('hasJoined', room);
+      io.emit('checkRooms', rooms);
     });
 
     socket.on('leave', (data) => {
