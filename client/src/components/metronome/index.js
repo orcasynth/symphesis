@@ -3,11 +3,8 @@ import { connect } from 'react-redux'
 import { setIsPlaying, setBPM, setNextTickTime, setCurrentSubdivision } from './actions'
 import './index.css'
 
-export class Metronome extends React.Component {
-    constructor(props) {
-        super(props)
-        this.Metronome = this.Metronome.bind(this)
-    }
+class Metronome extends React.Component {
+
     componentWillMount() {
         this.audioContext = new AudioContext()
         let timerID = 0
@@ -17,7 +14,7 @@ export class Metronome extends React.Component {
     nextTick() {
         var secondsPerBeat = 60 / this.props.bpm;
         this.props.dispatch(setNextTickTime(
-            this.props.nextTickTime+1/this.props.timeSignature * secondsPerBeat
+            this.props.nextTickTime+(1/this.props.timeSignature) * secondsPerBeat
         ))
         this.props.dispatch(setCurrentSubdivision(
             this.props.currentSubdivision+1
@@ -61,23 +58,25 @@ export class Metronome extends React.Component {
     }
 
     play() {
-        console.log(this);
         this.props.dispatch(setIsPlaying())
 
         if(this.props.isPlaying){
+            console.log('before setcurrent sub ',this.props.bpm)
             this.props.dispatch(setCurrentSubdivision(1))//reset the current tick time.
+            console.log('before setnextticktime ', this.props.nextTickTime)
             this.props.dispatch(setNextTickTime(this.audioContext.currentTime))
             this.scheduler();
             return "stop"; 
         } else {
             window.clearTimeout(this.timerID);
+            console.log("notplaying.")
             return "play";
         }
         
     }
     render() {
         return (
-            <div className="play-button" onClick={this.play} > > </div>
+            <div className="play-button" onClick={()=> this.play()} > > </div>
         )
     }    
 }
