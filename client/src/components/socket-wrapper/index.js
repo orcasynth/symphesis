@@ -12,13 +12,16 @@ export class SocketWrapper extends React.Component {
   constructor(props) {
     super(props);
     socket.on('message', msg => console.log(msg));
-    socket.on('listRooms', rooms => this.props.dispatch(getAvailableRooms(rooms)));
     socket.on('hasJoined', room => this.props.dispatch(setRoom(room)));
     socket.on('roomError', error => this.props.dispatch(socketError(error)))
   }
 
-  componentDidMount() {
-    socket.emit('listRooms')
+  receiveRoomList() {
+    socket.on('listRooms', rooms => this.props.dispatch(getAvailableRooms(rooms)));   
+  }
+
+  listRooms() {
+    socket.emit('listRooms');
   }
 
   leaveRoom() {
@@ -36,7 +39,7 @@ export class SocketWrapper extends React.Component {
 
   render() {
     if (!this.props.room) {
-      return <RoomFinder createRoom={(e) => this.createRoom(e)} joinRoom={(room) => this.joinRoom(room)} />
+      return <RoomFinder createRoom={(e) => this.createRoom(e)} listRooms={() => this.listRooms()} receiveRoomList={() => this.receiveRoomList()} joinRoom={(room) => this.joinRoom(room)} />
     }
     return <Room leaveRoom={() => this.leaveRoom()} />
   }

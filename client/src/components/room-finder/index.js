@@ -3,6 +3,15 @@ import {connect} from 'react-redux';
 import './index.css';
 
 export class RoomFinder extends React.Component {
+    constructor(props) {
+        super(props);
+        this.props.receiveRoomList();
+    }
+
+    componentDidMount() {
+        this.props.listRooms();
+    }
+
     render() {
         let rooms = [];
         for (let key in this.props.availableRooms) {
