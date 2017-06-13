@@ -12,13 +12,13 @@ export class SocketWrapper extends React.Component {
   constructor(props) {
     super(props);
     socket.on('message', msg => console.log(msg));
-    socket.on('checkRooms', rooms => this.props.dispatch(getAvailableRooms(rooms)));
+    socket.on('listRooms', rooms => this.props.dispatch(getAvailableRooms(rooms)));
     socket.on('hasJoined', room => this.props.dispatch(setRoom(room)));
     socket.on('roomError', error => this.props.dispatch(socketError(error)))
   }
 
   componentDidMount() {
-    socket.emit('checkRooms')
+    socket.emit('listRooms')
   }
 
   leaveRoom() {
