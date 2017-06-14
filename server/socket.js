@@ -27,15 +27,12 @@ function socketRooms(io) {
       else {
         socket.join(data.room);
         rooms[data.room] = io.sockets.adapter.rooms[data.room].length;
-        console.log('rooms ->', rooms)
-        console.log('rooms[data.room] ->', rooms[data.room])
         socket.emit('hasJoined', data.room);
         io.emit('listRooms', rooms);
       }
     });
 
-// START HERE
-  function roomGenerator () {
+    function roomGenerator () {
       let roomName = Moniker.generator([Moniker.adjective, Moniker.noun]).choose();
       if (io.sockets.adapter.rooms[roomName]) {
         return roomGenerator();
@@ -51,7 +48,7 @@ function socketRooms(io) {
       io.emit('listRooms', rooms);
     });
 
-    socket.on('leave', (data) => {
+    socket.on('leaveRoom', (data) => {
       socket.leave(data.room);
       if (io.sockets.adapter.rooms[data.room]) {
         rooms[data.room] = io.sockets.adapter.rooms[data.room].length;
@@ -69,14 +66,15 @@ function socketRooms(io) {
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');
-      for (let key in rooms) {
-        if (io.sockets.adapter.rooms[key]) {
-          if (io.sockets.adapter.rooms[key].length !== rooms[key]) {
-            rooms[key] = io.sockets.adapter.rooms[key].length;
+      // Object.keys + for each IS MORE DECLARATIVE AND MODERN
+      for (let room in rooms) {
+        if (io.sockets.adapter.rooms[room]) {
+          if (io.sockets.adapter.rooms[room].length !== rooms[room]) {
+            rooms[room] = io.sockets.adapter.rooms[room].length;
           }
         }
         else {
-          delete rooms[key];
+          delete rooms[room];
         }
       }
       io.emit('listRooms', rooms);

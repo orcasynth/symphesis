@@ -25,7 +25,7 @@ export class SocketWrapper extends React.Component {
   }
 
   leaveRoom() {
-    socket.emit('leave', { room: this.props.room })
+    socket.emit('leaveRoom', { room: this.props.room })
     this.props.dispatch(leaveRoom())
   }
 

@@ -4,7 +4,6 @@ import { setIsPlaying, setBPM, setNextTickTime, setCurrentSubdivision } from './
 import './index.css'
 
 class Metronome extends React.Component {
-
   componentWillMount() {
     this.audioContext = new AudioContext()
     let timerID = 0
@@ -47,8 +46,8 @@ class Metronome extends React.Component {
     if (this.props.currentSubdivision % 16 === 0) {
       amp.gain.value = .6;
       osc.frequency.value = 224;
-
-    } else if (this.props.currentSubdivision % 4 === 0) {
+    } 
+    else if (this.props.currentSubdivision % 4 === 0) {
       amp.gain.value = .2;
       osc.frequency.value = 216;
     }
