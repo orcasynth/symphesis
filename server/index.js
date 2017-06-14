@@ -22,9 +22,6 @@ if (process.env.NODE_ENV != 'production') {
 
 const app = express();
 
-const database = {
-};
-
 app.use(passport.initialize());
 
 passport.use(
@@ -33,20 +30,30 @@ passport.use(
     clientSecret: secret.CLIENT_SECRET,
     callbackURL: `/api/auth/google/callback`
   },
-    (accessToken, refreshToken, profile, cb) => {
-      User
-        .findOneAndUpdate(
-        { googleId: profile.id, displayName: profile.displayName },
-        { $set: { accessToken: accessToken, googleId: profile.id } }, { upsert: true, new: true })
-        .then((user) => {
-          return cb(null, user);
-        })
-        .catch(err => {
-          console.error(err)
-        })
-    }
+  (accessToken, refreshToken, profile, cb) => {
+    User
+      .findOneAndUpdate({ 
+        googleId: profile.id,
+        displayName: profile.displayName 
+      },
+      { 
+        $set: { 
+          accessToken: accessToken, 
+          googleId: profile.id 
+        } 
+      }, { 
+        upsert: true, 
+        new: true 
+      })
+      .then((user) => {
+        return cb(null, user);
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
   ));
-
+  
 passport.use(
   new BearerStrategy(
     (token, done) => {
@@ -57,13 +64,17 @@ passport.use(
             return done(null, user);
           }
         })
-        .catch(err => { console.error(err) })
+        .catch((err) => { 
+          console.error(err) 
+        })
     }
   )
 );
 
 app.get('/api/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  passport.authenticate('google', { 
+    scope: ['profile'] 
+  }));
 
 app.get('/api/auth/google/callback',
   passport.authenticate('google', {
@@ -90,11 +101,6 @@ app.get('/api/me',
   })
 );
 
-app.get('/api/questions',
-  passport.authenticate('bearer', { session: false }),
-  (req, res) => res.json(['Question 1', 'Question 2'])
-);
-
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
@@ -106,6 +112,7 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
 });
 
 let server;
+
 function runServer(port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(databaseUrl = DATABASE_URL, err => {
@@ -119,10 +126,10 @@ function runServer(port = PORT) {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
-        .on('error', err => {
-          mongoose.disconnect();
-          reject(err);
-        });
+      .on('error', (err) => {
+        mongoose.disconnect();
+        reject(err);
+      });
     });
   });
 }
@@ -131,7 +138,7 @@ function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
       console.log('Closing server');
-      server.close(err => {
+      server.close((err) => {
         if (err) {
           return reject(err);
         }
