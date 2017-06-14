@@ -11,13 +11,13 @@ const socket = io();
 export class SocketWrapper extends React.Component {
   constructor(props) {
     super(props);
-    socket.on('message', msg => console.log(msg));
-    socket.on('hasJoined', room => this.props.dispatch(setRoom(room)));
-    socket.on('roomError', error => this.props.dispatch(socketError(error)))
+    socket.on('message', (msg) => console.log(msg));
+    socket.on('hasJoined', (room) => this.props.dispatch(setRoom(room)));
+    socket.on('roomError', (error) => this.props.dispatch(socketError(error)))
   }
 
   receiveRoomList() {
-    socket.on('listRooms', rooms => this.props.dispatch(getAvailableRooms(rooms)));   
+    socket.emit('listRooms', (rooms) => this.props.dispatch(getAvailableRooms(rooms)));   
   }
 
   listRooms() {

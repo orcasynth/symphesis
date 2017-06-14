@@ -25,6 +25,8 @@ class Metronome extends React.Component {
 
   //function that starts time via audioContext.
   scheduler() {
+    // BEN: 
+    // 
     // while(this.props.nextTickTime < this.audioContext.currentTime + 0.1 ) {
     /*keep track of subdivisions and next tick*/
     this.nextTick();
