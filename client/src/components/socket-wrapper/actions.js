@@ -20,3 +20,19 @@ export const LEAVE_ROOM = 'LEAVE_ROOM';
 export const leaveRoom = () => ({
   type: LEAVE_ROOM
 })
+
+export const JOIN_ROOM = 'JOIN_ROOM';
+export const joinRoom = (room) => ({
+  type: JOIN_ROOM,
+  room
+})
+
+export const CREATE_ROOM = "CREATE_ROOM";
+export const createRoom = () => ({
+  type: CREATE_ROOM
+})
+
+export const LIST_ROOMS = "LIST_ROOMS";
+export const listRooms = () => ({
+  type: LIST_ROOMS
+})

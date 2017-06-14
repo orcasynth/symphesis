@@ -1,38 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAvailableRooms, setRoom, socketError, leaveRoom } from './actions';
+import { getAvailableRooms, setRoom, socketError, leaveRoom, joinRoom, createRoom, listRooms } from './actions';
 import '../../middleware/socketMiddleware';
 import './index.css';
 import RoomFinder from '../room-finder';
 import Room from '../room';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 
-const socket = io();
+// const socket = io();
 
 export class SocketWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    socket.on('message', (msg) => console.log(msg));
-    socket.on('hasJoined', (room) => this.props.dispatch(setRoom(room)));
-    socket.on('roomError', (error) => this.props.dispatch(socketError(error)));
-    socket.on('listRooms', (rooms) => this.props.dispatch(getAvailableRooms(rooms))); 
-  }
 
   componentDidMount() {
-    socket.emit('listRooms');
+    this.props.dispatch(listRooms())
   }
 
   leaveRoom() {
-    socket.emit('leaveRoom', { room: this.props.room })
     this.props.dispatch(leaveRoom())
   }
 
   createRoom() {
-    socket.emit('createRoom');
+    // console.log('wrapper socket:', socket.id)
+    this.props.dispatch(createRoom())
   }
 
   joinRoom(room) {
-    socket.emit('joinRoom', { room })
+    this.props.dispatch(joinRoom(room))
   }
 
   render() {
