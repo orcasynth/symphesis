@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getAvailableRooms, setRoom, socketError, leaveRoom } from './actions';
+import '../../middleware/socketMiddleware';
 import './index.css';
 import RoomFinder from '../room-finder';
 import Room from '../room';
@@ -17,7 +18,7 @@ export class SocketWrapper extends React.Component {
   }
 
   receiveRoomList() {
-    socket.emit('listRooms', (rooms) => this.props.dispatch(getAvailableRooms(rooms)));   
+    socket.on('listRooms', (rooms) => this.props.dispatch(getAvailableRooms(rooms))); 
   }
 
   listRooms() {
@@ -39,7 +40,12 @@ export class SocketWrapper extends React.Component {
 
   render() {
     if (!this.props.room) {
-      return <RoomFinder createRoom={(e) => this.createRoom(e)} listRooms={() => this.listRooms()} receiveRoomList={() => this.receiveRoomList()} joinRoom={(room) => this.joinRoom(room)} />
+      return <RoomFinder 
+        createRoom={(e) => this.createRoom(e)} 
+        listRooms={() => this.listRooms()} 
+        receiveRoomList={() => this.receiveRoomList()} 
+        joinRoom={(room) => this.joinRoom(room)} 
+      />
     }
     return <Room leaveRoom={() => this.leaveRoom()} />
   }
