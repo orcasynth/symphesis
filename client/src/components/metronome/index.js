@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setBPM, setNextTickTime, setCurrentSubdivision } from './actions'
+import { setIsPlaying, setNotPlaying, setBPM, setNextTickTime, setCurrentSubdivision } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
@@ -76,9 +76,17 @@ class Metronome extends React.Component {
     }
 
   }
+
+  stop() {
+    this.props.dispatch(setNotPlaying())  
+  }
+
   render() {
     return (
-      <div className="play-button" onClick={() => this.play()}> > </div>
+      <div>
+        <div className="play-button" onClick={() => this.play()}> > </div>
+        <div className="stop-button" onClick={() => this.stop()}> > </div>
+      </div>
     )
   }
 }

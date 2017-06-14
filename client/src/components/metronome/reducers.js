@@ -1,4 +1,4 @@
-import {SET_IS_PLAYING, SET_BPM, SET_NEXT_TICK_TIME, SET_CURRENT_SUBDIVISION} from "./actions"
+import {SET_IS_PLAYING, SET_NOT_PLAYING, SET_TICK, SET_BPM, SET_NEXT_TICK_TIME, SET_CURRENT_SUBDIVISION} from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -6,16 +6,29 @@ const initialState = {
     timeSignature:4,
     currentSubdivision:1,
     nextTickTime: 0,
+    currentTime:0,
     timerID:null
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case SET_IS_PLAYING: 
-            let newPlayState = !state.isPlaying
+            let newIsState = true
             return {
                 ...state,
-                    isPlaying: newPlayState
+                    isPlaying: newIsState
+            }
+        case SET_NOT_PLAYING: 
+            let notPlaying = false
+            return {
+                ...state,
+                    isPlaying: notPlaying
+            }            
+        case SET_TICK: 
+            console.log(action)
+            return {
+                ...state,
+                    currentTime: Math.floor(action.currentTime)
             }
         case SET_BPM: 
             return {
