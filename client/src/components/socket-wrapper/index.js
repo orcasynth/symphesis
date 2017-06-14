@@ -5,18 +5,16 @@ import '../../middleware/socketMiddleware';
 import './index.css';
 import RoomFinder from '../room-finder';
 import Room from '../room';
-// import io from 'socket.io-client';
-
-// const socket = io();
 
 export class SocketWrapper extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(listRooms())
+    console.log('running CdM')
   }
 
   leaveRoom() {
-    this.props.dispatch(leaveRoom())
+    this.props.dispatch(leaveRoom(this.props.room))
   }
 
   createRoom() {

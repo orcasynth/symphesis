@@ -41,7 +41,7 @@ export function socketMiddleware(store) {
 
     if(socket && action.type === actions.LEAVE_ROOM) {
       console.log('LEAVE_ROOM')
-      socket.emit('leaveRoom', { room: this.props.room })
+      socket.emit('leaveRoom', { room: action.room })
     }
 
     if(socket && action.type === actions.JOIN_ROOM) {

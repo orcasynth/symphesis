@@ -17,8 +17,9 @@ export const socketError = (socketError) => ({
 });
 
 export const LEAVE_ROOM = 'LEAVE_ROOM';
-export const leaveRoom = () => ({
-  type: LEAVE_ROOM
+export const leaveRoom = (room) => ({
+  type: LEAVE_ROOM,
+  room
 })
 
 export const JOIN_ROOM = 'JOIN_ROOM';
