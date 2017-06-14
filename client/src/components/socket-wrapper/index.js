@@ -10,7 +10,6 @@ export class SocketWrapper extends React.Component {
 
   componentDidMount() {
     this.props.dispatch(listRooms())
-    console.log('running CdM')
   }
 
   leaveRoom() {
