@@ -113,9 +113,9 @@ app.get(/^(?!\/api(\/|$))/, (req, res) => {
 
 let server;
 
-function runServer(databaseUrl = DATABASE_URL, port = PORT) {
+function runServer(port = PORT) {
   return new Promise((resolve, reject) => {
-    mongoose.connect(databaseUrl, err => {
+    mongoose.connect(databaseUrl = DATABASE_URL, err => {
       if (err) {
         return reject(err);
       }
