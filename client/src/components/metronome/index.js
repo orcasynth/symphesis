@@ -98,6 +98,7 @@ const mapStateToProps = function (state, props) {
     timeSignature: state.metronome.timeSignature,
     currentSubdivision: state.metronome.currentSubdivision,
     nextTickTime: state.metronome.nextTickTime,
+    currentTime: state.metronome.currentTime,
     timerID: state.metronome.timerID
   }
 }

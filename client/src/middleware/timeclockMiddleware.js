@@ -9,6 +9,7 @@ export const createTimeclockMiddleware = store => {
             actions.interval = setInterval(() => store.dispatch({ type:'SET_TICK', currentTime: audiocontext.currentTime}), 1000)
         } else if (action.type === actions.SET_NOT_PLAYING) {
             clearInterval(actions.interval);
+            audiocontext.close();
         }
         return next(action);
     }
