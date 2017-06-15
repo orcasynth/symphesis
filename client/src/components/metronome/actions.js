@@ -20,9 +20,11 @@ export const setBPM = bpm => ({
 })
 
 export const SET_NEXT_TICK_TIME = "SET_NEXT_TICK_TIME"
-export const setNextTickTime = int => ({
+export const setNextTickTime = (nextTickTime, bpm, timeSignature) => ({
     type: SET_NEXT_TICK_TIME,
-    nextTickTime: int
+    nextTickTime,
+    bpm,
+    timeSignature
 })
 
 export const SET_CURRENT_SUBDIVISION = "SET_CURRENT_SUBDIVISION"

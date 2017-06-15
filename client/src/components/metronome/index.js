@@ -13,7 +13,8 @@ class Metronome extends React.Component {
   nextTick() {
     var secondsPerBeat = 60 / this.props.bpm;
     this.props.dispatch(setNextTickTime(
-      this.props.nextTickTime + 1 / this.props.timeSignature * secondsPerBeat
+      null, this.props.bpm, this.props.timeSignature
+      // this.props.nextTickTime + 1 / this.props.timeSignature * secondsPerBeat
     ))
     this.props.dispatch(setCurrentSubdivision(
       this.props.currentSubdivision + 1
