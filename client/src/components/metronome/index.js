@@ -12,7 +12,8 @@ class Metronome extends React.Component {
   //function that updates currentSubdivision and the next tick and starts time via audioContext.
 
   //function that plays a note at a specific time.
-  scheduleNote(beatDivisionNumber, time) {
+
+  scheduleNote(currentSubdivision, time) {
     let osc = this.audioContext.createOscillator();
     let amp = this.audioContext.createGain();
     osc.connect(amp);
@@ -21,17 +22,16 @@ class Metronome extends React.Component {
     amp.gain.value = .05;
     osc.frequency.value = 208;
 
-    if (this.props.currentSubdivision % 16 === 0) {
+    if (currentSubdivision % 16 === 0) {
       amp.gain.value = .6;
       osc.frequency.value = 224;
     }
-    else if (this.props.currentSubdivision % 4 === 0) {
+    else if (currentSubdivision % 4 === 0) {
       amp.gain.value = .2;
       osc.frequency.value = 216;
     }
     osc.start(time);
     osc.stop(time + 0.1);
-    console.log(this.props.currentSubdivision);
   }
 
   play() {

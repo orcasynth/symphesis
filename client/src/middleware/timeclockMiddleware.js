@@ -4,6 +4,21 @@ export const createTimeclockMiddleware = store => {
   let currentSubdivision = 1;
   let tickLength;
   let secondsPerBeat;
+
+  function playMetronomeTone(time, velocity) {
+    let osc = audiocontext.createOscillator();
+    let amp = audiocontext.createGain();
+    osc.connect(amp);
+    amp.connect(audiocontext.destination);
+
+    amp.gain.value = velocity;
+    osc.frequency.value = 208;
+    
+    osc.start(time);
+    osc.stop(time + 0.1);
+
+  }
+
   return next => action => {
     // console.log('From middleware: ', action)
     if (action.type === actions.SET_IS_PLAYING && !audiocontext) {
@@ -25,6 +40,11 @@ export const createTimeclockMiddleware = store => {
         currentSubdivision = 1
       } else {
         currentSubdivision++;
+        if (currentSubdivision === 2) {
+          playMetronomeTone(action.nextTickTime, .6)
+        } else if (currentSubdivision%action.timeSignature === 2){
+          playMetronomeTone(action.nextTickTime, .2)
+        }  
       }
       action.currentSubdivision = currentSubdivision
     }
