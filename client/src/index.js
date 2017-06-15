@@ -7,12 +7,15 @@ import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import {createTimeclockMiddleware} from './middleware/timeclockMiddleware';
 import reducers from './reducers';
+import {socketMiddleware, storeWrapper} from './middleware/socketMiddleware';
 
 const store = createStore(
   reducers, 
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), 
-  applyMiddleware(thunk, createTimeclockMiddleware),
+  applyMiddleware(thunk, socketMiddleware, createTimeclockMiddleware)  
 );
+
+storeWrapper(store)
 
 ReactDOM.render(
   <Provider store={store}>

@@ -11,7 +11,7 @@ function socketRooms(io) {
       io.to(data.room).emit('message', data.message);
     });
 
-    socket.on('listRooms', (data) => {
+    socket.on('listRooms', () => {
       socket.emit('listRooms', rooms)
     });
 
