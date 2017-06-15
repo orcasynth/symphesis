@@ -5,13 +5,14 @@ import './index.css';
 import thunk from 'redux-thunk';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
+import {createTimeclockMiddleware} from './middleware/timeclockMiddleware';
 import reducers from './reducers';
 import {socketMiddleware, storeWrapper} from './middleware/socketMiddleware';
 
 const store = createStore(
   reducers, 
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), 
-  applyMiddleware(thunk, socketMiddleware)  
+  applyMiddleware(thunk, socketMiddleware, createTimeclockMiddleware)  
 );
 
 storeWrapper(store)
