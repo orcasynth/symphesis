@@ -1,37 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
-  componentWillMount() {
-    this.audioContext = new AudioContext()
-    let timerID = 0
+  // componentWillMount() {
+  //   this.audioContext = new AudioContext()
+  //   let timerID = 0
+  // }
+
+  componentDidMount () {
+    this.play();
   }
 
-  //function that updates currentSubdivision and the next tick and starts time via audioContext.
-
-  //function that plays a note at a specific time.
-
-  scheduleNote(currentSubdivision, time) {
-    let osc = this.audioContext.createOscillator();
-    let amp = this.audioContext.createGain();
-    osc.connect(amp);
-    amp.connect(this.audioContext.destination);
-
-    amp.gain.value = .05;
-    osc.frequency.value = 208;
-
-    if (currentSubdivision % 16 === 0) {
-      amp.gain.value = .6;
-      osc.frequency.value = 224;
-    }
-    else if (currentSubdivision % 4 === 0) {
-      amp.gain.value = .2;
-      osc.frequency.value = 216;
-    }
-    osc.start(time);
-    osc.stop(time + 0.1);
+  componentWillUnmount() {
+    this.stop();
   }
 
   play() {
@@ -42,11 +25,25 @@ class Metronome extends React.Component {
     this.props.dispatch(setNotPlaying())
   }
 
+  sendRecording () {
+    this.props.dispatch(sendRecording('hi', this.props.room))
+  }
+
   render() {
+    let roommates = [];
+    for (let user in this.props.roommates) {
+      console.log(user)
+      if (this.props.roommates[user].displayName) {
+        roommates.push(<li key={user}>{this.props.roommates[user].displayName}</li>)
+      }
+    }
+
     return (
       <div>
+        <button onClick={() => this.sendRecording()}>send recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <ul>{roommates}</ul>
       </div>
     )
   }
@@ -60,7 +57,9 @@ const mapStateToProps = function (state, props) {
     currentSubdivision: state.metronome.currentSubdivision,
     nextTickTime: state.metronome.nextTickTime,
     currentTime: state.metronome.currentTime,
-    timerID: state.metronome.timerID
+    timerID: state.metronome.timerID,
+    room: state.socketWrapper.room,
+    roommates: state.metronome.roommates
   }
 }
 

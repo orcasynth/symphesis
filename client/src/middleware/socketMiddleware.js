@@ -1,21 +1,15 @@
-// has to be set up within the store
-// goal is to make it so everything that needs to go through socket
-// is done in this middleware
-// 
-// this middleware will be listening to server socket
-// when server sends events it handles (reduces?) them
-// updates state
-// react event -> dispatch action -> middleware handles those specific actions -> server
 import * as actions from '../components/socket-wrapper/actions';
+import * as metronomeActions from '../components/metronome/actions';
 import io from 'socket.io-client';
-let socket
+let socket;
 
 export function storeWrapper(store){
-  socket = io()
+  socket = io();
   socket.on('message', (msg) => console.log(msg));
   socket.on('hasJoined', (room) => store.dispatch(actions.setRoom(room)));
   socket.on('roomError', (error) => store.dispatch(actions.socketError(error)));
   socket.on('listRooms', (rooms) => store.dispatch(actions.getAvailableRooms(rooms))); 
+  socket.on('receiveRecording', (data) => store.dispatch(metronomeActions.receiveRecording(data)))
 }
 
 export function socketMiddleware(store) {  
@@ -41,6 +35,10 @@ export function socketMiddleware(store) {
     if(socket && action.type === actions.LIST_ROOMS) {
       // console.log('LIST_ROOMS', action)
       socket.emit('listRooms')
+    }
+
+    if (action.type === metronomeActions.SEND_RECORDING) {
+      socket.emit('sendRecording', {recording: action.recording, room: action.room})
     }
 
     return result; 
