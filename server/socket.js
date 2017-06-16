@@ -5,12 +5,6 @@ function socketRooms(io) {
   io.on('connection', (socket) => {
     console.log('a user connected');
 
-    // FUTURE IMPLEMENTATION
-    socket.on('message', (data) => {
-      console.log('message', data);
-      io.to(data.room).emit('message', data.message);
-    });
-
     socket.on('listRooms', () => {
       socket.emit('listRooms', rooms)
     });
@@ -63,6 +57,10 @@ function socketRooms(io) {
     // socket.on('add music', data => {
     //     io.broadcast.to(data.room).emit('SOMETHING HERE', data)
     // })
+
+    socket.on('sendRecording', (data) => {
+      socket.to(data.room).emit('receiveRecording', data);
+    })
 
     socket.on('disconnect', () => {
       console.log('a user disconnected');

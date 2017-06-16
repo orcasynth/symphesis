@@ -1,4 +1,4 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, SET_TICK, SET_BPM, SET_NEXT_TICK_TIME, SET_CURRENT_SUBDIVISION } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, SET_NEXT_TICK_TIME, SEND_RECORDING, RECEIVE_RECORDING } from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -7,33 +7,21 @@ const initialState = {
     currentSubdivision: 1,
     nextTickTime: 0,
     currentTime: 0,
-    timerID: null
+    timerID: null,
+    recording: null
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case SET_IS_PLAYING:
-            let newIsState = true
             return {
                 ...state,
-                isPlaying: newIsState
+                isPlaying: true
             }
         case SET_NOT_PLAYING:
-            let notPlaying = false
             return {
                 ...state,
-                isPlaying: notPlaying
-            }
-        case SET_TICK:
-            console.log(action)
-            return {
-                ...state,
-                currentTime: Math.floor(action.currentTime)
-            }
-        case SET_BPM:
-            return {
-                ...state,
-                bpm: action.bpm
+                isPlaying: false
             }
         case SET_NEXT_TICK_TIME:
             return {
@@ -42,13 +30,15 @@ export default (state = initialState, action) => {
                 currentSubdivision: action.currentSubdivision,
                 currentTime: action.currentTime
             }
-        case SET_CURRENT_SUBDIVISION:
-            let newCurrentSubdivision = state.currentSubdivision + action.currentSubdivision
-            console.log('newCurrentSubdivision: ', newCurrentSubdivision)
-            console.log('action.currentSubdivision: ', action.currentSubdivision)
+        case SEND_RECORDING:
             return {
                 ...state,
-                currentSubdivision: newCurrentSubdivision
+                recording: action.recording
+            }
+        case RECEIVE_RECORDING: 
+            return {
+                ...state,
+                recording: action.recording
             }
         default:
             return state;

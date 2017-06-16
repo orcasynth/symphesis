@@ -1,20 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
-  componentWillMount() {
-    this.audioContext = new AudioContext()
-    let timerID = 0
-  }
+  // componentWillMount() {
+  //   this.audioContext = new AudioContext()
+  //   let timerID = 0
+  // }
 
   componentDidMount () {
-    this.props.dispatch(setIsPlaying(this.props.bpm, this.props.timeSignature))
+    this.play();
   }
 
   componentWillUnmount() {
-    this.props.dispatch(setNotPlaying())
+    this.stop();
   }
 
   play() {
@@ -25,9 +25,13 @@ class Metronome extends React.Component {
     this.props.dispatch(setNotPlaying())
   }
 
+  sendRecording () {
+    this.props.dispatch(sendRecording('hi', this.props.room))
+  }
   render() {
     return (
       <div>
+        <button onClick={() => this.sendRecording()}>send recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
       </div>
@@ -43,7 +47,8 @@ const mapStateToProps = function (state, props) {
     currentSubdivision: state.metronome.currentSubdivision,
     nextTickTime: state.metronome.nextTickTime,
     currentTime: state.metronome.currentTime,
-    timerID: state.metronome.timerID
+    timerID: state.metronome.timerID,
+    room: state.socketWrapper.room,
   }
 }
 

@@ -15,3 +15,16 @@ export const setNextTickTime = (bpm, timeSignature) => ({
     bpm,
     timeSignature,
 })
+
+export const SEND_RECORDING = "SEND_RECORDING";
+export const sendRecording = (recording, room) => ({
+    type: SEND_RECORDING,
+    recording,
+    room,
+})
+
+export const RECEIVE_RECORDING = "RECEIVE_RECORDING";
+export const receiveRecording = (recording) => ({
+    type: RECEIVE_RECORDING,
+    recording
+})
