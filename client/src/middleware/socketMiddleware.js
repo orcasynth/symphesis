@@ -1,11 +1,3 @@
-// has to be set up within the store
-// goal is to make it so everything that needs to go through socket
-// is done in this middleware
-// 
-// this middleware will be listening to server socket
-// when server sends events it handles (reduces?) them
-// updates state
-// react event -> dispatch action -> middleware handles those specific actions -> server
 import * as actions from '../components/socket-wrapper/actions';
 import io from 'socket.io-client';
 let socket

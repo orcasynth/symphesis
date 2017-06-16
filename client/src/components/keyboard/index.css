@@ -1,0 +1,88 @@
+#keyboard {
+	cursor: default; 
+	font-size: 0px; 
+	height: 150px; 
+	padding: 0px; 
+	position: relative; 
+	list-style: none; 
+	margin: 0px; 
+	width: 600px; 
+	user-select: none;
+}
+
+
+#keyboard ul {
+cursor: default; 
+font-size: 0px; 
+height: 150px; 
+padding: 0px; 
+position: relative; 
+list-style: none; 
+margin: 0px; 
+width: 600px; 
+user-select: none;
+}
+
+
+.white {
+display: inline-block; 
+user-select: none; 
+background-color: rgb(255, 255, 255); 
+border-width: 1px 0px 1px 1px; 
+border-top-style: solid; 
+border-right-style: initial; 
+border-bottom-style: solid;
+border-left-style: solid;
+border-top-color: rgb(0, 0, 0); 
+border-right-color: initial;
+border-bottom-color: rgb(0, 0, 0);
+border-left-color: rgb(0, 0, 0);
+border-image: initial; 
+height: 150px;
+width: 41px;
+border-radius: 0px 0px 5px 5px;
+}
+
+
+
+.black {
+display: inline-block; 
+user-select: none; 
+background-color: rgb(0, 0, 0);
+border: 1px solid rgb(0, 0, 0); 
+position: absolute; 
+width: 20px; 
+height: 100px; 
+border-radius: 0px 0px 3px 3px;
+}
+
+.black.one {
+left: 32px; 
+}
+
+.black.two {
+left: 116px; 
+}
+
+.black.three {
+left: 158px;
+}
+
+.black.four {
+left: 242px;
+}
+.black.five {
+left: 284px;
+}
+.black.six {
+left: 326px;
+}
+.black.seven {
+left: 410px;
+}
+.black.eight {
+left: 452px;
+}
+.black.nine {
+left: 536px;
+}

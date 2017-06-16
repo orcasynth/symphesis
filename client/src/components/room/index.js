@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { } from './actions';
 import Metronome from '../metronome';
 import './index.css';
+import Keyboard from '../keyboard'
+
+
 
 class Room extends React.Component {
   render() {
@@ -10,6 +13,7 @@ class Room extends React.Component {
       <div>You are in room {this.props.room}
         <button onClick={() => this.props.leaveRoom()}>click to Brexit</button>
         <Metronome />
+        <Keyboard />
       </div>
     )
   }
