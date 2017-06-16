@@ -9,29 +9,12 @@ class Metronome extends React.Component {
     let timerID = 0
   }
 
-  //function that updates currentSubdivision and the next tick and starts time via audioContext.
+  componentDidMount () {
+    this.props.dispatch(setIsPlaying(this.props.bpm, this.props.timeSignature))
+  }
 
-  //function that plays a note at a specific time.
-
-  scheduleNote(currentSubdivision, time) {
-    let osc = this.audioContext.createOscillator();
-    let amp = this.audioContext.createGain();
-    osc.connect(amp);
-    amp.connect(this.audioContext.destination);
-
-    amp.gain.value = .05;
-    osc.frequency.value = 208;
-
-    if (currentSubdivision % 16 === 0) {
-      amp.gain.value = .6;
-      osc.frequency.value = 224;
-    }
-    else if (currentSubdivision % 4 === 0) {
-      amp.gain.value = .2;
-      osc.frequency.value = 216;
-    }
-    osc.start(time);
-    osc.stop(time + 0.1);
+  componentWillUnmount() {
+    this.props.dispatch(setNotPlaying())
   }
 
   play() {
