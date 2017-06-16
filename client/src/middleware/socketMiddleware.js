@@ -9,7 +9,7 @@ export function storeWrapper(store){
   socket.on('hasJoined', (room) => store.dispatch(actions.setRoom(room)));
   socket.on('roomError', (error) => store.dispatch(actions.socketError(error)));
   socket.on('listRooms', (rooms) => store.dispatch(actions.getAvailableRooms(rooms))); 
-  socket.on('receiveRecording', (data) => store.dispatch(metronomeActions.receiveRecording(data.recording)))
+  socket.on('receiveRecording', (data) => store.dispatch(metronomeActions.receiveRecording(data)))
 }
 
 export function socketMiddleware(store) {  

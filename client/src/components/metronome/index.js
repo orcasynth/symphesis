@@ -28,12 +28,22 @@ class Metronome extends React.Component {
   sendRecording () {
     this.props.dispatch(sendRecording('hi', this.props.room))
   }
+
   render() {
+    let roommates = [];
+    for (let user in this.props.roommates) {
+      console.log(user)
+      if (this.props.roommates[user].displayName) {
+        roommates.push(<li key={user}>{this.props.roommates[user].displayName}</li>)
+      }
+    }
+
     return (
       <div>
         <button onClick={() => this.sendRecording()}>send recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <ul>{roommates}</ul>
       </div>
     )
   }
@@ -49,6 +59,7 @@ const mapStateToProps = function (state, props) {
     currentTime: state.metronome.currentTime,
     timerID: state.metronome.timerID,
     room: state.socketWrapper.room,
+    roommates: state.metronome.roommates
   }
 }
 

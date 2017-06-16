@@ -24,7 +24,7 @@ export const sendRecording = (recording, room) => ({
 })
 
 export const RECEIVE_RECORDING = "RECEIVE_RECORDING";
-export const receiveRecording = (recording) => ({
+export const receiveRecording = (roommates) => ({
     type: RECEIVE_RECORDING,
-    recording
+    roommates
 })

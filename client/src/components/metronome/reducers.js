@@ -30,15 +30,10 @@ export default (state = initialState, action) => {
                 currentSubdivision: action.currentSubdivision,
                 currentTime: action.currentTime
             }
-        case SEND_RECORDING:
-            return {
-                ...state,
-                recording: action.recording
-            }
         case RECEIVE_RECORDING: 
             return {
                 ...state,
-                recording: action.recording
+                roommates: action.roommates
             }
         default:
             return state;
