@@ -1,9 +1,19 @@
 import './index.css'
 import React from 'react';
 import { connect } from 'react-redux';
-
+import {playKeyboard, stopKeyboard} from './actions';
 
 export class Keyboard extends React.Component{
+  playKeyboard (e, detune, note) {
+    e.stopPropagation()
+    this.props.dispatch(playKeyboard(detune*100, note))
+  }
+
+  stopKeyboard (e, detune, note) {
+    e.stopPropagation()
+    this.props.dispatch(stopKeyboard(detune*100, note))
+  }
+
   render(){
     return( 
       <div id="keyboard" >
@@ -11,8 +21,8 @@ export class Keyboard extends React.Component{
           <li id="A2" title="A2" data-note-type="white" className="white"></li>
           <li id="A#2" title="A#2" data-note-type="black" className="black one"></li>
           <li id="B2" title="B2" data-note-type="white" className="white"></li>
-          <li id="C3" title="C3" data-note-type="white" className="white"></li>
-          <li id="C#3" title="C#3" data-note-type="black" className="black two"></li>
+          <li id="C3" title="C3" data-note-type="white" className="white" onMouseDown={(e) => this.playKeyboard(e, 3, 'C3')} onMouseUp={(e) => this.stopKeyboard(e, 3, 'C3')}></li>
+          <li id="C#3" title="C#3" data-note-type="black" className="black two" onMouseDown={(e) => this.playKeyboard(e, 4, 'C3')} onMouseUp={(e) => this.stopKeyboard(e, 4, 'C3')}></li>
           <li id="D3" title="D3" data-note-type="white" className="white"></li>
           <li id="D#3" title="D#3" data-note-type="black" className="black three"></li>
           <li id="E3" title="E3" data-note-type="white" className="white"></li>

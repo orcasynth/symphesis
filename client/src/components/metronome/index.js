@@ -32,7 +32,6 @@ class Metronome extends React.Component {
   render() {
     let roommates = [];
     for (let user in this.props.roommates) {
-      console.log(user)
       if (this.props.roommates[user].displayName) {
         roommates.push(<li key={user}>{this.props.roommates[user].displayName}</li>)
       }

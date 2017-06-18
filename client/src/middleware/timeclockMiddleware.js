@@ -1,9 +1,12 @@
 import * as actions from '../components/metronome/actions'
+import * as keyboardActions from '../components/keyboard/actions'
+
 export const createTimeclockMiddleware = store => {
   let audiocontext
   let currentSubdivision = 1;
   let tickLength;
   let secondsPerBeat;
+  let oscillators = [];
 
   function playMetronomeTone(time, velocity) {
     let osc = audiocontext.createOscillator();
@@ -17,6 +20,35 @@ export const createTimeclockMiddleware = store => {
     osc.start(time);
     osc.stop(time + 0.1);
 
+  }
+
+  function playNote(detune) {
+    var osc = audiocontext.createOscillator();
+    var amp=audiocontext.createGain();
+    osc.connect(amp);
+    amp.connect(audiocontext.destination);
+
+    osc.type = 'sawtooth';
+    
+    amp.gain.value=.5;
+    amp.gain.setTargetAtTime(0.5, audiocontext.currentTime, 0.01)
+    osc.frequency.value = 440;
+    osc.detune.value = detune;
+    
+    osc.start(audiocontext.currentTime);
+    let pushItem = {oscillator: osc, detune}
+    oscillators.push(pushItem)
+  }
+
+  function stopNote(detune) {
+    let index;
+    oscillators.forEach((obj, i) => {
+      if (obj.detune === detune) {
+        obj.oscillator.stop(0)
+        index = i
+      }
+    })
+    oscillators.splice(index, 1)
   }
 
   return next => action => {
@@ -47,6 +79,13 @@ export const createTimeclockMiddleware = store => {
         }  
       }
       action.currentSubdivision = currentSubdivision
+    }
+    else if (action.type === keyboardActions.PLAY_KEYBOARD) {
+      playNote(action.detune.detune)
+    }
+    else if (action.type === keyboardActions.STOP_KEYBOARD) {
+      console.log('stopaction', action)
+      stopNote(action.detune.detune)
     }
     return next(action);
   }
