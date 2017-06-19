@@ -21,13 +21,11 @@ function socketRooms(io) {
     });
 
     socket.on('joinRoom', (data) => {
-      // RECONSIDER ROOM MANAGEMENT LATER
       if (!io.sockets.adapter.rooms[data.room]) {
         socket.emit('roomError', 'Room does not exist')
       }
       else if (io.sockets.adapter.rooms[data.room].length > 5) {
         socket.emit('roomError', 'Room just filled up')
-        // ADD ALTERATE BUTTON FOR ROOM FOR LISTENERS
       }
       else {
         socket.join(data.room);

@@ -5,7 +5,6 @@ let socket;
 
 export function storeWrapper(store){
   socket = io();
-  socket.on('message', (msg) => console.log(msg));
   socket.on('hasJoined', (data) => store.dispatch(actions.setRoomAndUser(data)));
   socket.on('roomError', (error) => store.dispatch(actions.socketError(error)));
   socket.on('listRooms', (rooms) => store.dispatch(actions.getAvailableRooms(rooms))); 

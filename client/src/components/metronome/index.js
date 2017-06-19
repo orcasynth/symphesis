@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording, requestToRecord } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
@@ -43,10 +43,12 @@ class Metronome extends React.Component {
     return (
       <div>
         <button onClick={() => this.sendRecording()}>send recording</button>
+        <button onClick={() => this.props.dispatch(requestToRecord())}>req record</button>
         <button onClick={() => this.props.dispatch(startRecording())}>start recording</button>
         <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <p>{this.props.recordingMessage}</p>
         <p>Roommates</p>
         <ul>{roommates}</ul>
       </div>
@@ -59,14 +61,11 @@ const mapStateToProps = function (state, props) {
     isPlaying: state.metronome.isPlaying,
     bpm: state.metronome.bpm,
     timeSignature: state.metronome.timeSignature,
-    currentSubdivision: state.metronome.currentSubdivision,
-    nextTickTime: state.metronome.nextTickTime,
-    currentTime: state.metronome.currentTime,
-    timerID: state.metronome.timerID,
     room: state.socketWrapper.room,
     displayName: state.socketWrapper.displayName,
     roommates: state.metronome.roommates,
-    recording: state.metronome.recording
+    recording: state.metronome.recording,
+    recordingMessage: state.metronome.recordingMessage
   }
 }
 

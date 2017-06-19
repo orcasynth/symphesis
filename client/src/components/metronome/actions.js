@@ -67,3 +67,13 @@ export const receiveRecording = (roommates) => ({
     type: RECEIVE_RECORDING,
     roommates
 })
+
+export const REQUEST_START_RECORDING = "REQUEST_START_RECORDING";
+export const requestToRecord = () => ({
+    type: REQUEST_START_RECORDING,
+})
+
+export const UPDATE_RECORDING_MESSAGE = "UPDATE_RECORDING_MESSAGE";
+export const updateRecordingMessage = () => ({
+    type: UPDATE_RECORDING_MESSAGE,
+})

@@ -11,7 +11,9 @@ export const createTimeclockMiddleware = store => {
   let recordingInterval = 2;
   let recordingStartTime;
   let roommates;
-  let interval = {};
+  let interval;
+  let nextTickTime;
+  let isRecording;
 
   //helper functions
   function playMetronomeTone(time, velocity) {
@@ -96,15 +98,14 @@ export const createTimeclockMiddleware = store => {
     }
     else if (action.type === actions.SET_NOT_PLAYING && audiocontext) {
       clearInterval(interval);
-      interval = {};
+      interval = undefined;
       audiocontext.close().then(function () {
         audiocontext = undefined;
         console.log('Audiocontext has closed.')
       });
     }
     else if (action.type === actions.SET_NEXT_TICK_TIME) {
-      action.nextTickTime = audiocontext.currentTime + tickLength;
-      action.currentTime = audiocontext.currentTime;
+      nextTickTime = audiocontext.currentTime + tickLength;
       if (currentSubdivision === timeSignature * recordingInterval * 4) {
         currentSubdivision = 1;
       }
@@ -112,17 +113,19 @@ export const createTimeclockMiddleware = store => {
         currentSubdivision++;
         //subdivision 2 is treated as the "first" beat of the measure
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
-          recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime));
+          if (!isRecording) {
+            recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
+          } 
           for (let user in roommates) {
             let roommateRecording = roommates[user].recording;
             if (roommateRecording) {
-              roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime))
+              roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime))
             }
           }
-          playMetronomeTone(action.nextTickTime, .6);
+          playMetronomeTone(nextTickTime, .6);
         }
         else if (currentSubdivision % action.timeSignature === 2) {
-          playMetronomeTone(action.nextTickTime, .2);
+          playMetronomeTone(nextTickTime, .2);
         }
       }
       action.currentSubdivision = currentSubdivision
@@ -140,10 +143,13 @@ export const createTimeclockMiddleware = store => {
       stopRecordingNote(action.instrument, action.detune)
     }
     else if (action.type === actions.START_RECORDING) {
+      isRecording = true;
       recording = [];
       setTimeout(() => store.dispatch({type: actions.STOP_RECORDING}), (recordingInterval * secondsPerBeat * timeSignature)*1000)
     }
     else if (action.type === actions.STOP_RECORDING) {
+      isRecording = false;
+      store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording"})
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
       roommates = action.roommates;
@@ -153,6 +159,29 @@ export const createTimeclockMiddleware = store => {
         action.recording = [...recording];
         recording = [];
       }
+    }
+    else if (action.type === actions.REQUEST_START_RECORDING) {
+      // let threeTicksInSeconds = 3/tickLength;
+      let totalSubdivisions = 4 * timeSignature * recordingInterval;
+      // let pointOfNoReturn = totalSubdivisions + 2 - threeTicksInSeconds;
+
+      //wherever 1 is below, that is used instead of 2 because we don't count the next tick - function may be called mid-tick
+      let ticksUntilNextLoop = currentSubdivision < 2 ? 
+        (1 - currentSubdivision) : 
+        (totalSubdivisions + 1 - currentSubdivision);
+      let timeUntilNextLoop = ticksUntilNextLoop * tickLength + nextTickTime - audiocontext.currentTime;
+      let timeUntilRecordInMS = (timeUntilNextLoop > 3) ? 
+        timeUntilNextLoop * 1000 : 
+        (timeUntilNextLoop + (totalSubdivisions * tickLength)) * 1000;
+      store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're set to record once we get to the start of the loop..."});
+      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 3...'}), timeUntilRecordInMS-3000);
+      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 2...'}), timeUntilRecordInMS-2000);
+      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 1...'}), timeUntilRecordInMS-1000);
+      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're recording!"}), timeUntilRecordInMS);
+      setTimeout(() => store.dispatch({type: actions.START_RECORDING}), timeUntilRecordInMS);
+    }
+    else if (action.type === actions.UPDATE_RECORDING_MESSAGE) {
+
     }
     return next(action);
   }

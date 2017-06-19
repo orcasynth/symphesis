@@ -1,14 +1,11 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, SET_NEXT_TICK_TIME, SEND_RECORDING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, REQUEST_START_RECORDING, UPDATE_RECORDING_MESSAGE } from "./actions"
 
 const initialState = {
     isPlaying: false,
     bpm: 60,
     timeSignature: 4,
-    currentSubdivision: 1,
-    nextTickTime: 0,
-    currentTime: 0,
-    timerID: null,
-    recording: false
+    recording: false,
+    recordingMessage: 'Not recording'
 }
 
 export default (state = initialState, action) => {
@@ -33,17 +30,15 @@ export default (state = initialState, action) => {
                 ...state,
                 recording: false
             }
-        case SET_NEXT_TICK_TIME:
-            return {
-                ...state,
-                nextTickTime: action.nextTickTime,
-                currentSubdivision: action.currentSubdivision,
-                currentTime: action.currentTime
-            }
         case RECEIVE_RECORDING: 
             return {
                 ...state,
                 roommates: action.roommates
+            }
+        case UPDATE_RECORDING_MESSAGE:
+            return {
+                ...state,
+                recordingMessage: action.recordingMessage
             }
         default:
             return state;
