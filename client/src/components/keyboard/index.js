@@ -7,7 +7,7 @@ export class Keyboard extends React.Component{
   playKeyboard (e, detune, note) {
     e.stopPropagation()
     if (this.props.recording) {
-      this.props.dispatch(recordNote('keyboard', detune))
+      this.props.dispatch(recordNote('keyboard', detune*100))
     }
     this.props.dispatch(startPlaying('keyboard', detune*100, note))
   }
@@ -15,7 +15,7 @@ export class Keyboard extends React.Component{
   stopKeyboard (e, detune, note) {
     e.stopPropagation()
     if (this.props.recording) {
-      this.props.dispatch(stopRecordingNote('keyboard', detune))
+      this.props.dispatch(stopRecordingNote('keyboard', detune*100))
     }
     this.props.dispatch(stopPlaying('keyboard', detune*100, note))
   }
