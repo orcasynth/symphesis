@@ -1,8 +1,9 @@
-import {GET_AVAILABLE_ROOMS, SET_ROOM, SOCKET_ERROR, LEAVE_ROOM} from './actions';
+import {GET_AVAILABLE_ROOMS, SET_ROOM_AND_USER, SOCKET_ERROR, LEAVE_ROOM} from './actions';
 
 const initialState = {
   availableRooms: false,
   room: false,
+  displayName: false,
   socketError: false
 }
 
@@ -13,11 +14,12 @@ export default (state = initialState, action) => {
       availableRooms: action.availableRooms,
     }
   }
-  if (action.type === SET_ROOM) {
+  if (action.type === SET_ROOM_AND_USER) {
     return {
       ...state,
       socketError: false,
-      room: action.room
+      room: action.room,
+      displayName: action.displayName
     }
   }
   if (action.type === LEAVE_ROOM) {

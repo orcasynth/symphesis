@@ -27,7 +27,7 @@ export const createTimeclockMiddleware = store => {
     osc.stop(time + 0.1);
   }
 
-  //used to play notes with and without pre-defined stopping times
+  //used to play notes both with and without pre-defined stopping times
   function playNote(instrument, detune, start, stop) {
     console.log(detune)
     let osc = audiocontext.createOscillator();
@@ -110,6 +110,7 @@ export const createTimeclockMiddleware = store => {
       }
       else {
         currentSubdivision++;
+        //subdivision 2 is treated as the "first" beat of the measure
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
           recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime));
           for (let user in roommates) {

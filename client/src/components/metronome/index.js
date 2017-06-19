@@ -33,7 +33,10 @@ class Metronome extends React.Component {
     let roommates = [];
     for (let user in this.props.roommates) {
       if (this.props.roommates[user].displayName) {
-        roommates.push(<li key={user}>{this.props.roommates[user].displayName}</li>)
+        let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
+          "(that's you!)" :
+          null;
+        roommates.push(<li key={user}>{this.props.roommates[user].displayName} {thatsYou}</li>)
       }
     }
 
@@ -44,6 +47,7 @@ class Metronome extends React.Component {
         <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <p>Roommates</p>
         <ul>{roommates}</ul>
       </div>
     )
@@ -60,6 +64,7 @@ const mapStateToProps = function (state, props) {
     currentTime: state.metronome.currentTime,
     timerID: state.metronome.timerID,
     room: state.socketWrapper.room,
+    displayName: state.socketWrapper.displayName,
     roommates: state.metronome.roommates,
     recording: state.metronome.recording
   }
