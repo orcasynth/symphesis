@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
@@ -40,6 +40,8 @@ class Metronome extends React.Component {
     return (
       <div>
         <button onClick={() => this.sendRecording()}>send recording</button>
+        <button onClick={() => this.props.dispatch(startRecording())}>start recording</button>
+        <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
         <ul>{roommates}</ul>
@@ -58,7 +60,8 @@ const mapStateToProps = function (state, props) {
     currentTime: state.metronome.currentTime,
     timerID: state.metronome.timerID,
     room: state.socketWrapper.room,
-    roommates: state.metronome.roommates
+    roommates: state.metronome.roommates,
+    recording: state.metronome.recording
   }
 }
 

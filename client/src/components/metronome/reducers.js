@@ -1,4 +1,4 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, SET_NEXT_TICK_TIME, SEND_RECORDING, RECEIVE_RECORDING } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, SET_NEXT_TICK_TIME, SEND_RECORDING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING } from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -8,7 +8,7 @@ const initialState = {
     nextTickTime: 0,
     currentTime: 0,
     timerID: null,
-    recording: null
+    recording: false
 }
 
 export default (state = initialState, action) => {
@@ -22,6 +22,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isPlaying: false
+            }
+        case START_RECORDING:
+            return {
+                ...state,
+                recording: true
+            }
+        case STOP_RECORDING: 
+            return {
+                ...state,
+                recording: false
             }
         case SET_NEXT_TICK_TIME:
             return {

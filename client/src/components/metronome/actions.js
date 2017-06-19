@@ -30,6 +30,16 @@ export const stopRecordingNote = (instrument, detune) => ({
     instrument
 })
 
+export const START_RECORDING = "START_RECORDING"
+export const startRecording = () => ({
+    type: START_RECORDING
+})
+
+export const STOP_RECORDING = "STOP_RECORDING"
+export const stopRecording = () => ({
+    type: STOP_RECORDING
+})
+
 export const START_PLAYING = "START_PLAYING"
 export const startPlaying = (instrument, detune, note) => ({
     type: START_PLAYING,

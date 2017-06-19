@@ -49,17 +49,19 @@ export const createTimeclockMiddleware = store => {
   }
 
   function recordNote (instrument, detune) {
-    if (recording.length > 0) {
+    if (recording.length === 0) {
       recordingStartTime = audiocontext.currentTime;
     }
-    oscillators.push({instrument, startTime: audiocontext.currentTime-recordingStartTime, detune, stopTime: undefined})
+    recording.push({instrument, startTime: audiocontext.currentTime-recordingStartTime, detune, stopTime: undefined})
   }
   
   function stopRecordingNote (instrument, detune) {
+    console.log('ran function', recording)
     for (let i = 0; i < recording.length; i++) {
       if (recording[i].detune === detune) {
         if (!recording[i].stopTime) {
           recording[i].stopTime = audiocontext.currentTime-recordingStartTime;
+          console.log('after function', recording)
           break;
         }
       }
@@ -105,7 +107,14 @@ export const createTimeclockMiddleware = store => {
       recordNote(action.instrument, action.detune)
     }
     else if (action.type === actions.STOP_RECORDING_NOTE) {
+      console.log('stopped recording note')
       stopRecordingNote(action.instrument, action.detune)
+    }
+    else if (action.type === actions.START_RECORDING) {
+      recording = [];
+    }
+    else if (action.type === actions.STOP_RECORDING) {
+      console.log(recording)
     }
     return next(action);
   }
