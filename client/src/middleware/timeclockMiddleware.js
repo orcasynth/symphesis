@@ -13,6 +13,7 @@ export const createTimeclockMiddleware = store => {
   let roommates;
   let interval = {};
 
+  //helper functions
   function playMetronomeTone(time, velocity) {
     let osc = audiocontext.createOscillator();
     let amp = audiocontext.createGain();
@@ -26,6 +27,7 @@ export const createTimeclockMiddleware = store => {
     osc.stop(time + 0.1);
   }
 
+  //used to play notes with and without pre-defined stopping times
   function playNote(instrument, detune, start, stop) {
     console.log(detune)
     let osc = audiocontext.createOscillator();
@@ -40,8 +42,9 @@ export const createTimeclockMiddleware = store => {
       osc.frequency.value = 440;
       osc.detune.value = detune;
     }
-
-    start ? osc.start(start) : osc.start(audiocontext.currentTime)
+    start ? 
+      osc.start(start) : 
+      osc.start(audiocontext.currentTime)
     if (stop) {
       osc.stop(stop);
     }
@@ -61,6 +64,7 @@ export const createTimeclockMiddleware = store => {
     if (recording.length === 0) {
       recordingStartTime = audiocontext.currentTime;
     }
+    //check to make sure starttime doesn't go over permitted length
     if (audiocontext.currentTime - recordingStartTime < (recordingInterval * secondsPerBeat * timeSignature)) {
       recording.push({ instrument, startTime: audiocontext.currentTime - recordingStartTime, detune, stopTime: undefined });
     }
@@ -70,8 +74,11 @@ export const createTimeclockMiddleware = store => {
     for (let i = 0; i < recording.length; i++) {
       if (recording[i].detune === detune) {
         if (!recording[i].stopTime) {
-          let stopTime = audiocontext.currentTime - recordingStartTime
-          recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ? stopTime : (recordingInterval * secondsPerBeat * timeSignature);
+          let stopTime = audiocontext.currentTime - recordingStartTime;
+          //check to make sure stoptime doesn't go over permitted length
+          recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ? 
+            stopTime : 
+            (recordingInterval * secondsPerBeat * timeSignature);
           break;
         }
       }
@@ -100,17 +107,17 @@ export const createTimeclockMiddleware = store => {
       action.currentTime = audiocontext.currentTime;
       if (currentSubdivision === timeSignature * recordingInterval * 4) {
         currentSubdivision = 1;
-        recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime))
-        for (let user in roommates) {
-          let roommateRecording = roommates[user].recording;
-          if (roommateRecording) {
-            roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime))
-          }
-        }
       }
       else {
         currentSubdivision++;
-        if (currentSubdivision === 2) {
+        if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
+          recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime));
+          for (let user in roommates) {
+            let roommateRecording = roommates[user].recording;
+            if (roommateRecording) {
+              roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + action.nextTickTime, note.stopTime + action.nextTickTime))
+            }
+          }
           playMetronomeTone(action.nextTickTime, .6);
         }
         else if (currentSubdivision % action.timeSignature === 2) {
@@ -141,8 +148,10 @@ export const createTimeclockMiddleware = store => {
       roommates = action.roommates;
     }
     else if (action.type === actions.SEND_RECORDING) {
-      action.recording = [...recording];
-      recording = [];
+      if (recording.length > 0) {
+        action.recording = [...recording];
+        recording = [];
+      }
     }
     return next(action);
   }
