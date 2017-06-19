@@ -1,17 +1,17 @@
 import './index.css'
 import React from 'react';
 import { connect } from 'react-redux';
-import {playKeyboard, stopKeyboard} from './actions';
+import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../metronome/actions';
 
 export class Keyboard extends React.Component{
   playKeyboard (e, detune, note) {
     e.stopPropagation()
-    this.props.dispatch(playKeyboard(detune*100, note))
+    this.props.dispatch(startPlaying('keyboard', detune*100, note))
   }
 
   stopKeyboard (e, detune, note) {
     e.stopPropagation()
-    this.props.dispatch(stopKeyboard(detune*100, note))
+    this.props.dispatch(stopPlaying('keyboard', detune*100, note))
   }
 
   render(){
@@ -49,6 +49,7 @@ export class Keyboard extends React.Component{
 
 const mapStateToProps = (state) => ({
   room: state.socketWrapper.room,
+  recording: state.metronome.recording
 })
 
 export default connect(mapStateToProps)(Keyboard);
