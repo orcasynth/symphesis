@@ -8,6 +8,7 @@ export const createTimeclockMiddleware = store => {
   let oscillators = [];
   let recording = [];
   let recordingStartTime;
+  let roommates;
 
   function playMetronomeTone(time, velocity) {
     let osc = audiocontext.createOscillator();
@@ -52,16 +53,14 @@ export const createTimeclockMiddleware = store => {
     if (recording.length === 0) {
       recordingStartTime = audiocontext.currentTime;
     }
-    recording.push({instrument, startTime: audiocontext.currentTime-recordingStartTime, detune, stopTime: undefined})
+    recording.push({instrument, startTime: audiocontext.currentTime-recordingStartTime, detune, stopTime: undefined});
   }
   
   function stopRecordingNote (instrument, detune) {
-    console.log('ran function', recording)
     for (let i = 0; i < recording.length; i++) {
       if (recording[i].detune === detune) {
         if (!recording[i].stopTime) {
           recording[i].stopTime = audiocontext.currentTime-recordingStartTime;
-          console.log('after function', recording)
           break;
         }
       }
@@ -75,7 +74,7 @@ export const createTimeclockMiddleware = store => {
       currentSubdivision = 1;
       secondsPerBeat = 60 / action.bpm;
       tickLength = 1 / action.timeSignature *  60 / action.bpm;
-      actions.interval = setInterval(() => store.dispatch({ type: actions.SET_NEXT_TICK_TIME, bpm: action.bpm, timeSignature: action.timeSignature}), tickLength * 1000)
+      actions.interval = setInterval(() => store.dispatch({ type: actions.SET_NEXT_TICK_TIME, bpm: action.bpm, timeSignature: action.timeSignature}), tickLength * 1000);
     } else if (action.type === actions.SET_NOT_PLAYING && audiocontext) {
       clearInterval(actions.interval);
       audiocontext.close().then(function () {
@@ -107,14 +106,15 @@ export const createTimeclockMiddleware = store => {
       recordNote(action.instrument, action.detune)
     }
     else if (action.type === actions.STOP_RECORDING_NOTE) {
-      console.log('stopped recording note')
       stopRecordingNote(action.instrument, action.detune)
     }
     else if (action.type === actions.START_RECORDING) {
       recording = [];
     }
     else if (action.type === actions.STOP_RECORDING) {
-      console.log(recording)
+    }
+    else if (action.type === actions.RECEIVE_RECORDING) {
+      roommates = action.roommates;
     }
     return next(action);
   }
