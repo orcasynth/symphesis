@@ -26,7 +26,7 @@ class Metronome extends React.Component {
   }
 
   sendRecording () {
-    this.props.dispatch(sendRecording('hi', this.props.room))
+    this.props.dispatch(sendRecording(this.props.room))
   }
 
   render() {

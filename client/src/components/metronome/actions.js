@@ -57,9 +57,8 @@ export const stopPlaying = (instrument, detune, note) => ({
 })
 
 export const SEND_RECORDING = "SEND_RECORDING";
-export const sendRecording = (recording, room) => ({
+export const sendRecording = (room) => ({
     type: SEND_RECORDING,
-    recording,
     room,
 })
 

@@ -38,7 +38,7 @@ export function socketMiddleware(store) {
     }
 
     if (action.type === metronomeActions.SEND_RECORDING) {
-      socket.emit('sendRecording', {recording: action.recording, room: action.room})
+      socket.emit('sendRecording', action)
     }
 
     return result; 

@@ -68,29 +68,32 @@ export const createTimeclockMiddleware = store => {
   }
 
   return next => action => {
-    // console.log('From middleware: ', action)
     if (action.type === actions.SET_IS_PLAYING && !audiocontext) {
       audiocontext = new AudioContext();
       currentSubdivision = 1;
       secondsPerBeat = 60 / action.bpm;
       tickLength = 1 / action.timeSignature *  60 / action.bpm;
       actions.interval = setInterval(() => store.dispatch({ type: actions.SET_NEXT_TICK_TIME, bpm: action.bpm, timeSignature: action.timeSignature}), tickLength * 1000);
-    } else if (action.type === actions.SET_NOT_PLAYING && audiocontext) {
+    } 
+    else if (action.type === actions.SET_NOT_PLAYING && audiocontext) {
       clearInterval(actions.interval);
       audiocontext.close().then(function () {
         audiocontext = undefined;
         console.log('Audiocontext has closed.')
       });
-    } else if (action.type === actions.SET_NEXT_TICK_TIME) {
+    } 
+    else if (action.type === actions.SET_NEXT_TICK_TIME) {
       action.nextTickTime = audiocontext.currentTime + tickLength;
       action.currentTime = audiocontext.currentTime;
       if (currentSubdivision === 16) {
         currentSubdivision = 1
-      } else {
+      } 
+      else {
         currentSubdivision++;
         if (currentSubdivision === 2) {
           playMetronomeTone(action.nextTickTime, .6)
-        } else if (currentSubdivision%action.timeSignature === 2){
+        } 
+        else if (currentSubdivision%action.timeSignature === 2){
           playMetronomeTone(action.nextTickTime, .2)
         }  
       }
@@ -115,6 +118,9 @@ export const createTimeclockMiddleware = store => {
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
       roommates = action.roommates;
+    }
+    else if (action.type === actions.SEND_RECORDING) {
+      action.recording = recording;
     }
     return next(action);
   }
