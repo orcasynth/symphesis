@@ -5,26 +5,22 @@ import { Key } from './key';
 import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../metronome/actions';
 
 export class Keyboard extends React.Component{
-  playKeyboard (e, detune, note) {
-    e.stopPropagation()
-    if (this.props.recording) {
-      this.props.dispatch(recordNote('keyboard', detune*100))
-    }
-    this.props.dispatch(startPlaying('keyboard', detune*100, note))
-  }
-
   onMouseDown(note) {
-  }
-
-  onMouseUp() {
-  }
-
-  stopKeyboard (e, detune, note) {
-    e.stopPropagation()
     if (this.props.recording) {
-      this.props.dispatch(stopRecordingNote('keyboard', detune*100))
+      //change this note to detune
+      this.props.dispatch(recordNote('keyboard', note))
     }
-    this.props.dispatch(stopPlaying('keyboard', detune*100, note))
+    //change second note to detune
+    this.props.dispatch(startPlaying('keyboard', note, note))
+  }
+
+  onMouseUp(note) {
+    if (this.props.recording) {
+      //change this note to detune
+      this.props.dispatch(stopRecordingNote('keyboard', note))
+    }
+    //turn second note into detune
+    this.props.dispatch(stopPlaying('keyboard', note, note))
   }
 
   render(){
