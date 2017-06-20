@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording, requestToRecord } from './actions'
 import './index.css'
 
 class Metronome extends React.Component {
@@ -26,22 +26,34 @@ class Metronome extends React.Component {
   }
 
   sendRecording () {
-    this.props.dispatch(sendRecording('hi', this.props.room))
+    this.props.dispatch(sendRecording(this.props.room))
   }
 
   render() {
     let roommates = [];
     for (let user in this.props.roommates) {
       if (this.props.roommates[user].displayName) {
-        roommates.push(<li key={user}>{this.props.roommates[user].displayName}</li>)
+        let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
+          "(that's you!)" :
+          null;
+        roommates.push(<li key={user}>{this.props.roommates[user].displayName} {thatsYou}</li>)
       }
     }
 
+    let sendRecording = (this.props.enableSendRecording) ? 
+      (<button onClick={() => this.sendRecording()}>send recording</button>) :
+      null;
+
     return (
       <div>
-        <button onClick={() => this.sendRecording()}>send recording</button>
+        {sendRecording}
+        <button onClick={() => this.props.dispatch(requestToRecord())}>req record</button>
+        <button onClick={() => this.props.dispatch(startRecording())}>start recording</button>
+        <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <p>{this.props.recordingMessage}</p>
+        <p>Roommates</p>
         <ul>{roommates}</ul>
       </div>
     )
@@ -53,12 +65,12 @@ const mapStateToProps = function (state, props) {
     isPlaying: state.metronome.isPlaying,
     bpm: state.metronome.bpm,
     timeSignature: state.metronome.timeSignature,
-    currentSubdivision: state.metronome.currentSubdivision,
-    nextTickTime: state.metronome.nextTickTime,
-    currentTime: state.metronome.currentTime,
-    timerID: state.metronome.timerID,
     room: state.socketWrapper.room,
-    roommates: state.metronome.roommates
+    displayName: state.socketWrapper.displayName,
+    roommates: state.metronome.roommates,
+    recording: state.metronome.recording,
+    recordingMessage: state.metronome.recordingMessage,
+    enableSendRecording: state.metronome.enableSendRecording
   }
 }
 
