@@ -1,5 +1,5 @@
 import * as actions from '../components/socket-wrapper/actions';
-import * as metronomeActions from '../components/metronome/actions';
+import * as audioWrapperActions from '../components/audio-wrapper/actions';
 import io from 'socket.io-client';
 let socket;
 
@@ -8,7 +8,7 @@ export function storeWrapper(store){
   socket.on('hasJoined', (data) => store.dispatch(actions.setRoomAndUser(data)));
   socket.on('roomError', (error) => store.dispatch(actions.socketError(error)));
   socket.on('listRooms', (rooms) => store.dispatch(actions.getAvailableRooms(rooms))); 
-  socket.on('receiveRecording', (data) => store.dispatch(metronomeActions.receiveRecording(data)))
+  socket.on('receiveRecording', (data) => store.dispatch(audioWrapperActions.receiveRecording(data)))
 }
 
 export function socketMiddleware(store) {  
@@ -36,7 +36,7 @@ export function socketMiddleware(store) {
       socket.emit('listRooms')
     }
 
-    if (action.type === metronomeActions.SEND_RECORDING) {
+    if (action.type === audioWrapperActions.SEND_RECORDING) {
       socket.emit('sendRecording', action)
     }
 

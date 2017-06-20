@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import socketWrapper from './components/socket-wrapper/reducers';
 import app from './components/app/reducers';
-import metronome from './components/metronome/reducers';
+import audioWrapper from './components/audio-wrapper/reducers';
 
 
 export default combineReducers({
   socketWrapper,
   app,
-  metronome,
+  audioWrapper,
 });

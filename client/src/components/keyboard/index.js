@@ -2,7 +2,7 @@ import './index.css'
 import React from 'react';
 import { connect } from 'react-redux';
 import { Key } from './key';
-import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../metronome/actions';
+import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio-wrapper/actions';
 
 export class Keyboard extends React.Component{
   onMouseDown(note) {
@@ -68,7 +68,7 @@ export class Keyboard extends React.Component{
 
 const mapStateToProps = (state) => ({
   room: state.socketWrapper.room,
-  recording: state.metronome.recording
+  recording: state.audioWrapper.recording
 })
 
 export default connect(mapStateToProps)(Keyboard);
