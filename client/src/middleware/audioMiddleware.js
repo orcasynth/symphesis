@@ -30,21 +30,30 @@ export const audioMiddleware = store => {
 
   //used to play notes both with and without pre-defined stopping times
   function playNote(instrument, detune, start, stop) {
-    console.log(detune)
+    switch (instrument) {
+      case "keyboard":
+        playKeyboard(detune, start, stop);
+        break;
+      case "drums":
+        playDrums(detune, start, stop);
+        break;
+    }
+  }
+
+  function playKeyboard(detune, start, stop) {
     let osc = audiocontext.createOscillator();
     let amp = audiocontext.createGain();
     osc.connect(amp);
     amp.connect(audiocontext.destination);
-    if (instrument === "keyboard") {
-      osc.type = 'sawtooth';
 
-      amp.gain.value = .5;
-      amp.gain.setTargetAtTime(0.5, audiocontext.currentTime, 0.01)
-      osc.frequency.value = 440;
-      osc.detune.value = detune;
-    }
-    start ? 
-      osc.start(start) : 
+    osc.type = 'sawtooth';
+
+    amp.gain.value = .5;
+    amp.gain.setTargetAtTime(0.5, audiocontext.currentTime, 0.01)
+    osc.frequency.value = 440;
+    osc.detune.value = detune;
+    start ?
+      osc.start(start) :
       osc.start(audiocontext.currentTime)
     if (stop) {
       osc.stop(stop);
@@ -54,6 +63,7 @@ export const audioMiddleware = store => {
   }
 
   function stopNote(instrument, detune) {
+    console.log(oscillators)
     let index = oscillators.findIndex((oscillator) => {
       return oscillator.detune === detune;
     })
@@ -77,8 +87,8 @@ export const audioMiddleware = store => {
         if (!recording[i].stopTime) {
           let stopTime = audiocontext.currentTime - recordingStartTime;
           //check to make sure stoptime doesn't go over permitted length
-          recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ? 
-            stopTime : 
+          recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ?
+            stopTime :
             (recordingInterval * secondsPerBeat * timeSignature);
           break;
         }
@@ -86,29 +96,33 @@ export const audioMiddleware = store => {
     }
   }
 
-  function playKick () {
-    // wait 100ms for sample to download/decode
-    var startTime = audiocontext.currentTime
-
-    getSample('samples/Bass-Drum-1.wav', function play (buffer) {
-      console.log('ran play', buffer)
-      var player = audiocontext.createBufferSource()
+  function playDrums(detune, start, stop) {
+    console.log(detune, start, stop)
+    getSample(`samples/drums/${detune}`, function play(buffer) {
+      let player = audiocontext.createBufferSource()
       player.buffer = buffer
       player.connect(audiocontext.destination)
-      player.start(startTime)
-    })
-
-    function getSample (url, cb) {
-      var request = new XMLHttpRequest()
-      request.open('GET', url)
-      request.responseType = 'arraybuffer'
-      request.onload = function () {
-        console.log('loading sample', request.response)
-        audiocontext.decodeAudioData(request.response, cb)
+      start ?
+        player.start(start) :
+        player.start(audiocontext.currentTime);
+      if (stop) {
+        player.stop(stop);
       }
-      request.send()
-    }
+      let pushItem = { oscillator: player, detune }
+      oscillators.push(pushItem)
+    })
   }
+
+  function getSample(url, cb) {
+    var request = new XMLHttpRequest()
+    request.open('GET', url)
+    request.responseType = 'arraybuffer'
+    request.onload = function () {
+      audiocontext.decodeAudioData(request.response, cb)
+    }
+    request.send()
+  }
+
   return next => action => {
     if (action.type === actions.SET_IS_PLAYING && !audiocontext) {
       audiocontext = new AudioContext();
@@ -144,7 +158,7 @@ export const audioMiddleware = store => {
             }
           })
         }
-        if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
+        if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
           playMetronomeTone(nextTickTime, .6);
           // playKick();
         }
@@ -168,11 +182,11 @@ export const audioMiddleware = store => {
     }
     else if (action.type === actions.START_RECORDING) {
       recording = [];
-      setTimeout(() => store.dispatch({type: actions.STOP_RECORDING}), (recordingInterval * secondsPerBeat * timeSignature)*1000)
+      setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), (recordingInterval * secondsPerBeat * timeSignature) * 1000)
     }
     else if (action.type === actions.STOP_RECORDING) {
-      store.dispatch({type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true})
-      store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording"})
+      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
+      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
       roommates = action.roommates;
@@ -182,7 +196,7 @@ export const audioMiddleware = store => {
         action.recording = [...recording];
         recording = [];
       }
-      store.dispatch({type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false})
+      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false })
     }
     else if (action.type === actions.REQUEST_START_RECORDING) {
       // let threeTicksInSeconds = 3/tickLength;
@@ -190,19 +204,19 @@ export const audioMiddleware = store => {
       // let pointOfNoReturn = totalSubdivisions + 2 - threeTicksInSeconds;
 
       //wherever 1 is below, that is used instead of 2 because we don't count the next tick - function may be called mid-tick
-      let ticksUntilNextLoop = currentSubdivision < 2 ? 
-        (1 - currentSubdivision) : 
+      let ticksUntilNextLoop = currentSubdivision < 2 ?
+        (1 - currentSubdivision) :
         (totalSubdivisions + 1 - currentSubdivision);
       let timeUntilNextLoop = ticksUntilNextLoop * tickLength + nextTickTime - audiocontext.currentTime;
-      let timeUntilRecordInMS = (timeUntilNextLoop > 3) ? 
-        timeUntilNextLoop * 1000 : 
+      let timeUntilRecordInMS = (timeUntilNextLoop > 3) ?
+        timeUntilNextLoop * 1000 :
         (timeUntilNextLoop + (totalSubdivisions * tickLength)) * 1000;
-      store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're set to record once we get to the start of the loop..."});
-      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 3...'}), timeUntilRecordInMS-3000);
-      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 2...'}), timeUntilRecordInMS-2000);
-      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 1...'}), timeUntilRecordInMS-1000);
-      setTimeout(() => store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're recording!"}), timeUntilRecordInMS);
-      setTimeout(() => store.dispatch({type: actions.START_RECORDING}), timeUntilRecordInMS);
+      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're set to record once we get to the start of the loop..." });
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 3...' }), timeUntilRecordInMS - 3000);
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 2...' }), timeUntilRecordInMS - 2000);
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 1...' }), timeUntilRecordInMS - 1000);
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're recording!" }), timeUntilRecordInMS);
+      setTimeout(() => store.dispatch({ type: actions.START_RECORDING }), timeUntilRecordInMS);
     }
     else if (action.type === actions.UPDATE_RECORDING_MESSAGE) {
 
