@@ -1,0 +1,25 @@
+.play-button{ 
+    display: inline-block; 
+    width:60px; 
+    height: 60px; 
+    background-color: #8c8c8c; 
+    cursor:pointer;
+    border: 1px solid #e3e3e3;
+    text-align:center;
+}
+.play-button:active{ 
+    background-color: #e6e6e6;
+}
+
+.stop-button{ 
+    display: inline-block; 
+    width:60px; 
+    height: 60px; 
+    background-color: red; 
+    cursor:pointer;
+    border: 1px solid #e3e3e3;
+    text-align:center;
+}
+.stop-button:active{ 
+    background-color: darkred;
+}
