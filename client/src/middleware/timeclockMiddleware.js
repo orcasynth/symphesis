@@ -13,7 +13,6 @@ export const createTimeclockMiddleware = store => {
   let roommates;
   let interval;
   let nextTickTime;
-  let isRecording;
 
   //helper functions
   function playMetronomeTone(time, velocity) {
@@ -87,6 +86,29 @@ export const createTimeclockMiddleware = store => {
     }
   }
 
+  function playKick () {
+    // wait 100ms for sample to download/decode
+    var startTime = audiocontext.currentTime
+
+    getSample('../samples/Bass-Drum-1.wav', function play (buffer) {
+      console.log('ran play', buffer)
+      var player = audiocontext.createBufferSource()
+      player.buffer = buffer
+      player.connect(audiocontext.destination)
+      player.start(startTime)
+    })
+
+    function getSample (url, cb) {
+      var request = new XMLHttpRequest()
+      request.open('GET', url)
+      request.responseType = 'arraybuffer'
+      request.onload = function () {
+        console.log('loading sample', request.response)
+        audiocontext.decodeAudioData(request.response, cb)
+      }
+      request.send()
+    }
+  }
   return next => action => {
     if (action.type === actions.SET_IS_PLAYING && !audiocontext) {
       audiocontext = new AudioContext();
@@ -112,17 +134,18 @@ export const createTimeclockMiddleware = store => {
       else {
         currentSubdivision++;
         //subdivision 2 is treated as the "first" beat of the measure
-        if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
-          if (!isRecording) {
+        if (currentSubdivision === 2) {
             recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
-          } 
           for (let user in roommates) {
             let roommateRecording = roommates[user].recording;
             if (roommateRecording) {
               roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime))
             }
           }
+        }
+        if (currentSubdivision === 2 || currentSubdivision === (2 + (4 *  timeSignature))) {
           playMetronomeTone(nextTickTime, .6);
+          // playKick();
         }
         else if (currentSubdivision % action.timeSignature === 2) {
           playMetronomeTone(nextTickTime, .2);
@@ -143,12 +166,11 @@ export const createTimeclockMiddleware = store => {
       stopRecordingNote(action.instrument, action.detune)
     }
     else if (action.type === actions.START_RECORDING) {
-      isRecording = true;
       recording = [];
       setTimeout(() => store.dispatch({type: actions.STOP_RECORDING}), (recordingInterval * secondsPerBeat * timeSignature)*1000)
     }
     else if (action.type === actions.STOP_RECORDING) {
-      isRecording = false;
+      store.dispatch({type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true})
       store.dispatch({type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording"})
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
@@ -159,6 +181,7 @@ export const createTimeclockMiddleware = store => {
         action.recording = [...recording];
         recording = [];
       }
+      store.dispatch({type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false})
     }
     else if (action.type === actions.REQUEST_START_RECORDING) {
       // let threeTicksInSeconds = 3/tickLength;

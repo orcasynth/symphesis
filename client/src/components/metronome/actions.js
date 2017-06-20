@@ -77,3 +77,9 @@ export const UPDATE_RECORDING_MESSAGE = "UPDATE_RECORDING_MESSAGE";
 export const updateRecordingMessage = () => ({
     type: UPDATE_RECORDING_MESSAGE,
 })
+
+export const ENABLE_SEND_RECORDING = "ENABLE_SEND_RECORDING";
+export const enableSendRecording = (enableSendRecording) => ({
+    type: ENABLE_SEND_RECORDING,
+    enableSendRecording
+})

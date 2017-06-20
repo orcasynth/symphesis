@@ -40,9 +40,13 @@ class Metronome extends React.Component {
       }
     }
 
+    let sendRecording = (this.props.enableSendRecording) ? 
+      (<button onClick={() => this.sendRecording()}>send recording</button>) :
+      null;
+
     return (
       <div>
-        <button onClick={() => this.sendRecording()}>send recording</button>
+        {sendRecording}
         <button onClick={() => this.props.dispatch(requestToRecord())}>req record</button>
         <button onClick={() => this.props.dispatch(startRecording())}>start recording</button>
         <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
@@ -65,7 +69,8 @@ const mapStateToProps = function (state, props) {
     displayName: state.socketWrapper.displayName,
     roommates: state.metronome.roommates,
     recording: state.metronome.recording,
-    recordingMessage: state.metronome.recordingMessage
+    recordingMessage: state.metronome.recordingMessage,
+    enableSendRecording: state.metronome.enableSendRecording
   }
 }
 

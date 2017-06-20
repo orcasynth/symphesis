@@ -1,11 +1,12 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING } from "./actions"
 
 const initialState = {
     isPlaying: false,
     bpm: 60,
     timeSignature: 4,
     recording: false,
-    recordingMessage: 'Not recording'
+    recordingMessage: 'Not recording',
+    enableSendRecording: false
 }
 
 export default (state = initialState, action) => {
@@ -39,6 +40,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 recordingMessage: action.recordingMessage
+            }
+        case ENABLE_SEND_RECORDING: 
+            return {
+                ...state,
+                enableSendRecording: action.enableSendRecording
             }
         default:
             return state;
