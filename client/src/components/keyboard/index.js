@@ -8,20 +8,22 @@ import convertToDetune from '../../utilities/convertToDetune';
 
 
 class Keyboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+  }
   componentDidMount() {
-    document.addEventListener("keydown", (event) => this.onKeyDown(event))  
-
-    document.addEventListener("keyup", (event) => this.onKeyUp(event))
+    document.addEventListener("keydown", this.onKeyDown)  
+    document.addEventListener("keyup", this.onKeyUp)
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", (event) => this.onKeyDown(event))
-    document.removeEventListener("keyup", (event) => this.onKeyUp(event))
+    document.removeEventListener("keydown", this.onKeyDown)
+    document.removeEventListener("keyup", this.onKeyUp)
   }
 
   onKeyDown(event) {
-    console.log(event)
-    console.log(event.key)
     let note = convertFromKeycode(event.key, this.props.instrument)
     if (note) {
       if (this.props.recording) {
