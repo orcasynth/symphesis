@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording, requestToRecord } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording, requestToRecord, mute } from './actions'
 import './index.css'
 
 class AudioWrapper extends React.Component {
@@ -29,16 +29,32 @@ class AudioWrapper extends React.Component {
     this.props.dispatch(sendRecording(this.props.room))
   }
 
+  mute (user) {
+    let newObj = {...this.props.muted};
+    newObj[user] = !newObj[user];
+    this.props.dispatch(mute(newObj));
+  }
+
   render() {
     let roommates = [];
-    for (let user in this.props.roommates) {
+    Object.keys(this.props.roommates).forEach((user) => {
       if (this.props.roommates[user].displayName) {
+        let muteButtonText = (this.props.muted[user]) ? 
+          "Unmute" : 
+          "Mute";
+        let muteText = (this.props.muted[user]) ? 
+          "(Muted)" : 
+          null;
         let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
           "(that's you!)" :
           null;
-        roommates.push(<li key={user}>{this.props.roommates[user].displayName} {thatsYou}</li>)
+        roommates.push(
+          <li key={user}>{this.props.roommates[user].displayName} {thatsYou} {muteText}
+            <button onClick={() => this.mute(user)}>{muteButtonText}</button>
+          </li>
+        )
       }
-    }
+    })
 
     let sendRecording = (this.props.enableSendRecording) ? 
       (<button onClick={() => this.sendRecording()}>send recording</button>) :
@@ -70,7 +86,8 @@ const mapStateToProps = function (state, props) {
     roommates: state.audioWrapper.roommates,
     recording: state.audioWrapper.recording,
     recordingMessage: state.audioWrapper.recordingMessage,
-    enableSendRecording: state.audioWrapper.enableSendRecording
+    enableSendRecording: state.audioWrapper.enableSendRecording,
+    muted: state.audioWrapper.muted
   }
 }
 

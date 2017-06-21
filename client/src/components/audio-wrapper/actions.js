@@ -83,3 +83,9 @@ export const enableSendRecording = (enableSendRecording) => ({
     type: ENABLE_SEND_RECORDING,
     enableSendRecording
 })
+
+export const MUTE = "MUTE";
+export const mute = (obj) => ({
+    type: MUTE,
+    obj
+})
