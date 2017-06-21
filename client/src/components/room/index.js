@@ -6,6 +6,7 @@ import './index.css';
 import Keyboard from '../keyboard';
 import Drums from '../drums';
 import ElectricGuitar from '../electric-guitar';
+import Mic from '../mic';
 
 
 
@@ -17,7 +18,8 @@ class Room extends React.Component {
         <AudioWrapper />
         {/*<Drums />
         <Keyboard />*/}
-        <ElectricGuitar />
+        {/*<ElectricGuitar />*/}
+        <Mic />
       </div>
     )
   }

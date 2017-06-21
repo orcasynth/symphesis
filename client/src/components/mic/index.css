@@ -1,0 +1,20 @@
+.mic-component canvas {
+  width:250px;
+  display: block;
+}
+.mic-component .record {
+  width: 250px;
+  height: 40px;
+  border: 1px solid lightblue;
+  text-align:center;
+  line-height: 2.4em;
+  display:block;
+}
+
+.mic-component .stop {
+  width: 250px;
+  height: 40px;
+  border: 1px solid pink;
+  text-align:center;
+  line-height: 2.4em;
+}
