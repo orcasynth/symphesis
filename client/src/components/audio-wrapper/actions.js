@@ -26,8 +26,8 @@ export const recordNote = (instrument, detune) => ({
 export const STOP_RECORDING_NOTE = "STOP_RECORDING_NOTE"
 export const stopRecordingNote = (instrument, detune) => ({
     type: STOP_RECORDING_NOTE,
-    detune,
-    instrument
+    instrument,
+    detune
 })
 
 export const START_RECORDING = "START_RECORDING"
