@@ -34,8 +34,8 @@ export const audioMiddleware = store => {
       case "keyboard":
         playKeyboard(detune, start, stop);
         break;
-      case "drums":
-        playDrums(detune, start, stop);
+      default:
+        playSamples(instrument, detune, start, stop);
         break;
     }
   }
@@ -96,9 +96,8 @@ export const audioMiddleware = store => {
     }
   }
 
-  function playDrums(detune, start, stop) {
-    console.log(detune, start, stop)
-    getSample(`samples/drums/${detune}`, function play(buffer) {
+  function playSamples(instrument, detune, start, stop) {
+    getSample(`samples/${instrument}/${detune}`, function play(buffer) {
       let player = audiocontext.createBufferSource()
       player.buffer = buffer
       player.connect(audiocontext.destination)
