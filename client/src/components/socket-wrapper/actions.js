@@ -4,10 +4,11 @@ export const getAvailableRooms = (availableRooms) => ({
   availableRooms
 });
 
-export const SET_ROOM = 'SET_ROOM';
-export const setRoom = (room) => ({
-  type: SET_ROOM,
-  room
+export const SET_ROOM_AND_USER = 'SET_ROOM_AND_USER';
+export const setRoomAndUser = (data) => ({
+  type: SET_ROOM_AND_USER,
+  room: data.room,
+  displayName: data.displayName
 });
 
 export const SOCKET_ERROR = 'SOCKET_ERROR';

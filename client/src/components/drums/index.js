@@ -1,13 +1,11 @@
-import './index.css'
 import React from 'react';
 import { connect } from 'react-redux';
-import Key from './key';
-import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
+import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
-
-class Keyboard extends React.Component {
+export class Drums extends React.Component{
   componentDidMount() {
     document.addEventListener("keydown", (event) => this.onKeyDown(event))  
 
@@ -20,8 +18,6 @@ class Keyboard extends React.Component {
   }
 
   onKeyDown(event) {
-    console.log(event)
-    console.log(event.key)
     let note = convertFromKeycode(event.key, this.props.instrument)
     if (note) {
       if (this.props.recording) {
@@ -40,47 +36,48 @@ class Keyboard extends React.Component {
       this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
     }
   }
-  render() {
-    return (
 
+  render(){
+    return ( 
       <div id="keyboard" >
         <div id="keyboard-row">
-          <Key note="C#3" />
-          <Key note="D#3" />
-          <Key note="F#3" />
-          <Key note="G#3" />
+          <Key note="hihat2" /> 
+          <Key note="hihat1" /> 
+          <Key note="hitom1" /> 
+          <Key note="hitom2" /> 
         </div>
         <div id="keyboard-row">
-          <Key note="C3" />
-          <Key note="D3" />
-          <Key note="E3" />
-          <Key note="F3" />
-          <Key note="G3" />
+          <Key note="kick" />
+          <Key note="lowtom1" /> 
+          <Key note="lowtom2" /> 
+          <Key note="ride1" /> 
+          <Key note="ride2" /> 
         </div>
         <div id="keyboard-row">
-          <Key note="A#4" />
-          <Key note="C#4" />
-          <Key note="D#4" />
-          <Key note="F#4" />
+          <Key note="ridebell" /> 
+          <Key note="ridecrash" /> 
+          <Key note="snare1" /> 
+          <Key note="snare2" /> 
         </div>
         <div id="keyboard-row">
-          <Key note="A4" />
-          <Key note="B4" />
-          <Key note="C4" />
-          <Key note="D4" />
-          <Key note="E4" />
-          <Key note="F4" />
-          <Key note="G4" />
+          <Key note="snareroll" /> 
+          {/*<Key note="B" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
+          <Key note="C" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
+          <Key note="D" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
+          <Key note="E" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
+          <Key note="F" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/>  
+          <Key note="G" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> */}
         </div>
+
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  recording: state.audioWrapper.recording,
-  instrument: state.audioWrapper.instrument
-});
+  room: state.socketWrapper.room,
+  recording: state.audioWrapper.recording
+})
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -102,4 +99,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Keyboard);
+)(Drums);

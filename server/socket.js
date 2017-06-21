@@ -12,27 +12,27 @@ function socketRooms(io) {
       let room = roomGenerator();
       socket.join(room);
       rooms[room] = {};
-      rooms[room][socket.id] = { recording: null, displayName: usernameGenerator(room) };
+      let displayName = usernameGenerator(room);
+      rooms[room][socket.id] = { recording: null, displayName };
       rooms[room].length = io.sockets.adapter.rooms[room].length;
-      socket.emit('hasJoined', room);
+      socket.emit('hasJoined', {room, displayName});
       io.emit('listRooms', returnRoomList(rooms));
       io.in(room).emit('receiveRecording', rooms[room]);
     });
 
     socket.on('joinRoom', (data) => {
-      // RECONSIDER ROOM MANAGEMENT LATER
       if (!io.sockets.adapter.rooms[data.room]) {
         socket.emit('roomError', 'Room does not exist')
       }
       else if (io.sockets.adapter.rooms[data.room].length > 5) {
         socket.emit('roomError', 'Room just filled up')
-        // ADD ALTERATE BUTTON FOR ROOM FOR LISTENERS
       }
       else {
         socket.join(data.room);
-        rooms[data.room][socket.id] = { recording: null, displayName: usernameGenerator(data.room) };
+        let displayName = usernameGenerator(data.room);
+        rooms[data.room][socket.id] = { recording: null, displayName };
         rooms[data.room].length = io.sockets.adapter.rooms[data.room].length;
-        socket.emit('hasJoined', data.room);
+        socket.emit('hasJoined', {room: data.room, displayName});
         io.in(data.room).emit('receiveRecording', rooms[data.room]);
         io.emit('listRooms', returnRoomList(rooms));
       }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAvailableRooms, setRoom, socketError, leaveRoom, joinRoom, createRoom, listRooms } from './actions';
+import { leaveRoom, joinRoom, createRoom, listRooms } from './actions';
 import '../../middleware/socketMiddleware';
 import './index.css';
 import RoomFinder from '../room-finder';
