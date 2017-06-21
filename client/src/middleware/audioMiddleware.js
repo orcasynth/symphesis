@@ -64,7 +64,6 @@ export const audioMiddleware = store => {
   }
 
   function stopNote(instrument, detune) {
-    console.log(oscillators)
     let index = oscillators.findIndex((oscillator) => {
       return oscillator.detune === detune;
     })
@@ -160,7 +159,6 @@ export const audioMiddleware = store => {
         }
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
           playMetronomeTone(nextTickTime, .6);
-          // playKick();
         }
         else if (currentSubdivision % action.timeSignature === 2) {
           playMetronomeTone(nextTickTime, .2);
@@ -200,10 +198,7 @@ export const audioMiddleware = store => {
       store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false })
     }
     else if (action.type === actions.REQUEST_START_RECORDING) {
-      // let threeTicksInSeconds = 3/tickLength;
       let totalSubdivisions = 4 * timeSignature * recordingInterval;
-      // let pointOfNoReturn = totalSubdivisions + 2 - threeTicksInSeconds;
-
       //wherever 1 is below, that is used instead of 2 because we don't count the next tick - function may be called mid-tick
       let ticksUntilNextLoop = currentSubdivision < 2 ?
         (1 - currentSubdivision) :
