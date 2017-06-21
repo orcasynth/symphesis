@@ -1,7 +1,8 @@
 import * as actions from '../components/audio-wrapper/actions'
 
 export const audioMiddleware = store => {
-  let audiocontext
+  //CONSIDER ADDING THESE INTO REDUX, ACCESSING VIA store.getState
+  let audioContext
   let currentSubdivision = 1;
   let tickLength;
   let secondsPerBeat;
@@ -16,10 +17,10 @@ export const audioMiddleware = store => {
 
   //helper functions
   function playMetronomeTone(time, velocity) {
-    let osc = audiocontext.createOscillator();
-    let amp = audiocontext.createGain();
+    let osc = audioContext.createOscillator();
+    let amp = audioContext.createGain();
     osc.connect(amp);
-    amp.connect(audiocontext.destination);
+    amp.connect(audioContext.destination);
 
     amp.gain.value = velocity;
     osc.frequency.value = 208;
@@ -41,20 +42,20 @@ export const audioMiddleware = store => {
   }
 
   function playKeyboard(detune, start, stop) {
-    let osc = audiocontext.createOscillator();
-    let amp = audiocontext.createGain();
+    let osc = audioContext.createOscillator();
+    let amp = audioContext.createGain();
     osc.connect(amp);
-    amp.connect(audiocontext.destination);
+    amp.connect(audioContext.destination);
 
     osc.type = 'sawtooth';
 
     amp.gain.value = .5;
-    amp.gain.setTargetAtTime(0.5, audiocontext.currentTime, 0.01)
+    amp.gain.setTargetAtTime(0.5, audioContext.currentTime, 0.01)
     osc.frequency.value = 440;
     osc.detune.value = detune;
     start ?
       osc.start(start) :
-      osc.start(audiocontext.currentTime)
+      osc.start(audioContext.currentTime)
     if (stop) {
       osc.stop(stop);
     }
@@ -73,11 +74,11 @@ export const audioMiddleware = store => {
 
   function recordNote(instrument, detune) {
     if (recording.length === 0) {
-      recordingStartTime = audiocontext.currentTime;
+      recordingStartTime = audioContext.currentTime;
     }
     //check to make sure starttime doesn't go over permitted length
-    if (audiocontext.currentTime - recordingStartTime < (recordingInterval * secondsPerBeat * timeSignature)) {
-      recording.push({ instrument, startTime: audiocontext.currentTime - recordingStartTime, detune, stopTime: undefined });
+    if (audioContext.currentTime - recordingStartTime < (recordingInterval * secondsPerBeat * timeSignature)) {
+      recording.push({ instrument, startTime: audioContext.currentTime - recordingStartTime, detune, stopTime: undefined });
     }
   }
 
@@ -85,7 +86,7 @@ export const audioMiddleware = store => {
     for (let i = 0; i < recording.length; i++) {
       if (recording[i].detune === detune) {
         if (!recording[i].stopTime) {
-          let stopTime = audiocontext.currentTime - recordingStartTime;
+          let stopTime = audioContext.currentTime - recordingStartTime;
           //check to make sure stoptime doesn't go over permitted length
           recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ?
             stopTime :
@@ -98,12 +99,12 @@ export const audioMiddleware = store => {
 
   function playSamples(instrument, detune, start, stop) {
     getSample(`samples/${instrument}/${detune}`, function play(buffer) {
-      let player = audiocontext.createBufferSource()
+      let player = audioContext.createBufferSource()
       player.buffer = buffer
-      player.connect(audiocontext.destination)
+      player.connect(audioContext.destination)
       start ?
         player.start(start) :
-        player.start(audiocontext.currentTime);
+        player.start(audioContext.currentTime);
       if (stop) {
         player.stop(stop);
       }
@@ -117,30 +118,30 @@ export const audioMiddleware = store => {
     request.open('GET', url)
     request.responseType = 'arraybuffer'
     request.onload = function () {
-      audiocontext.decodeAudioData(request.response, cb)
+      audioContext.decodeAudioData(request.response, cb)
     }
     request.send()
   }
 
   return next => action => {
-    if (action.type === actions.SET_IS_PLAYING && !audiocontext) {
-      audiocontext = new AudioContext();
+    if (action.type === actions.SET_IS_PLAYING && !audioContext) {
+      audioContext = new AudioContext();
       currentSubdivision = 1;
       timeSignature = action.timeSignature;
       secondsPerBeat = 60 / action.bpm;
       tickLength = 1 / action.timeSignature * 60 / action.bpm;
       interval = setInterval(() => store.dispatch({ type: actions.SET_NEXT_TICK_TIME, bpm: action.bpm, timeSignature: action.timeSignature }), tickLength * 1000);
     }
-    else if (action.type === actions.SET_NOT_PLAYING && audiocontext) {
+    else if (action.type === actions.SET_NOT_PLAYING && audioContext) {
       clearInterval(interval);
       interval = undefined;
-      audiocontext.close().then(function () {
-        audiocontext = undefined;
-        console.log('Audiocontext has closed.')
+      audioContext.close().then(function () {
+        audioContext = undefined;
+        console.log('audioContext has closed.')
       });
     }
     else if (action.type === actions.SET_NEXT_TICK_TIME) {
-      nextTickTime = audiocontext.currentTime + tickLength;
+      nextTickTime = audioContext.currentTime + tickLength;
       if (currentSubdivision === timeSignature * recordingInterval * 4) {
         currentSubdivision = 1;
       }
@@ -207,7 +208,7 @@ export const audioMiddleware = store => {
       let ticksUntilNextLoop = currentSubdivision < 2 ?
         (1 - currentSubdivision) :
         (totalSubdivisions + 1 - currentSubdivision);
-      let timeUntilNextLoop = ticksUntilNextLoop * tickLength + nextTickTime - audiocontext.currentTime;
+      let timeUntilNextLoop = ticksUntilNextLoop * tickLength + nextTickTime - audioContext.currentTime;
       let timeUntilRecordInMS = (timeUntilNextLoop > 3) ?
         timeUntilNextLoop * 1000 :
         (timeUntilNextLoop + (totalSubdivisions * tickLength)) * 1000;
