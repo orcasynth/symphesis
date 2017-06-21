@@ -181,7 +181,7 @@ export const audioMiddleware = store => {
       stopRecordingNote(action.instrument, action.detune)
     }
     else if (action.type === actions.START_RECORDING) {
-      recording = [];
+      store.dispatch({ type: actions.TRASH_RECORDING });
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), (recordingInterval * secondsPerBeat * timeSignature) * 1000)
     }
     else if (action.type === actions.STOP_RECORDING) {
@@ -195,7 +195,7 @@ export const audioMiddleware = store => {
     else if (action.type === actions.SEND_RECORDING) {
       if (recording.length > 0) {
         action.recording = [...recording];
-        recording = [];
+      store.dispatch({ type: actions.TRASH_RECORDING });
       }
       store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false })
     }
@@ -216,8 +216,8 @@ export const audioMiddleware = store => {
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're recording!" }), timeUntilRecordInMS);
       setTimeout(() => store.dispatch({ type: actions.START_RECORDING }), timeUntilRecordInMS);
     }
-    else if (action.type === actions.UPDATE_RECORDING_MESSAGE) {
-
+    else if (action.type === actions.TRASH_RECORDING) {
+      recording = [];
     }
     return next(action);
   }

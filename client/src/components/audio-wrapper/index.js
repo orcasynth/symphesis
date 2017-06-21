@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording, startRecording, stopRecording, requestToRecord, mute } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, requestToRecord, mute, trashRecording } from './actions'
 import './index.css'
 
 class AudioWrapper extends React.Component {
@@ -64,8 +64,7 @@ class AudioWrapper extends React.Component {
       <div>
         {sendRecording}
         <button onClick={() => this.props.dispatch(requestToRecord())}>req record</button>
-        <button onClick={() => this.props.dispatch(startRecording())}>start recording</button>
-        <button onClick={() => this.props.dispatch(stopRecording())}>stop recording</button>
+        <button onClick={() => this.props.dispatch(trashRecording())}>trash recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
         <p>{this.props.recordingMessage}</p>

@@ -89,3 +89,8 @@ export const mute = (obj) => ({
     type: MUTE,
     obj
 })
+
+export const TRASH_RECORDING = "TRASH_RECORDING";
+export const trashRecording = () => ({
+    type: TRASH_RECORDING
+})
