@@ -1,4 +1,4 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING, MUTE } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING, MUTE, CHANGE_INSTRUMENT } from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -10,6 +10,7 @@ const initialState = {
     enableSendRecording: false,
     roommates: false,
     muted: {},
+    instrument: "electric-guitar",
 }
 
 export default (state = initialState, action) => {
@@ -53,6 +54,11 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 muted: action.obj
+            }
+        case CHANGE_INSTRUMENT:
+            return {
+                ...state,
+                instrument: action.instrument
             }
         default:
             return state;

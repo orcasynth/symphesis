@@ -94,3 +94,9 @@ export const TRASH_RECORDING = "TRASH_RECORDING";
 export const trashRecording = () => ({
     type: TRASH_RECORDING
 })
+
+export const CHANGE_INSTRUMENT = "CHANGE_INSTRUMENT";
+export const changeInstrument = (instrument) => ({
+    type: CHANGE_INSTRUMENT,
+    instrument
+})

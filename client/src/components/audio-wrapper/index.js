@@ -1,7 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording, requestToRecord, mute, trashRecording } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, requestToRecord, mute, trashRecording, changeInstrument } from './actions'
 import './index.css'
+import Keyboard from '../keyboard';
+import Drums from '../drums';
+import ElectricGuitar from '../electric-guitar';
 
 class AudioWrapper extends React.Component {
   // componentWillMount() {
@@ -60,6 +63,18 @@ class AudioWrapper extends React.Component {
       (<button onClick={() => this.sendRecording()}>send recording</button>) :
       null;
 
+    let instrument;
+    switch (this.props.instrument) {
+      case "keyboard": 
+        instrument = (<Keyboard />);
+        break;
+      case "drums": 
+        instrument = (<Drums />);
+        break;
+      case "electric-guitar":
+        instrument = (<ElectricGuitar />);
+        break;
+    }
     return (
       <div>
         {sendRecording}
@@ -67,9 +82,17 @@ class AudioWrapper extends React.Component {
         <button onClick={() => this.props.dispatch(trashRecording())}>trash recording</button>
         <div className="play-button" onClick={() => this.play()}> > </div>
         <div className="stop-button" onClick={() => this.stop()}> > </div>
+        <select onChange={(e) => {
+          this.props.dispatch(changeInstrument(e.target.value))
+        }}>
+          <option value="electric-guitar">Electric Guitar</option>
+          <option value="keyboard">Keyboard</option>
+          <option value="drums">Drums</option>
+        </select>
         <p>{this.props.recordingMessage}</p>
         <p>Roommates</p>
         <ul>{roommates}</ul>
+        {instrument}
       </div>
     )
   }
@@ -86,7 +109,8 @@ const mapStateToProps = function (state, props) {
     recording: state.audioWrapper.recording,
     recordingMessage: state.audioWrapper.recordingMessage,
     enableSendRecording: state.audioWrapper.enableSendRecording,
-    muted: state.audioWrapper.muted
+    muted: state.audioWrapper.muted,
+    instrument: state.audioWrapper.instrument
   }
 }
 
