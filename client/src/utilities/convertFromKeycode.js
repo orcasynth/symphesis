@@ -46,7 +46,7 @@ function convertFromKeyCode(keycode, instrument) {
       'B': "Fm",
       'N': "G",
       'M': "G7",
-      'N': "Gm"
+      ',': "Gm"
     }, 
     "drums" : {
       '2': "hihat2",

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { setIsPlaying, setNotPlaying, sendRecording, requestToRecord, mute, trashRecording, changeInstrument } from './actions'
+import { setIsPlaying, setNotPlaying, sendRecording, requestToRecord, mute, trashRecording, changeInstrument } from './actions';
 import './index.css'
 import Keyboard from '../keyboard';
 import Drums from '../drums';
@@ -66,13 +66,13 @@ class AudioWrapper extends React.Component {
     let instrument;
     switch (this.props.instrument) {
       case "keyboard": 
-        instrument = (<Keyboard />);
+        instrument = <Keyboard />;
         break;
       case "drums": 
-        instrument = (<Drums />);
+        instrument = <Drums />;
         break;
       case "electric-guitar":
-        instrument = (<ElectricGuitar />);
+        instrument = <ElectricGuitar />;
         break;
     }
     return (

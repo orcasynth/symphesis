@@ -63,6 +63,33 @@ export const audioMiddleware = store => {
     oscillators.push(pushItem)
   }
 
+  function playSamples(instrument, detune, start, stop) {
+    getSample(`samples/${instrument}/${detune}`, function play(buffer) {
+      let player = audioContext.createBufferSource()
+      player.buffer = buffer
+      player.connect(audioContext.destination)
+      start ?
+        player.start(start) :
+        player.start(audioContext.currentTime);
+      if (stop) {
+        player.stop(stop);
+      }
+      let pushItem = { oscillator: player, detune }
+      oscillators.push(pushItem)
+      console.log(oscillators)
+    })
+  }
+
+  function getSample(url, cb) {
+    var request = new XMLHttpRequest()
+    request.open('GET', url)
+    request.responseType = 'arraybuffer'
+    request.onload = function () {
+      audioContext.decodeAudioData(request.response, cb)
+    }
+    request.send()
+  }
+
   function stopNote(instrument, detune) {
     let index = oscillators.findIndex((oscillator) => {
       return oscillator.detune === detune;
@@ -96,32 +123,6 @@ export const audioMiddleware = store => {
     }
   }
 
-  function playSamples(instrument, detune, start, stop) {
-    getSample(`samples/${instrument}/${detune}`, function play(buffer) {
-      let player = audioContext.createBufferSource()
-      player.buffer = buffer
-      player.connect(audioContext.destination)
-      start ?
-        player.start(start) :
-        player.start(audioContext.currentTime);
-      if (stop) {
-        player.stop(stop);
-      }
-      let pushItem = { oscillator: player, detune }
-      oscillators.push(pushItem)
-    })
-  }
-
-  function getSample(url, cb) {
-    var request = new XMLHttpRequest()
-    request.open('GET', url)
-    request.responseType = 'arraybuffer'
-    request.onload = function () {
-      audioContext.decodeAudioData(request.response, cb)
-    }
-    request.send()
-  }
-
   return next => action => {
     if (action.type === actions.SET_IS_PLAYING && !audioContext) {
       audioContext = new AudioContext();
@@ -153,7 +154,6 @@ export const audioMiddleware = store => {
             if (!store.getState().audioWrapper.muted[user]) {
               let roommateRecording = roommates[user].recording;
               if (roommateRecording) {
-                console.log(roommateRecording)
                 roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime))
               }
             }

@@ -4,7 +4,6 @@ import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio
 import convertToDetune from '../../utilities/convertToDetune';
 
 const KeyPrototype = function(props) {
-  console.log('props ->', props)
   function onMouseDown(note) {
     if (props.recording) {
       props.recordNote(props.instrument, convertToDetune(note))

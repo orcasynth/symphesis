@@ -1,22 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Key } from '../keyboard/key';
-import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio-wrapper/actions';
+import Key from '../keyboard/key';
+import convertFromKeycode from '../../utilities/convertFromKeycode';
+import convertToDetune from '../../utilities/convertToDetune';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
 export class Drums extends React.Component{
-  // onMouseDown(detune) {
-  //   if (this.props.recording) {
-  //     this.props.dispatch(recordNote('drums', detune))
-  //   }
-  //   this.props.dispatch(startPlaying('drums', detune))
-  // }
+  componentDidMount() {
+    document.addEventListener("keydown", (event) => this.onKeyDown(event))  
 
-  // onMouseUp(detune) {
-  //   if (this.props.recording) {
-  //     this.props.dispatch(stopRecordingNote('drums', detune))
-  //   }
-  //   this.props.dispatch(stopPlaying('drums', detune))
-  // }
+    document.addEventListener("keyup", (event) => this.onKeyUp(event))
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", (event) => this.onKeyDown(event))
+    document.removeEventListener("keyup", (event) => this.onKeyUp(event))
+  }
+
+  onKeyDown(event) {
+    let note = convertFromKeycode(event.key, this.props.instrument)
+    if (note) {
+      if (this.props.recording) {
+        this.props.recordNote(this.props.instrument, convertToDetune(note))
+      }
+      this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
+    }
+  }
+
+  onKeyUp(event) {
+    let note = convertFromKeycode(event.key, this.props.instrument)
+    if (note) {
+      if (this.props.recording) {
+        this.props.stopRecordingNote(this.props.instrument, convertToDetune(note))
+      }
+      this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
+    }
+  }
 
   render(){
     return ( 
@@ -60,4 +79,24 @@ const mapStateToProps = (state) => ({
   recording: state.audioWrapper.recording
 })
 
-export default connect(mapStateToProps)(Drums);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    recordNote: (instrument, detune) => {
+      dispatch(recordNote(instrument, detune))
+    },
+    startPlaying: (instrument, detune, note) => {
+      dispatch(startPlaying(instrument, detune, note))
+    },
+    stopPlaying: (instrument, detune, note) => {
+      dispatch(stopPlaying(instrument, detune, note))
+    },
+    stopRecordingNote: (instrument, detune) => {
+      dispatch(stopRecordingNote(instrument, detune))
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Drums);

@@ -1,22 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Key } from '../keyboard/key';
-import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio-wrapper/actions';
+import Key from '../keyboard/key';
+import convertFromKeycode from '../../utilities/convertFromKeycode';
+import convertToDetune from '../../utilities/convertToDetune';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
 export class ElectricGuitar extends React.Component{
-  // onMouseDown(detune) {
-  //   if (this.props.recording) {
-  //     this.props.dispatch(recordNote('electric-guitar', detune))
-  //   }
-  //   this.props.dispatch(startPlaying('electric-guitar', detune))
-  // }
+  componentDidMount() {
+    document.addEventListener("keydown", (event) => this.onKeyDown(event))  
 
-  // onMouseUp(detune) {
-  //   if (this.props.recording) {
-  //     this.props.dispatch(stopRecordingNote('electric-guitar', detune))
-  //   }
-  //   this.props.dispatch(stopPlaying('electric-guitar', detune))
-  // }
+    document.addEventListener("keyup", (event) => this.onKeyUp(event))
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", (event) => this.onKeyDown(event))
+    document.removeEventListener("keyup", (event) => this.onKeyUp(event))
+  }
+
+  onKeyDown(event) {
+    let note = convertFromKeycode(event.key, this.props.instrument)
+    if (note) {
+      if (this.props.recording) {
+        this.props.recordNote(this.props.instrument, convertToDetune(note))
+      }
+      this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
+    }
+  }
+
+  onKeyUp(event) {
+    let note = convertFromKeycode(event.key, this.props.instrument)
+    if (note) {
+      if (this.props.recording) {
+        this.props.stopRecordingNote(this.props.instrument, convertToDetune(note))
+      }
+      this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
+    }
+  }
 
   render(){
     return( 
@@ -61,8 +80,28 @@ export class ElectricGuitar extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-  room: state.socketWrapper.room,
-  recording: state.audioWrapper.recording
-})
+  recording: state.audioWrapper.recording,
+  instrument: state.audioWrapper.instrument
+});
 
-export default connect(mapStateToProps)(ElectricGuitar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    recordNote: (instrument, detune) => {
+      dispatch(recordNote(instrument, detune))
+    },
+    startPlaying: (instrument, detune, note) => {
+      dispatch(startPlaying(instrument, detune, note))
+    },
+    stopPlaying: (instrument, detune, note) => {
+      dispatch(stopPlaying(instrument, detune, note))
+    },
+    stopRecordingNote: (instrument, detune) => {
+      dispatch(stopRecordingNote(instrument, detune))
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ElectricGuitar);
