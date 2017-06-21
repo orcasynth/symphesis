@@ -148,7 +148,6 @@ export const audioMiddleware = store => {
         currentSubdivision++;
         //subdivision 2 is treated as the "first" beat of the measure
         if (currentSubdivision === 2) {
-          console.log()
           recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
           Object.keys(roommates).forEach((user) => {
             if (!store.getState().audioWrapper.muted[user]) {
