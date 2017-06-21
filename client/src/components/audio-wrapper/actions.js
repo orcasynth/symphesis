@@ -83,3 +83,20 @@ export const enableSendRecording = (enableSendRecording) => ({
     type: ENABLE_SEND_RECORDING,
     enableSendRecording
 })
+
+export const MUTE = "MUTE";
+export const mute = (obj) => ({
+    type: MUTE,
+    obj
+})
+
+export const TRASH_RECORDING = "TRASH_RECORDING";
+export const trashRecording = () => ({
+    type: TRASH_RECORDING
+})
+
+export const CHANGE_INSTRUMENT = "CHANGE_INSTRUMENT";
+export const changeInstrument = (instrument) => ({
+    type: CHANGE_INSTRUMENT,
+    instrument
+})
