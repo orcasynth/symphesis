@@ -4,6 +4,7 @@ const initialState = {
     isPlaying: false,
     bpm: 60,
     timeSignature: 4,
+    //IS "RECORDING" BEING USED BY REACT?
     recording: false,
     recordingMessage: 'Not recording',
     enableSendRecording: false

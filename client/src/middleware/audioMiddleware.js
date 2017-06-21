@@ -188,6 +188,7 @@ export const audioMiddleware = store => {
       store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
+      //POTENTIALLY REFACTOR TO REMOVE RECORDINGS FROM LIST OF ROOMMATES
       roommates = action.roommates;
     }
     else if (action.type === actions.SEND_RECORDING) {
