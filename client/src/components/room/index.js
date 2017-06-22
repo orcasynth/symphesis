@@ -10,6 +10,7 @@ class Room extends React.Component {
       <div>You are user {this.props.displayName} in room {this.props.room}
         <button onClick={() => this.props.leaveRoom()}>click to Brexit</button>
         <AudioWrapper />
+      
       </div>
     )
   }
