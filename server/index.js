@@ -8,6 +8,10 @@ const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const socketRooms = require('./socket').socketRooms;
+const multer = require('multer');
+const bodyParser = require('body-parser');
+const upload = multer();
+const fs = require('fs');
 
 mongoose.Promise = global.Promise
 
@@ -100,6 +104,41 @@ app.get('/api/me',
     displayName: req.user.displayName
   })
 );
+
+app.use(express.static('audioupload'));
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(
+  bodyParser.raw({ type: 'audio/ogg', limit: '50mb' })
+);
+
+app.post('/audioupload', upload.single(), function(req, res, next) {
+    try{
+    console.log('body => ', req.body);
+    console.log('files => ', req.files);
+    const audioFile = req.file;
+    //create unique filenames
+    let d = new Date();
+    let n = d.getTime();
+    let newFilename = n+'.ogg'
+    //write file
+    fs.writeFile('../client/public/' + newFilename, req.body, function(err){
+        if(err) {
+            console.log('Error in writing file: ', err);
+        }
+    })
+    res.send();
+    }
+    catch(e){
+    console.log(e);
+    res.sendStatus(400);
+    }
+    next();
+});
 
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
