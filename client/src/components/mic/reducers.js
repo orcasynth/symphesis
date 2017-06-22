@@ -1,4 +1,4 @@
-import { START_MIC_RECORDING, SET_RECORD_BUTTON_DISABLED, SET_STOP_BUTTON_DISABLED } from "./actions"
+import { START_MIC_RECORDING, STOP_MIC_RECORDING, SET_RECORD_BUTTON_DISABLED, SET_STOP_BUTTON_DISABLED } from "./actions"
 
 
 const initialState = {
@@ -14,7 +14,11 @@ export default (state = initialState, action) => {
         ...state,
         isRecording: action.isRecording
       }
-
+    case STOP_MIC_RECORDING:
+      return {
+        ...state,
+        isRecording: action.isRecording
+      }
     case SET_RECORD_BUTTON_DISABLED:
       return {
         ...state,
