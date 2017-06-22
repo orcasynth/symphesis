@@ -5,6 +5,7 @@ import './index.css'
 import Keyboard from '../keyboard';
 import Drums from '../drums';
 import ElectricGuitar from '../electric-guitar';
+import Mic from '../mic';
 
 class AudioWrapper extends React.Component {
   // componentWillMount() {
@@ -74,6 +75,9 @@ class AudioWrapper extends React.Component {
       case "electric-guitar":
         instrument = <ElectricGuitar />;
         break;
+      case "mic":
+        instrument = <Mic />;
+        break;
     }
     return (
       <div>
@@ -88,6 +92,7 @@ class AudioWrapper extends React.Component {
           <option value="electric-guitar">Electric Guitar</option>
           <option value="keyboard">Keyboard</option>
           <option value="drums">Drums</option>
+          <option value="mic">Mic</option>
         </select>
         <p>{this.props.recordingMessage}</p>
         <p>Roommates</p>
