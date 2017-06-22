@@ -6,28 +6,45 @@ import convertToDetune from '../../utilities/convertToDetune';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
 export class ElectricGuitar extends React.Component{
+  constructor(props) {
+    super(props);
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+    this.state = {};
+  }
   componentDidMount() {
-    document.addEventListener("keydown", (event) => this.onKeyDown(event))  
-
-    document.addEventListener("keyup", (event) => this.onKeyUp(event))
+    document.addEventListener("keydown", this.onKeyDown)  
+    document.addEventListener("keyup", this.onKeyUp)
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", (event) => this.onKeyDown(event))
-    document.removeEventListener("keyup", (event) => this.onKeyUp(event))
+    document.removeEventListener("keydown", this.onKeyDown)
+    document.removeEventListener("keyup", this.onKeyUp)
   }
 
   onKeyDown(event) {
-    let note = convertFromKeycode(event.key, this.props.instrument)
-    if (note) {
-      if (this.props.recording) {
-        this.props.recordNote(this.props.instrument, convertToDetune(note))
+    if (!this.state[event.key]) {
+      let note = convertFromKeycode(event.key, this.props.instrument)
+      if (note) {
+        if (this.props.recording) {
+          this.props.recordNote(this.props.instrument, convertToDetune(note))
+        }
+        this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
       }
-      this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
     }
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = true;
+      return obj;
+    })
   }
 
   onKeyUp(event) {
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = false;
+      return obj;
+    })
     let note = convertFromKeycode(event.key, this.props.instrument)
     if (note) {
       if (this.props.recording) {
