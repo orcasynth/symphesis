@@ -10,8 +10,19 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const socketRooms = require('./socket').socketRooms;
 const multer = require('multer');
 const bodyParser = require('body-parser');
-const upload = multer();
 const fs = require('fs');
+
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../client/public')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname )
+  }
+});
+
+const upload = multer({ storage: storage});
+
 
 mongoose.Promise = global.Promise
 
@@ -116,22 +127,25 @@ app.use(
   bodyParser.raw({ type: 'audio/ogg', limit: '50mb' })
 );
 
-app.post('/audioupload', upload.single(), function(req, res, next) {
+app.post('/api/audioupload', upload.single('mic'), function(req, res, next) {
     try{
     console.log('body => ', req.body);
-    console.log('files => ', req.files);
-    const audioFile = req.file;
-    //create unique filenames
-    let d = new Date();
-    let n = d.getTime();
-    let newFilename = n+'.ogg'
-    //write file
-    fs.writeFile('../client/public/' + newFilename, req.body, function(err){
-        if(err) {
-            console.log('Error in writing file: ', err);
-        }
-    })
-    res.send();
+    console.log('file => ', req.file);
+    // const audioFile = req.file;
+    // console.log(req);
+    // //create unique filenames
+    // let d = new Date();
+    // let n = d.getTime();
+    // let newFilename = n+'.ogg'
+    // //write file
+    // fs.writeFile('../client/public/' + newFilename, req.body, function(err){
+    //     if(err) {
+    //         console.log('Error in writing file: ', err);
+    //     } else {
+    //       //broadcast to socket to make an ajax request thru thunk.
+    //     }
+    // })
+    // res.send();
     }
     catch(e){
     console.log(e);

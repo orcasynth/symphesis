@@ -45,11 +45,22 @@ export const micMiddleware = store => {
       let blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
       chunks = [];
 
-      request = new XMLHttpRequest();
-      request.open("POST", 'http://localhost:3001/audioupload', true);
-      request.responseType = "blob";
-      request.setRequestHeader("Content-Type", "audio/ogg");
-      request.send(blob);
+      let file = new File([blob], 'whatever.ogg', {type: 'audio/ogg' });
+
+      // request = new XMLHttpRequest();
+      // request.open("POST", 'http://localhost:3001/audioupload', true);
+      // request.responseType = "blob";
+      // request.setRequestHeader("Content-Type", "audio/ogg");
+      // request.send(file);
+      let fd = new FormData();
+      fd.append('mic', blob, 'mic_01.ogg' );
+
+      fetch('/api/audioupload',
+      {
+        method: 'post',
+        body: fd
+      });
+
     }
   }
   return next => action => {
