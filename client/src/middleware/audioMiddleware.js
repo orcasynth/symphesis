@@ -49,7 +49,7 @@ export const audioMiddleware = store => {
 
     osc.type = 'sine';
 
-    amp.gain.value = 45;
+    amp.gain.value = 30;
     amp.gain.setTargetAtTime(1, audioContext.currentTime, 0.1)
     osc.frequency.value = 440;
     osc.detune.value = detune;
