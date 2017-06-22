@@ -97,18 +97,18 @@ export const audioMiddleware = store => {
   }
 
   function stopNote(instrument, detune) {
-    console.log(instrument, detune)
     // let index = oscillators.findIndex((oscillator) => {
     //   return oscillator.detune === detune;
     // })
     // oscillators[index].oscillator.stop(0);
     // oscillators.splice(index, 1)
+    console.log('before stop', oscillators)
     if (oscillators[detune]) {
       oscillators[detune].stop(0);
       delete oscillators[detune]
     }
-    
-    console.log(oscillators)
+    console.log('after stop', oscillators)
+
   }
 
   function recordNote(instrument, detune) {
@@ -205,12 +205,14 @@ export const audioMiddleware = store => {
       //   oscillators[oscillator].stop(0)
       // })
       // oscillators = {};
-      console.log(oscillators)
+      console.log('stop-recording', oscillators)
+      console.log('stop-recording', recording)
       recording.forEach(note => {
         if (!note.stopTime || note.stopTime > (recordingInterval * secondsPerBeat * timeSignature)) {
           note.stopTime = (recordingInterval * secondsPerBeat * timeSignature)
         }
       })
+      console.log('stop-recording-after-loop', recording)
       store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
       store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
     }
