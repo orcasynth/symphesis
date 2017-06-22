@@ -1,4 +1,4 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING, MUTE, CHANGE_INSTRUMENT, KEY_TRACKER, RESET_KEY_TRACKER } from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -7,7 +7,11 @@ const initialState = {
     //IS "RECORDING" BEING USED BY REACT?
     recording: false,
     recordingMessage: 'Not recording',
-    enableSendRecording: false
+    enableSendRecording: false,
+    roommates: false,
+    muted: {},
+    instrument: "electric-guitar",
+    keyTracker: {}
 }
 
 export default (state = initialState, action) => {
@@ -46,6 +50,16 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 enableSendRecording: action.enableSendRecording
+            }
+        case MUTE:
+            return {
+                ...state,
+                muted: action.obj
+            }
+        case CHANGE_INSTRUMENT:
+            return {
+                ...state,
+                instrument: action.instrument
             }
         default:
             return state;

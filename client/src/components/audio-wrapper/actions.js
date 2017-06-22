@@ -26,8 +26,8 @@ export const recordNote = (instrument, detune) => ({
 export const STOP_RECORDING_NOTE = "STOP_RECORDING_NOTE"
 export const stopRecordingNote = (instrument, detune) => ({
     type: STOP_RECORDING_NOTE,
-    detune,
-    instrument
+    instrument,
+    detune
 })
 
 export const START_RECORDING = "START_RECORDING"
@@ -82,4 +82,21 @@ export const ENABLE_SEND_RECORDING = "ENABLE_SEND_RECORDING";
 export const enableSendRecording = (enableSendRecording) => ({
     type: ENABLE_SEND_RECORDING,
     enableSendRecording
+})
+
+export const MUTE = "MUTE";
+export const mute = (obj) => ({
+    type: MUTE,
+    obj
+})
+
+export const TRASH_RECORDING = "TRASH_RECORDING";
+export const trashRecording = () => ({
+    type: TRASH_RECORDING
+})
+
+export const CHANGE_INSTRUMENT = "CHANGE_INSTRUMENT";
+export const changeInstrument = (instrument) => ({
+    type: CHANGE_INSTRUMENT,
+    instrument
 })

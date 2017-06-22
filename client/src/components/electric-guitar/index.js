@@ -1,25 +1,57 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Key } from '../keyboard/key';
-import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio-wrapper/actions';
+import Key from '../keyboard/key';
+import convertFromKeycode from '../../utilities/convertFromKeycode';
+import convertToDetune from '../../utilities/convertToDetune';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
 export class ElectricGuitar extends React.Component{
-  onMouseDown(detune) {
-    if (this.props.recording) {
-      //change this note to detune
-      this.props.dispatch(recordNote('electric-guitar', detune))
-    }
-    //change second note to detune
-    this.props.dispatch(startPlaying('electric-guitar', detune))
+  constructor(props) {
+    super(props);
+    this.onKeyDown = this.onKeyDown.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
+    this.state = {};
+  }
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown)  
+    document.addEventListener("keyup", this.onKeyUp)
   }
 
-  onMouseUp(detune) {
-    if (this.props.recording) {
-      //change this note to detune
-      this.props.dispatch(stopRecordingNote('electric-guitar', detune))
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyDown)
+    document.removeEventListener("keyup", this.onKeyUp)
+  }
+
+  onKeyDown(event) {
+    if (!this.state[event.key]) {
+      let note = convertFromKeycode(event.key, this.props.instrument)
+      if (note) {
+        if (this.props.recording) {
+          this.props.recordNote(this.props.instrument, convertToDetune(note))
+        }
+        this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
+      }
     }
-    //turn second note into detune
-    this.props.dispatch(stopPlaying('electric-guitar', detune))
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = true;
+      return obj;
+    })
+  }
+
+  onKeyUp(event) {
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = false;
+      return obj;
+    })
+    let note = convertFromKeycode(event.key, this.props.instrument)
+    if (note) {
+      if (this.props.recording) {
+        this.props.stopRecordingNote(this.props.instrument, convertToDetune(note))
+      }
+      this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
+    }
   }
 
   render(){
@@ -27,36 +59,36 @@ export class ElectricGuitar extends React.Component{
       
       <div id="keyboard" >
         <div id="keyboard-row">
-          <Key note="C#" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-A.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-A.mp3")}/> 
-          <Key note="D#" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-A7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-A7.mp3")}/> 
-          <Key note="F#" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-Am.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Am.mp3")}/> 
-          <Key note="G#" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-B.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-B.mp3")}/> 
+          <Key note="A"/> 
+          <Key note="A7"/> 
+          <Key note="Am"/> 
+          <Key note="B"/> 
         </div>
         <div id="keyboard-row">
           {/*<Key note="A" octave="2" />
           <Key note="A#" octave="2" />
           <Key note="B" octave="2" />*/}
-          <Key note="C" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-B7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-B7.mp3")}/>
-          <Key note="D" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-Bm.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Bm.mp3")}/> 
-          <Key note="E" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-C.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-C.mp3")}/> 
-          <Key note="F" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-C7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-C7.mp3")}/> 
-          <Key note="G" octave="3" onMouseDown={() => this.onMouseDown("cleanchord-Cm.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Cm.mp3")}/> 
+          <Key note="B7"/>
+          <Key note="Bm"/> 
+          <Key note="C"/> 
+          <Key note="C7"/> 
+          <Key note="Cm"/> 
         </div>
         <div id="keyboard-row">
-          <Key note="A#" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-D.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-D.mp3")}/> 
-          <Key note="C#" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-D7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-D7.mp3")}/> 
-          <Key note="D#" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-Dm.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Dm.mp3")}/> 
-          <Key note="F#" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-E.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-E.mp3")}/> 
+          <Key note="D"/> 
+          <Key note="D7"/> 
+          <Key note="Dm"/> 
+          <Key note="E"/> 
         </div>
         <div id="keyboard-row">
-          <Key note="A" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-E7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-E7.mp3")}/> 
-          <Key note="B" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-Em.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Em.mp3")}/> 
-          <Key note="C" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-F.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-F.mp3")}/> 
-          <Key note="D" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-F7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-F7.mp3")}/> 
-          <Key note="E" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-Fm.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Fm.mp3")}/> 
-          <Key note="F" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-G.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-G.mp3")}/>  
-          <Key note="G" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-G7.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-G7.mp3")}/> 
-          <Key note="G" octave="4" onMouseDown={() => this.onMouseDown("cleanchord-Gm.mp3")} onMouseUp={() => this.onMouseUp("cleanchord-Gm.mp3")}/> 
+          <Key note="E7"/> 
+          <Key note="Em"/> 
+          <Key note="F"/> 
+          <Key note="F7"/> 
+          <Key note="Fm"/> 
+          <Key note="G"/>  
+          <Key note="G7"/> 
+          <Key note="Gm"/> 
         </div>
 
       </div>
@@ -65,8 +97,28 @@ export class ElectricGuitar extends React.Component{
 }
 
 const mapStateToProps = (state) => ({
-  room: state.socketWrapper.room,
-  recording: state.audioWrapper.recording
-})
+  recording: state.audioWrapper.recording,
+  instrument: state.audioWrapper.instrument
+});
 
-export default connect(mapStateToProps)(ElectricGuitar);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    recordNote: (instrument, detune) => {
+      dispatch(recordNote(instrument, detune))
+    },
+    startPlaying: (instrument, detune, note) => {
+      dispatch(startPlaying(instrument, detune, note))
+    },
+    stopPlaying: (instrument, detune, note) => {
+      dispatch(stopPlaying(instrument, detune, note))
+    },
+    stopRecordingNote: (instrument, detune) => {
+      dispatch(stopRecordingNote(instrument, detune))
+    }
+  }
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ElectricGuitar);
