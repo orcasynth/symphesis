@@ -7,7 +7,8 @@ export const audioMiddleware = store => {
   let tickLength;
   let secondsPerBeat;
   let timeSignature;
-  let oscillators = [];
+  // let oscillators = [];
+  let oscillators = {};
   let recording = [];
   let recordingInterval = 2;
   let recordingStartTime;
@@ -58,9 +59,12 @@ export const audioMiddleware = store => {
       osc.start(audioContext.currentTime)
     if (stop) {
       osc.stop(stop);
+    } 
+    else {
+      // let pushItem = { oscillator: osc, detune }
+      // oscillators.push(pushItem)
+      oscillators[detune] = osc;
     }
-    let pushItem = { oscillator: osc, detune }
-    oscillators.push(pushItem)
   }
 
   function playSamples(instrument, detune, start, stop) {
@@ -74,8 +78,11 @@ export const audioMiddleware = store => {
       if (stop) {
         player.stop(stop);
       }
-      let pushItem = { oscillator: player, detune }
-      oscillators.push(pushItem)
+      else {
+        // let pushItem = { oscillator: player, detune }
+        // oscillators.push(pushItem)
+        oscillators[detune] = player;
+      }
     })
   }
 
@@ -90,11 +97,18 @@ export const audioMiddleware = store => {
   }
 
   function stopNote(instrument, detune) {
-    let index = oscillators.findIndex((oscillator) => {
-      return oscillator.detune === detune;
-    })
-    oscillators[index].oscillator.stop(0);
-    oscillators.splice(index, 1)
+    console.log(instrument, detune)
+    // let index = oscillators.findIndex((oscillator) => {
+    //   return oscillator.detune === detune;
+    // })
+    // oscillators[index].oscillator.stop(0);
+    // oscillators.splice(index, 1)
+    if (oscillators[detune]) {
+      oscillators[detune].stop(0);
+      delete oscillators[detune]
+    }
+    
+    console.log(oscillators)
   }
 
   function recordNote(instrument, detune) {
@@ -111,11 +125,7 @@ export const audioMiddleware = store => {
     for (let i = 0; i < recording.length; i++) {
       if (recording[i].detune === detune) {
         if (!recording[i].stopTime) {
-          let stopTime = audioContext.currentTime - recordingStartTime;
-          //check to make sure stoptime doesn't go over permitted length
-          recording[i].stopTime = (stopTime < (2 * secondsPerBeat * timeSignature)) ?
-            stopTime :
-            (recordingInterval * secondsPerBeat * timeSignature);
+          recording[i].stopTime = audioContext.currentTime - recordingStartTime;
           break;
         }
       }
@@ -181,9 +191,26 @@ export const audioMiddleware = store => {
     }
     else if (action.type === actions.START_RECORDING) {
       store.dispatch({ type: actions.TRASH_RECORDING });
-      setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), (recordingInterval * secondsPerBeat * timeSignature) * 1000)
+      let timeUntilRecordingStop = recordingInterval * secondsPerBeat * timeSignature * 1000
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 3...' }), timeUntilRecordingStop - 3000);
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 2...' }), timeUntilRecordingStop - 2000);
+      setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 1...' }), timeUntilRecordingStop - 1000);
+      setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
+      // oscillators.forEach(oscillator => oscillator.stop(0));
+      // oscillators = [];
+      // Object.keys(oscillators).forEach(oscillator => {
+      //   console.log(oscillators[oscillator]);
+      //   oscillators[oscillator].stop(0)
+      // })
+      // oscillators = {};
+      console.log(oscillators)
+      recording.forEach(note => {
+        if (!note.stopTime || note.stopTime > (recordingInterval * secondsPerBeat * timeSignature)) {
+          note.stopTime = (recordingInterval * secondsPerBeat * timeSignature)
+        }
+      })
       store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
       store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
     }
