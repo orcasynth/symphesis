@@ -31,7 +31,6 @@ export const audioMiddleware = store => {
 
   //used to play notes both with and without pre-defined stopping times
   function playNote(instrument, detune, start, stop) {
-    oscillators.forEach(item => console.log('playnote', item))
     switch (instrument) {
       case "keyboard":
         playKeyboard(detune, start, stop);
@@ -77,7 +76,6 @@ export const audioMiddleware = store => {
       }
       let pushItem = { oscillator: player, detune }
       oscillators.push(pushItem)
-      oscillators.forEach(item => console.log('playsamples', item))
     })
   }
 
@@ -97,9 +95,6 @@ export const audioMiddleware = store => {
     })
     oscillators[index].oscillator.stop(0);
     oscillators.splice(index, 1)
-    oscillators.forEach((item) => {
-      console.log('stopnote', item)
-    })
   }
 
   function recordNote(instrument, detune) {

@@ -12,6 +12,7 @@ class Keyboard extends React.Component {
     super(props);
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onKeyUp = this.onKeyUp.bind(this)
+    this.state = {};
   }
   componentDidMount() {
     document.addEventListener("keydown", this.onKeyDown)  
@@ -24,16 +25,28 @@ class Keyboard extends React.Component {
   }
 
   onKeyDown(event) {
-    let note = convertFromKeycode(event.key, this.props.instrument)
-    if (note) {
-      if (this.props.recording) {
-        this.props.recordNote(this.props.instrument, convertToDetune(note))
+    if (!this.state[event.key]) {
+      let note = convertFromKeycode(event.key, this.props.instrument)
+      if (note) {
+        if (this.props.recording) {
+          this.props.recordNote(this.props.instrument, convertToDetune(note))
+        }
+        this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
       }
-      this.props.startPlaying(this.props.instrument, convertToDetune(note), note)
     }
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = true;
+      return obj;
+    })
   }
 
   onKeyUp(event) {
+    this.setState(prevState => {
+      let obj = {};
+      obj[event.key] = false;
+      return obj;
+    })
     let note = convertFromKeycode(event.key, this.props.instrument)
     if (note) {
       if (this.props.recording) {

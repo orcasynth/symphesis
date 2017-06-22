@@ -1,4 +1,4 @@
-import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING, MUTE, CHANGE_INSTRUMENT } from "./actions"
+import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, STOP_RECORDING, UPDATE_RECORDING_MESSAGE, ENABLE_SEND_RECORDING, MUTE, CHANGE_INSTRUMENT, KEY_TRACKER, RESET_KEY_TRACKER } from "./actions"
 
 const initialState = {
     isPlaying: false,
@@ -11,6 +11,7 @@ const initialState = {
     roommates: false,
     muted: {},
     instrument: "electric-guitar",
+    keyTracker: {}
 }
 
 export default (state = initialState, action) => {
