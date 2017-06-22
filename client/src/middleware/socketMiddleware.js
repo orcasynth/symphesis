@@ -9,6 +9,12 @@ export function storeWrapper(store){
   socket.on('roomError', (error) => store.dispatch(actions.socketError(error)));
   socket.on('listRooms', (rooms) => store.dispatch(actions.getAvailableRooms(rooms))); 
   socket.on('receiveRecording', (data) => store.dispatch(audioWrapperActions.receiveRecording(data)))
+  socket.on('getMic', data => console.log(data))
+      //   fetch('/api/audioupload',
+      // {
+      //   method: 'post',
+      //   body: fd
+      // });
 }
 
 export function socketMiddleware(store) {  

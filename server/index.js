@@ -8,9 +8,14 @@ const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const socketRooms = require('./socket').socketRooms;
+const rooms = require('./socket').rooms;
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const app = express();
+const nodeServer = require('http').createServer(app);
+const io = require('socket.io')(nodeServer);
+socketRooms(io);
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -35,7 +40,6 @@ if (process.env.NODE_ENV != 'production') {
   secret = require('./secret');
 }
 
-const app = express();
 
 app.use(passport.initialize());
 
@@ -129,8 +133,11 @@ app.use(
 
 app.post('/api/audioupload', upload.single('mic'), function(req, res, next) {
     try{
-    console.log('body => ', req.body);
-    console.log('file => ', req.file);
+    let obj = req.file;
+    let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('.'))
+    let splitFileName = sliceString.split('_')
+    console.log(sliceString, splitFileName)
+    io.emit('getMic', 'hello')
     // const audioFile = req.file;
     // console.log(req);
     // //create unique filenames
@@ -154,6 +161,7 @@ app.post('/api/audioupload', upload.single('mic'), function(req, res, next) {
     next();
 });
 
+
 // Serve the built client
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
@@ -172,9 +180,6 @@ function runServer(port = PORT) {
       if (err) {
         return reject(err);
       }
-      const nodeServer = require('http').createServer(app);
-      const io = require('socket.io')(nodeServer);
-      socketRooms(io);
       server = nodeServer.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();

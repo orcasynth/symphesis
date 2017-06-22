@@ -107,4 +107,4 @@ function socketRooms(io) {
   })
 }
 
-module.exports = { socketRooms }
+module.exports = { socketRooms, rooms }
