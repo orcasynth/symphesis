@@ -62,7 +62,7 @@ export class MiscSounds extends React.Component{
           <Key note="count" /> 
           <Key note="baby" /> 
           <Key note="evil" /> 
-          <Key note="frtb" /> 
+          <Key note="ftbb" /> 
           <Key note="hrd" /> 
           <Key note="houston" /> 
           <Key note="igtbf" /> 
