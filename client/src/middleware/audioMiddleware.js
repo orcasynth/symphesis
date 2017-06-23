@@ -197,16 +197,22 @@ export const audioMiddleware = store => {
           oscillators[oscillator].stop(0)
         })
       }, timeUntilRecordingStop - 25)
+      setTimeout(() => {
+                recording.forEach(note => {
+          if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
+            note.stopTime = (audioContext.currentTime - recordingStartTime)
+          }
+        })}, timeUntilRecordingStop - 25);
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
       if (store.getState().audioWrapper.instrument !== "mic") {
         store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
-        recording.forEach(note => {
-          if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
-            note.stopTime = (audioContext.currentTime - recordingStartTime)
-          }
-        })
+        // recording.forEach(note => {
+        //   if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
+        //     note.stopTime = (audioContext.currentTime - recordingStartTime)
+        //   }
+        // })
       }
       else {
         recording = [{ instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime) }]
