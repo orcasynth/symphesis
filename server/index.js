@@ -132,9 +132,9 @@ app.use(
 app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
   try {
     let obj = req.file;
-    let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('.'))
+    let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('_'))
     let splitFileName = sliceString.split('_')
-    res.sendStatus(201)
+    res.status(201).json(sliceString)
     // const audioFile = req.file;
     // console.log(req);
     // //create unique filenames

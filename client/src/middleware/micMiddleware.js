@@ -61,9 +61,11 @@ export const micMiddleware = store => {
         method: 'post',
         body: fd
       })
+      .then((res => res.json()))
       .then((res) => {
-        if (res.status === 201) {
-          store.dispatch({type: audioWrapperActions.SEND_RECORDING, recording: [{}]})
+        if (res) {
+          console.log({type: audioWrapperActions.SEND_RECORDING, room: res})
+          store.dispatch({type: audioWrapperActions.SEND_RECORDING, room: res})
         }
       })
 

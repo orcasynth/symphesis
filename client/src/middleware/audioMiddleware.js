@@ -1,4 +1,5 @@
 import * as actions from '../components/audio-wrapper/actions'
+import * as micActions from '../components/mic/actions'
 
 export const audioMiddleware = store => {
   //CONSIDER ADDING THESE INTO REDUX, ACCESSING VIA store.getState
@@ -98,9 +99,6 @@ export const audioMiddleware = store => {
   }
 
   function recordNote(instrument, detune) {
-    if (recording.length === 0) {
-      recordingStartTime = audioContext.currentTime;
-    }
     //check to make sure starttime doesn't go over permitted length
     if (audioContext.currentTime - recordingStartTime < (recordingInterval * secondsPerBeat * timeSignature)) {
       recording.push({ instrument, startTime: audioContext.currentTime - recordingStartTime, detune, stopTime: undefined });
@@ -181,10 +179,23 @@ export const audioMiddleware = store => {
     }
     else if (action.type === actions.START_RECORDING) {
       store.dispatch({ type: actions.TRASH_RECORDING });
+      recordingStartTime = audioContext.currentTime;
+      if (store.getState().audioWrapper.instrument === "mic") {
+        store.dispatch({type: micActions.START_MIC_RECORDING})
+        setTimeout(() => store.dispatch({ type: micActions.STOP_MIC_RECORDING }), (recordingInterval * secondsPerBeat * timeSignature) * 1000)        
+      }
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), (recordingInterval * secondsPerBeat * timeSignature) * 1000)
     }
     else if (action.type === actions.STOP_RECORDING) {
-      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
+      if (!store.getState().audioWrapper.instrument === "mic") {
+        store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
+      }
+      else {
+        console.log(audioContext.currentTime)
+        console.log(recordingStartTime)
+        recording = [{instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime)}]
+        console.log(recording)
+      }
       store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
