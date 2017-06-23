@@ -98,7 +98,7 @@ class AudioWrapper extends React.Component {
             <option value="drums">🥁 Drums</option>
             <option value="mic">🎤 Mic</option>
             <option value="bass-synth">🎹 Bass Synth</option>
-            <option value="misc-sounds">Misc</option>
+            <option value="misc-sounds">❓Misc</option>
           </select> 
 
           {instrument}
