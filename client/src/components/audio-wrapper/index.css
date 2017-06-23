@@ -54,6 +54,10 @@ main {
   padding: 1px 6px;
 }
 
+.you-color {
+  color: #b79505;
+}
+
 .instrument-select {
   width: 130px;
   height: 3em;

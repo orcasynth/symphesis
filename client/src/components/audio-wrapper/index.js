@@ -45,8 +45,11 @@ class AudioWrapper extends React.Component {
         let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
           "(ME)" :
           null;
+        let youColor = (this.props.displayName === this.props.roommates[user].displayName) ? 
+          "you-color" :
+          null;
         roommates.push(
-          <li key={user}><i className="fa fa-user fa-lg" aria-hidden="true"></i> {this.props.roommates[user].displayName} {thatsYou}
+          <li className={youColor} key={user}><i className="fa fa-user fa-lg" aria-hidden="true"></i> {this.props.roommates[user].displayName} {thatsYou}
             <div className="mute-person" onClick={() => this.mute(user)}> <i className="fa fa-pause-circle fa-lg" aria-hidden="true"></i> {muteButtonText}</div>
           </li>
         )
