@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {startPlaying, stopPlaying, recordNote, stopRecordingNote} from '../audio-wrapper/actions';
 import convertToDetune from '../../utilities/convertToDetune';
+import convertNoteToKey from '../../utilities/convertNoteToKey';
 
 const KeyPrototype = function(props) {
   function onMouseDown(note) {
@@ -18,7 +19,7 @@ const KeyPrototype = function(props) {
       props.stopPlaying(props.instrument, convertToDetune(note), note)
   }
 
-  if(props.note.split("").includes("#") || props.note.split("").includes("b")){
+  if(props.note.split("").includes("#")){
     return (
       <div
         id={props.note} 
@@ -28,7 +29,7 @@ const KeyPrototype = function(props) {
         onMouseDown={() => onMouseDown(`${props.note}`)} 
         onMouseUp={() => onMouseUp(`${props.note}`)}
       > 
-        {props.note} 
+        <p>  <span className="qwerty-key">{convertNoteToKey(props.note, props.instrument)}</span>{props.note} </p>
       </div>
     )
   }
@@ -41,7 +42,7 @@ const KeyPrototype = function(props) {
       onMouseDown={() => onMouseDown(`${props.note}`)} 
       onMouseUp={() => onMouseUp(`${props.note}`)}
       > 
-        {props.note} 
+        <p> <span className="qwerty-key">{convertNoteToKey(props.note, props.instrument)}</span>{props.note} </p> 
       </div>
   )
   // empty div in keyboard with onKeyDown inside of keyboard

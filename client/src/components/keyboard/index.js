@@ -61,9 +61,12 @@ class Keyboard extends React.Component {
       <div id="keyboard" >
         <div id="keyboard-row">
           <Key note="C#3" />
-          <Key note="D#3" />
+          <Key note="D#3" className="space-between"/>
           <Key note="F#3" />
           <Key note="G#3" />
+          <Key note="A#4" className="space-between"/>
+          <Key note="C#4" />
+          <Key note="D#4" />
         </div>
         <div id="keyboard-row">
           <Key note="C3" />
@@ -71,21 +74,11 @@ class Keyboard extends React.Component {
           <Key note="E3" />
           <Key note="F3" />
           <Key note="G3" />
-        </div>
-        <div id="keyboard-row">
-          <Key note="A#4" />
-          <Key note="C#4" />
-          <Key note="D#4" />
-          <Key note="F#4" />
-        </div>
-        <div id="keyboard-row">
           <Key note="A4" />
           <Key note="B4" />
           <Key note="C4" />
           <Key note="D4" />
           <Key note="E4" />
-          <Key note="F4" />
-          <Key note="G4" />
         </div>
       </div>
     )

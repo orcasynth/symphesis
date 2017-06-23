@@ -5,6 +5,7 @@ import './index.css'
 import Keyboard from '../keyboard';
 import Drums from '../drums';
 import ElectricGuitar from '../electric-guitar';
+import BassSynth from '../bass-synth'
 import Mic from '../mic';
 
 class AudioWrapper extends React.Component {
@@ -78,26 +79,40 @@ class AudioWrapper extends React.Component {
       case "mic":
         instrument = <Mic />;
         break;
+      case "bass-synth":
+        instrument = <BassSynth />;
+        break;
     }
     return (
       <div>
         {sendRecording}
-        <button onClick={() => this.props.dispatch(requestToRecord())}>req record</button>
-        <button onClick={() => this.props.dispatch(trashRecording())}>trash recording</button>
-        <div className="play-button" onClick={() => this.play()}> > </div>
-        <div className="stop-button" onClick={() => this.stop()}> > </div>
-        <select onChange={(e) => {
-          this.props.dispatch(changeInstrument(e.target.value))
-        }}>
-          <option value="electric-guitar">Electric Guitar</option>
-          <option value="keyboard">Keyboard</option>
-          <option value="drums">Drums</option>
-          <option value="mic">Mic</option>
-        </select>
-        <p>{this.props.recordingMessage}</p>
-        <p>Roommates</p>
-        <ul>{roommates}</ul>
-        {instrument}
+        <div className="transport">        
+          <div className="play-button" onClick={() => this.play()}> play </div>
+          <div className="stop-button" onClick={() => this.stop()}> stop </div>
+        </div>
+        <div className="instrument-container">
+          <p>{this.props.recordingMessage}</p>
+          <select className="instrument-select" onChange={(e) => {
+            this.props.dispatch(changeInstrument(e.target.value))
+          }}>
+            <option value="electric-guitar"> 🎸 Electric Guitar</option>
+            <option value="keyboard">🎹 Keyboard</option>
+            <option value="drums">🥁 Drums</option>
+            <option value="mic">🎤 Mic</option>
+            <option value="bass-synth">🎹 Bass Synth</option>
+          </select>        
+          {instrument}
+          <button onClick={() => this.props.dispatch(requestToRecord())}>
+            record
+          </button>
+          <button onClick={() => this.props.dispatch(trashRecording())}>
+            undo
+          </button> 
+        </div>
+        <div className="users">       
+          <p>Roommates</p>
+          <ul>{roommates}</ul>   
+        </div>     
       </div>
     )
   }

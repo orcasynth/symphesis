@@ -58,34 +58,23 @@ export class Drums extends React.Component{
     return ( 
       <div id="keyboard" >
         <div id="keyboard-row">
+          <Key note="hihat1" />          
           <Key note="hihat2" /> 
-          <Key note="hihat1" /> 
+          <Key note="ride1" /> 
+          <Key note="ride2" /> 
+          <Key note="snareroll" /> 
+          <Key note="ridecrash" /> 
+          <Key note="ridebell" /> 
+        </div>
+        <div id="keyboard-row">          
+          <Key note="kick" />
+          <Key note="snare1" /> 
+          <Key note="snare2" /> 
+          <Key note="lowtom1" /> 
+          <Key note="lowtom2" />          
           <Key note="hitom1" /> 
           <Key note="hitom2" /> 
         </div>
-        <div id="keyboard-row">
-          <Key note="kick" />
-          <Key note="lowtom1" /> 
-          <Key note="lowtom2" /> 
-          <Key note="ride1" /> 
-          <Key note="ride2" /> 
-        </div>
-        <div id="keyboard-row">
-          <Key note="ridebell" /> 
-          <Key note="ridecrash" /> 
-          <Key note="snare1" /> 
-          <Key note="snare2" /> 
-        </div>
-        <div id="keyboard-row">
-          <Key note="snareroll" /> 
-          {/*<Key note="B" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
-          <Key note="C" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
-          <Key note="D" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
-          <Key note="E" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> 
-          <Key note="F" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/>  
-          <Key note="G" octave="4" onMouseDown={(note) => this.onMouseDown(note)} onMouseUp={(note) => this.onMouseUp(note)}/> */}
-        </div>
-
       </div>
     )
   }
