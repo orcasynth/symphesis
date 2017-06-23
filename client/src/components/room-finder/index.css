@@ -31,11 +31,16 @@
   color: white;
 }
 
-.overlay h2 {
+.overlay-child {
+  margin: auto;
   padding-top: 10%;
   width: 600px;
+  text-align: center;
 }
 
+.overlay-child h2 {
+  text-transform: none;
+}
 .modal-btn:hover {
     font-size: 1.25em;
     -webkit-transition: font-size .2s; /* Safari */

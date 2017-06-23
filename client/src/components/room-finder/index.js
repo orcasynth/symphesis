@@ -23,9 +23,11 @@ export class RoomFinder extends React.Component {
     if (this.props.displayModal) {
       modal = (
       <div className='overlay'>
+        <div className="overlay-child">
         <h2>
-          
+          SYMPHESIS is a collaborative music-making web app. Join a room with your old friends or new friends, pick your instruments, make your recording and go! The app will loop your music and combine it with everyone else's. To record, click on the + button and wait for the countdown. If you like how your loop mashes up with everyone else's, press the send button to send it to everyone else!
         </h2>
+        </div>
         <a className="modal-btn" onClick={() => this.props.dispatch(displayModal())}>X</a>
       </div> 
       )
