@@ -11,9 +11,6 @@ const socketRooms = require('./socket').socketRooms;
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const app = express();
-const nodeServer = require('http').createServer(app);
-const io = require('socket.io')(nodeServer);
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -38,7 +35,7 @@ if (process.env.NODE_ENV != 'production') {
   secret = require('./secret');
 }
 
-
+const app = express();
 app.use(passport.initialize());
 
 passport.use(
@@ -176,6 +173,8 @@ function runServer(port = PORT) {
       if (err) {
         return reject(err);
       }
+      const nodeServer = require('http').createServer(app);
+      const io = require('socket.io')(nodeServer);
       server = nodeServer.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
         resolve();
