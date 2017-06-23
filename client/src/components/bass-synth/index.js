@@ -70,7 +70,7 @@ class BassSynth extends React.Component {
         </div>
         <div id="keyboard-row">
           <Key note="C1" />
-          <Key note="D2" />
+          <Key note="D1" />
           <Key note="E1" />
           <Key note="F1" />
           <Key note="G1" />
