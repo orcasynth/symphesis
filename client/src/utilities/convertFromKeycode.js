@@ -94,7 +94,7 @@ function convertFromKeyCode(keycode, instrument) {
       O: 'hot',
       A: 'ltbk',
       S: 'nnn',
-      D: 'keyboard',
+      D: 'hand',
       F: 'rtcw',
       G: 'scream',
       H: 'subway',

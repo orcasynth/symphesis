@@ -71,7 +71,7 @@ export class MiscSounds extends React.Component{
         <div id="keyboard-row">          
           <Key note="ltbk" />
           <Key note="nnn" /> 
-          <Key note="keyboard" /> 
+          <Key note="hand" /> 
           <Key note="rtcw" /> 
           <Key note="scream" />          
           <Key note="subway" /> 

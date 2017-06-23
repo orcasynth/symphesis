@@ -90,7 +90,7 @@ function convertToDetune(note) {
     hot: 'its_hot.mp3',
     ltbk: 'let-the-bass-kick.mp3',
     nnn: 'n-n-n-n-n-no.mp3',
-    keyboard: 'place_hand_on_keyboard.mp3',
+    hand: 'place_hand_on_keyboard.mp3',
     rtcw: 'relclaim-the-computer-world.mp3',
     scream: 'somebody-scream.mp3',
     subway: 'subway-please-stand-clear.wav',

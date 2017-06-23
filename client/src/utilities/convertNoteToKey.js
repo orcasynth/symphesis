@@ -91,7 +91,7 @@ function convertNoteToKey(note, instrument) {
       hot: 'O',
       ltbk: 'A',
       nnn: 'S',
-      keyboard: 'D',
+      hand: 'D',
       rtcw: 'F',
       scream: 'G',
       subway: 'H',
