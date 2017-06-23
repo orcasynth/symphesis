@@ -1,13 +1,11 @@
-import './index.css'
 import React from 'react';
 import { connect } from 'react-redux';
-import Key from './key';
-import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
+import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
-
-class Keyboard extends React.Component {
+export class MiscSounds extends React.Component{
   constructor(props) {
     super(props);
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -55,30 +53,31 @@ class Keyboard extends React.Component {
       this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
     }
   }
-  render() {
-    return (
 
+  render(){
+    return ( 
       <div id="keyboard" >
         <div id="keyboard-row">
-          <Key note="C#3" />
-          <Key note="D#3" className="space-between"/>
-          <Key note="F#3" />
-          <Key note="G#3" />
-          <Key note="A#3" className="space-between"/>
-          <Key note="C#4" />
-          <Key note="D#4" />
+          <Key note="space" />          
+          <Key note="count" /> 
+          <Key note="baby" /> 
+          <Key note="evil" /> 
+          <Key note="frtb" /> 
+          <Key note="hrd" /> 
+          <Key note="houston" /> 
+          <Key note="igtbf" /> 
+          <Key note="hot" /> 
         </div>
-        <div id="keyboard-row">
-          <Key note="C3" />
-          <Key note="D3" />
-          <Key note="E3" />
-          <Key note="F3" />
-          <Key note="G3" />
-          <Key note="A3" />
-          <Key note="B3" />
-          <Key note="C4" />
-          <Key note="D4" />
-          <Key note="E4" />
+        <div id="keyboard-row">          
+          <Key note="ltbk" />
+          <Key note="nnn" /> 
+          <Key note="keyboard" /> 
+          <Key note="rtcw" /> 
+          <Key note="scream" />          
+          <Key note="subway" /> 
+          <Key note="ttb" /> 
+          <Key note="up" /> 
+          <Key note="wneic" /> 
         </div>
       </div>
     )
@@ -86,9 +85,10 @@ class Keyboard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  room: state.socketWrapper.room,
   recording: state.audioWrapper.recording,
   instrument: state.audioWrapper.instrument
-});
+})
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -110,4 +110,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Keyboard);
+)(MiscSounds);

@@ -7,7 +7,7 @@ import Drums from '../drums';
 import ElectricGuitar from '../electric-guitar';
 import BassSynth from '../bass-synth'
 import Mic from '../mic';
-
+import MiscSounds from '../misc-sounds';
 class AudioWrapper extends React.Component {
   // componentWillMount() {
   //   this.audioContext = new AudioContext()
@@ -82,6 +82,11 @@ class AudioWrapper extends React.Component {
       case "bass-synth":
         instrument = <BassSynth />;
         break;
+      case "misc-sounds":
+        instrument = <MiscSounds />;
+        break;
+      default:
+        instrument = undefined;
     }
     return (
       <div>
@@ -100,6 +105,7 @@ class AudioWrapper extends React.Component {
             <option value="drums">🥁 Drums</option>
             <option value="mic">🎤 Mic</option>
             <option value="bass-synth">🎹 Bass Synth</option>
+            <option value="misc-sounds">Misc</option>
           </select>        
           {instrument}
           <button onClick={() => this.props.dispatch(requestToRecord())}>

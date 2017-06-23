@@ -2,13 +2,13 @@
 
 function convertFromKeyCode(keycode, instrument) {
   let convertedKeycode = keycode.toUpperCase()
-  const conversionTable = { 
-   "keyboard" : {
+  const conversionTable = {
+    "keyboard": {
       'W': "C#3",
       'E': "D#3",
       'T': "F#3",
       'Y': "G#3",
-      'U': "A#4",
+      'U': "A#3",
       'O': "C#4",
       'P': "D#4",
       'A': "C3",
@@ -16,13 +16,13 @@ function convertFromKeyCode(keycode, instrument) {
       'D': "E3",
       'F': "F3",
       'G': "G3",
-      'H': "A4",
-      'J': "B4",
+      'H': "A3",
+      'J': "B3",
       'K': "C4",
       'L': "D4",
       ';': "E4"
     },
-    "electric-guitar" : {
+    "electric-guitar": {
       'Q': "G",
       'A': "G7",
       'Z': "Gm",
@@ -44,8 +44,8 @@ function convertFromKeyCode(keycode, instrument) {
       'U': "F",
       'J': "F7",
       'M': "Fm",
-    }, 
-    "drums" : {
+    },
+    "drums": {
       'Q': "hihat1",
       'W': "hihat2",
       'E': "snareroll",
@@ -61,7 +61,7 @@ function convertFromKeyCode(keycode, instrument) {
       'H': "hitom1",
       'J': "hitom2"
     },
-    "bass-synth" : {
+    "bass-synth": {
       'W': "C#1",
       'E': "D#1",
       'T': "F#1",
@@ -81,6 +81,26 @@ function convertFromKeyCode(keycode, instrument) {
       'L': "D2",
       ';': "E2",
       "'": "F2"
+    },
+    'misc-sounds': {
+      Q: 'space',
+      W: 'count',
+      E: 'baby',
+      R: 'evil',
+      T: 'ftbb',
+      Y: 'hrd',
+      U: 'houston',
+      I: 'igtbf',
+      O: 'hot',
+      A: 'ltbk',
+      S: 'nnn',
+      D: 'keyboard',
+      F: 'rtcw',
+      G: 'scream',
+      H: 'subway',
+      J: 'ttb',
+      K: 'up',
+      L: 'wneic'
     }
   }
   return conversionTable[instrument][convertedKeycode]
