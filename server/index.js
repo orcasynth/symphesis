@@ -8,25 +8,23 @@ const mongoose = require('mongoose')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const socketRooms = require('./socket').socketRooms;
-const rooms = require('./socket').rooms;
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 const nodeServer = require('http').createServer(app);
 const io = require('socket.io')(nodeServer);
-socketRooms(io);
 
-var storage = multer.diskStorage({
+let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../client/public/mic')
+    cb(null, '../client/public/samples/mic')
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname )
+    cb(null, file.originalname)
   }
 });
 
-const upload = multer({ storage: storage});
+const upload = multer({ storage: storage });
 
 
 mongoose.Promise = global.Promise
@@ -49,30 +47,30 @@ passport.use(
     clientSecret: secret.CLIENT_SECRET,
     callbackURL: `/api/auth/google/callback`
   },
-  (accessToken, refreshToken, profile, cb) => {
-    User
-      .findOneAndUpdate({ 
-        googleId: profile.id,
-        displayName: profile.displayName 
-      },
-      { 
-        $set: { 
-          accessToken: accessToken, 
-          googleId: profile.id 
-        } 
-      }, { 
-        upsert: true, 
-        new: true 
-      })
-      .then((user) => {
-        return cb(null, user);
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }
+    (accessToken, refreshToken, profile, cb) => {
+      User
+        .findOneAndUpdate({
+          googleId: profile.id,
+          displayName: profile.displayName
+        },
+        {
+          $set: {
+            accessToken: accessToken,
+            googleId: profile.id
+          }
+        }, {
+          upsert: true,
+          new: true
+        })
+        .then((user) => {
+          return cb(null, user);
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
   ));
-  
+
 passport.use(
   new BearerStrategy(
     (token, done) => {
@@ -83,16 +81,16 @@ passport.use(
             return done(null, user);
           }
         })
-        .catch((err) => { 
-          console.error(err) 
+        .catch((err) => {
+          console.error(err)
         })
     }
   )
 );
 
 app.get('/api/auth/google',
-  passport.authenticate('google', { 
-    scope: ['profile'] 
+  passport.authenticate('google', {
+    scope: ['profile']
   }));
 
 app.get('/api/auth/google/callback',
@@ -121,7 +119,7 @@ app.get('/api/me',
 );
 
 app.use(express.static('audioupload'));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -131,13 +129,12 @@ app.use(
   bodyParser.raw({ type: 'audio/ogg', limit: '50mb' })
 );
 
-app.post('/api/audioupload', upload.single('mic'), function(req, res, next) {
-    try{
+app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
+  try {
     let obj = req.file;
     let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('.'))
     let splitFileName = sliceString.split('_')
-    console.log(sliceString, splitFileName)
-    io.emit('getMic', 'hello')
+    res.sendStatus(201)
     // const audioFile = req.file;
     // console.log(req);
     // //create unique filenames
@@ -153,12 +150,11 @@ app.post('/api/audioupload', upload.single('mic'), function(req, res, next) {
     //     }
     // })
     // res.send();
-    }
-    catch(e){
+  }
+  catch (e) {
     console.log(e);
     res.sendStatus(400);
-    }
-    next();
+  }
 });
 
 
@@ -184,10 +180,10 @@ function runServer(port = PORT) {
         console.log(`Your app is listening on port ${port}`);
         resolve();
       })
-      .on('error', (err) => {
-        mongoose.disconnect();
-        reject(err);
-      });
+        .on('error', (err) => {
+          mongoose.disconnect();
+          reject(err);
+        });
     });
   });
 }

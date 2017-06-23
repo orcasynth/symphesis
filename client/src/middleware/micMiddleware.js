@@ -1,4 +1,5 @@
 import * as actions from '../components/mic/actions'
+import * as audioWrapperActions from '../components/audio-wrapper/actions';
 
 //pass store and actions to middleware.
 export const micMiddleware = store => {
@@ -59,7 +60,12 @@ export const micMiddleware = store => {
       {
         method: 'post',
         body: fd
-      });
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          store.dispatch({type: audioWrapperActions.SEND_RECORDING, recording: [{}]})
+        }
+      })
 
     }
   }
