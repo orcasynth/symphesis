@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {} from './actions';
 import './index.css';
 
 export function LoginPage() {

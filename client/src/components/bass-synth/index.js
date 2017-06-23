@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Key from '../keyboard/key';
+import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
-import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 
-export class ElectricGuitar extends React.Component{
+
+class BassSynth extends React.Component {
   constructor(props) {
     super(props);
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -53,37 +54,32 @@ export class ElectricGuitar extends React.Component{
       this.props.stopPlaying(this.props.instrument, convertToDetune(note), note)
     }
   }
+  render() {
+    return (
 
-  render(){
-    return( 
-      
       <div id="keyboard" >
         <div id="keyboard-row">
-          <Key note="G"/>  
-          <Key note="A"/> 
-          <Key note="B"/> 
-          <Key note="C"/> 
-          <Key note="D"/> 
-          <Key note="E"/> 
-          <Key note="F"/>           
+          <Key note="C#1" />
+          <Key note="D#1" className="space-between"/>
+          <Key note="F#1" />
+          <Key note="G#1" />
+          <Key note="A#2" className="space-between"/>
+          <Key note="C#2" />
+          <Key note="D#2" className="space-between"/>
+          <Key note="F#2" />          
         </div>
         <div id="keyboard-row">
-          <Key note="G7"/>           
-          <Key note="A7"/> 
-          <Key note="B7"/>     
-          <Key note="C7"/> 
-          <Key note="D7"/> 
-          <Key note="E7"/> 
-          <Key note="F7"/>           
-        </div>
-        <div id="keyboard-row">
-          <Key note="Gm"/>         
-          <Key note="Am"/> 
-          <Key note="Bm"/> 
-          <Key note="Cm"/> 
-          <Key note="Dm"/> 
-          <Key note="Em"/> 
-          <Key note="Fm"/> 
+          <Key note="C1" />
+          <Key note="D2" />
+          <Key note="E1" />
+          <Key note="F1" />
+          <Key note="G1" />
+          <Key note="A2" />
+          <Key note="B2" />
+          <Key note="C2" />
+          <Key note="D2" />
+          <Key note="E2" />
+          <Key note="F2" />
         </div>
       </div>
     )
@@ -115,4 +111,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ElectricGuitar);
+)(BassSynth);

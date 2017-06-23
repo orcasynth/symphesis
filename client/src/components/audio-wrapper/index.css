@@ -1,25 +1,45 @@
 .play-button{ 
-    display: inline-block; 
-    width:60px; 
-    height: 60px; 
-    background-color: #8c8c8c; 
-    cursor:pointer;
-    border: 1px solid #e3e3e3;
-    text-align:center;
+  display: inline-block; 
+  width:40px; 
+  height: 40px; 
+  line-height: 2.5em;
+  border-radius:50%;
+  background-color: #8c8c8c; 
+  cursor:pointer;
+  border: 1px solid #e3e3e3;
+  text-align:center;
 }
+
 .play-button:active{ 
-    background-color: #e6e6e6;
+  background-color: #e6e6e6;
 }
 
 .stop-button{ 
-    display: inline-block; 
-    width:60px; 
-    height: 60px; 
-    background-color: red; 
-    cursor:pointer;
-    border: 1px solid #e3e3e3;
-    text-align:center;
+  display: inline-block; 
+  width:40px; 
+  height: 40px; 
+  line-height: 2.5em;
+  border-radius: 50%;
+  background-color: red; 
+  cursor:pointer;
+  border: 1px solid #e3e3e3;
+  text-align:center;
 }
+
 .stop-button:active{ 
-    background-color: darkred;
+  background-color: darkred;
+}
+
+.instrument-select {
+  width: 120px;
+  height: 3em;
+  margin-bottom: 20px;
+}
+
+.transport {
+  text-align: center;
+}
+
+.instrument-container {
+  text-align: center;
 }

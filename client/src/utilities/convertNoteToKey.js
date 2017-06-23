@@ -1,0 +1,86 @@
+function convertNoteToKey(note, instrument) {
+  const conversionTable = { 
+   keyboard: { 
+     'C#3': 'W',
+     'D#3': 'E',
+     'F#3': 'T',
+     'G#3': 'Y',
+     'A#4': 'U',
+     'C#4': 'O',
+     'D#4': 'P',
+     C3: 'A',
+     D3: 'S',
+     E3: 'D',
+     F3: 'F',
+     G3: 'G',
+     A4: 'H',
+     B4: 'J',
+     C4: 'K',
+     D4: 'L',
+     E4: ';' 
+    }, 
+    'electric-guitar': {
+     G: 'Q',
+     G7: 'A',
+     Gm: 'Z',
+     A: 'W',
+     A7: 'S',
+     Am: 'X',
+     B: 'E',
+     B7: 'D',
+     Bm: 'C',
+     C: 'R',
+     C7: 'F',
+     Cm: 'V',
+     D: 'T',
+     D7: 'G',
+     Dm: 'B',
+     E: 'Y',
+     E7: 'H',
+     Em: 'N',
+     F: 'U',
+     F7: 'J',
+     Fm: 'M' 
+    },
+    drums: {
+     hihat2: 'Q',
+     hihat1: 'W',
+     snareroll: 'E',
+     ridecrash: 'R',
+     ride1: 'T',
+     ride2: 'Y',
+     ridebell: 'U',
+     kick: 'A',
+     snare1: 'S',
+     snare2: 'D',
+     lowtom1: 'F',
+     lowtom2: 'G',
+     hitom1: 'H',
+     hitom2: 'J' 
+    } ,
+    'bass-synth': {
+     'C#1': 'W',
+     'D#1': 'E',
+     'F#1': 'T',
+     'G#1': 'Y',
+     'A#2': 'U',
+     'C#2': 'O',
+     'D#2': 'P',
+     'F#2': ']',
+     C1: 'A',
+     D1: 'S',
+     E1: 'D',
+     F1: 'F',
+     G1: 'G',
+     A2: 'H',
+     B2: 'J',
+     C2: 'K',
+     D2: 'L',
+     E2: ';',
+     F2: "'" 
+    }
+  }
+  return conversionTable[instrument][note]
+}
+
+export default convertNoteToKey

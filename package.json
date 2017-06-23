@@ -29,6 +29,7 @@
     "mongoose": "^4.10.5",
     "moniker": "^0.1.2",
     "npm-run-all": "^4.0.1",
+    "react-fontawesome": "^1.6.1",
     "socket.io": "^2.0.2",
     "xp": "^1.0.1"
   }
