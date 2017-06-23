@@ -59,10 +59,14 @@
 }
 
 .qwerty-key {
-	color: #e3e3e3;
+	color: #777;
 	position: absolute;
 	bottom: 5px;
 	left: 5px;
 	font-weight: normal;
 	font-size: .8em;
+}
+
+.black .qwerty-key {
+	color: #e3e3e3;
 }

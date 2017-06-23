@@ -2,6 +2,45 @@
   background-color: whitesmoke;
 }*/
 
+.overlay {
+	background: rgba(0, 0, 0, 0.9);
+	color: lightgray;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 0;
+	text-align: center;
+	overflow: auto;
+}
+
+.modal-btn {
+    font-weight: bold;
+    color: #5a5a5a;
+    position: absolute;
+    font-size:1em;
+    left: 10px;
+    top: 5px;
+    text-decoration: none;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}
+
+.overlay .modal-btn {
+  color: white;
+}
+
+.overlay h2 {
+  padding-top: 10%;
+  width: 600px;
+}
+
+.modal-btn:hover {
+    font-size: 1.25em;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}
 
 .socket-display {
   list-style: none;
