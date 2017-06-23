@@ -4,6 +4,7 @@ import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
+import './index.css';
 
 export class MiscSounds extends React.Component{
   constructor(props) {
@@ -56,8 +57,8 @@ export class MiscSounds extends React.Component{
 
   render(){
     return ( 
-      <div id="keyboard" >
-        <div id="keyboard-row">
+      <div id="keyboard" className="misc-sounds" >
+        <div id="keyboard-row" className="row-btn">
           <Key note="space" />          
           <Key note="count" /> 
           <Key note="baby" /> 
@@ -68,7 +69,7 @@ export class MiscSounds extends React.Component{
           <Key note="igtbf" /> 
           <Key note="hot" /> 
         </div>
-        <div id="keyboard-row">          
+        <div id="keyboard-row" className="row-btn">          
           <Key note="ltbk" />
           <Key note="nnn" /> 
           <Key note="hand" /> 

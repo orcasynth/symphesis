@@ -210,7 +210,7 @@ export const audioMiddleware = store => {
       else {
         recording = [{instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime)}]
       }
-      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
+      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Press + to Record." })
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
       //POTENTIALLY REFACTOR TO REMOVE RECORDINGS FROM LIST OF ROOMMATES

@@ -4,6 +4,7 @@ import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
+import './index.css'
 
 export class Drums extends React.Component{
   constructor(props) {
@@ -56,8 +57,8 @@ export class Drums extends React.Component{
 
   render(){
     return ( 
-      <div id="keyboard" >
-        <div id="keyboard-row">         
+      <div id="keyboard" className="drums">
+        <div id="keyboard-row" className="row-btn">         
           <Key note="hihat2" />
           <Key note="hihat1" />
           <Key note="snareroll" />
@@ -66,7 +67,7 @@ export class Drums extends React.Component{
           <Key note="ride2" /> 
           <Key note="ridebell" /> 
         </div>
-        <div id="keyboard-row">          
+        <div id="keyboard-row" className="row-btn">          
           <Key note="kick" />
           <Key note="snare1" /> 
           <Key note="snare2" /> 

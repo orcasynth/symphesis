@@ -1,0 +1,6 @@
+.location {
+    position:absolute;
+    top: 5px;
+    left: 10px;
+    font-size: .8em;
+}

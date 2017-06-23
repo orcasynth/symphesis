@@ -1,0 +1,18 @@
+.drums {
+    min-width: 910px;
+}
+.drums .row-btn {
+    margin-bottom: 10px;
+}
+
+.drums .row-btn .key {
+    color: white;
+    background-color: #416fa7;
+    border: #083367 1px solid;
+    cursor: pointer;
+    width: 110px;
+}
+
+.drums .row-btn span {
+    color: #083367;
+}
