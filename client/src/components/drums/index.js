@@ -57,13 +57,13 @@ export class Drums extends React.Component{
   render(){
     return ( 
       <div id="keyboard" >
-        <div id="keyboard-row">
-          <Key note="hihat1" />          
-          <Key note="hihat2" /> 
+        <div id="keyboard-row">         
+          <Key note="hihat2" />
+          <Key note="hihat1" />
+          <Key note="snareroll" />
+          <Key note="ridecrash" />
           <Key note="ride1" /> 
           <Key note="ride2" /> 
-          <Key note="snareroll" /> 
-          <Key note="ridecrash" /> 
           <Key note="ridebell" /> 
         </div>
         <div id="keyboard-row">          
