@@ -9,11 +9,6 @@ import BassSynth from '../bass-synth'
 import Mic from '../mic';
 import MiscSounds from '../misc-sounds';
 class AudioWrapper extends React.Component {
-  // componentWillMount() {
-  //   this.audioContext = new AudioContext()
-  //   let timerID = 0
-  // }
-
   componentDidMount () {
     this.play();
   }
@@ -47,9 +42,6 @@ class AudioWrapper extends React.Component {
         let muteButtonText = (this.props.muted[user]) ? 
           "Unmute" : 
           "Mute";
-        let muteText = (this.props.muted[user]) ? 
-          "(Muted)" : 
-          null;
         let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
           "(ME)" :
           null;
@@ -62,7 +54,7 @@ class AudioWrapper extends React.Component {
     })
 
     let sendRecording = (this.props.enableSendRecording) ? 
-      (<button onClick={() => this.sendRecording()}>send recording</button>) :
+      (<button className="send-button" onClick={() => this.sendRecording()}>Press me to send your recording! Press &mdash; to trash it...</button>) :
       null;
 
     let instrument;

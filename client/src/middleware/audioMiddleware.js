@@ -186,8 +186,8 @@ export const audioMiddleware = store => {
       let timeUntilRecordingStop = recordingInterval * secondsPerBeat * timeSignature * 1000
       recordingStartTime = audioContext.currentTime;
       if (store.getState().audioWrapper.instrument === "mic") {
-        store.dispatch({type: micActions.START_MIC_RECORDING})
-        setTimeout(() => store.dispatch({ type: micActions.STOP_MIC_RECORDING }), timeUntilRecordingStop)        
+        store.dispatch({ type: micActions.START_MIC_RECORDING })
+        setTimeout(() => store.dispatch({ type: micActions.STOP_MIC_RECORDING }), timeUntilRecordingStop)
       }
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 3...' }), timeUntilRecordingStop - 3000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 2...' }), timeUntilRecordingStop - 2000);
@@ -195,20 +195,21 @@ export const audioMiddleware = store => {
       setTimeout(() => {
         Object.keys(oscillators).forEach(oscillator => {
           oscillators[oscillator].stop(0)
-        })}, timeUntilRecordingStop - 25)
+        })
+      }, timeUntilRecordingStop - 25)
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
-      if (!store.getState().audioWrapper.instrument === "mic") {
+      if (store.getState().audioWrapper.instrument !== "mic") {
         store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
         recording.forEach(note => {
-        if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
-          note.stopTime = (audioContext.currentTime - recordingStartTime)
-        }
-      })
+          if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
+            note.stopTime = (audioContext.currentTime - recordingStartTime)
+          }
+        })
       }
       else {
-        recording = [{instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime)}]
+        recording = [{ instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime) }]
       }
       store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Press + to Record." })
     }

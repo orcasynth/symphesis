@@ -46,8 +46,16 @@ main {
   color:#c9ab2a;
 }
 
+.send-button {
+  display: block;
+  margin: auto;
+  font-family: 'Sarala', sans-serif;
+  margin-bottom: 16px;
+  padding: 1px 6px;
+}
+
 .instrument-select {
-  width: 120px;
+  width: 130px;
   height: 3em;
   margin-bottom: 20px;
 }
