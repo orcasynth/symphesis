@@ -101,18 +101,10 @@ export const audioMiddleware = store => {
   }
 
   function stopNote(instrument, detune) {
-    // let index = oscillators.findIndex((oscillator) => {
-    //   return oscillator.detune === detune;
-    // })
-    // oscillators[index].oscillator.stop(0);
-    // oscillators.splice(index, 1)
-    console.log('before stop', oscillators)
     if (oscillators[detune]) {
       oscillators[detune].stop(0);
       delete oscillators[detune]
     }
-    console.log('after stop', oscillators)
-
   }
 
   function recordNote(instrument, detune) {
@@ -147,7 +139,6 @@ export const audioMiddleware = store => {
       interval = undefined;
       audioContext.close().then(function () {
         audioContext = undefined;
-        console.log('audioContext has closed.')
       });
     }
     else if (action.type === actions.SET_NEXT_TICK_TIME) {

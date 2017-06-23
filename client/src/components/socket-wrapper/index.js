@@ -17,7 +17,6 @@ export class SocketWrapper extends React.Component {
   }
 
   createRoom() {
-    // console.log('wrapper socket:', socket.id)
     this.props.dispatch(createRoom())
   }
 

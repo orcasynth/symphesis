@@ -17,10 +17,7 @@ export const micMiddleware = store => {
       navigator.msGetUserMedia
     );
     if (navigator.getUserMedia) {
-      console.log('getUserMedia supported.');
-
       let constraints = { audio: true };
-
       let onError = function (err) {
         console.log('The following error occured: ' + err);
       }
@@ -64,7 +61,6 @@ export const micMiddleware = store => {
       .then((res => res.json()))
       .then((res) => {
         if (res) {
-          console.log({type: audioWrapperActions.SEND_RECORDING, room: res})
           store.dispatch({type: audioWrapperActions.SEND_RECORDING, room: res})
         }
       })

@@ -16,10 +16,4 @@ export class Mic extends React.Component{
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    setMicIsRecording: (isRecording) => {
-      dispatch(setMicIsRecording(isRecording));
-    },
-})
-
 export default connect()(Mic);

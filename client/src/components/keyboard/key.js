@@ -44,10 +44,6 @@ const KeyPrototype = function(props) {
         {props.note} 
       </div>
   )
-  // empty div in keyboard with onKeyDown inside of keyboard
-  // onKeyDown={() => console.log(props.note)}
-  // onClick={() => props.dispatch(playKeyboard())}
-  // onClick={dispatch()}
 } 
 
 const mapStateToProps = (state) => ({

@@ -132,24 +132,8 @@ app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
     let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('_'))
     let splitFileName = sliceString.split('_')
     res.status(201).json(sliceString)
-    // const audioFile = req.file;
-    // console.log(req);
-    // //create unique filenames
-    // let d = new Date();
-    // let n = d.getTime();
-    // let newFilename = n+'.ogg'
-    // //write file
-    // fs.writeFile('../client/public/' + newFilename, req.body, function(err){
-    //     if(err) {
-    //         console.log('Error in writing file: ', err);
-    //     } else {
-    //       //broadcast to socket to make an ajax request thru thunk.
-    //     }
-    // })
-    // res.send();
   }
   catch (e) {
-    console.log(e);
     res.sendStatus(400);
   }
 });
@@ -176,7 +160,6 @@ function runServer(port = PORT) {
       const nodeServer = require('http').createServer(app);
       const io = require('socket.io')(nodeServer);
       server = nodeServer.listen(port, () => {
-        console.log(`Your app is listening on port ${port}`);
         resolve();
       })
         .on('error', (err) => {
@@ -190,7 +173,6 @@ function runServer(port = PORT) {
 function closeServer() {
   return mongoose.disconnect().then(() => {
     return new Promise((resolve, reject) => {
-      console.log('Closing server');
       server.close((err) => {
         if (err) {
           return reject(err);

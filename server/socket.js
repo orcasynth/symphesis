@@ -3,7 +3,6 @@ let rooms = {};
 
 function socketRooms(io) {
   io.on('connection', (socket) => {
-    console.log('a user connected');
     socket.on('listRooms', () => {
       socket.emit('listRooms', returnRoomList(rooms))
     });
@@ -56,7 +55,6 @@ function socketRooms(io) {
     })
 
     socket.on('disconnect', () => {
-      console.log('a user disconnected');
       let userRoom;
       // Object.keys + for each IS MORE DECLARATIVE AND MODERN
       for (let room in rooms) {
