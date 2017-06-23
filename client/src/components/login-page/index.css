@@ -1,0 +1,31 @@
+.login-btn {
+  padding: 25px;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  font-weight: lighter;
+  text-decoration: none;
+  color: teal;
+  font-size: 1.7em;
+  text-align:center;
+  display: inline-block;
+  cursor: pointer;
+  margin: 16% auto; 
+  -webkit-transition: font-size .35s; /* Safari */
+  transition: font-size .35s;
+  animation-timing-function:ease-out;
+}
+
+.login-btn:hover {
+  font-size: 2.05em;
+  background-color: #adefe4;
+  box-shadow: 0 3px 3px rgba(0,0,0,0.16), 0 0px 3px rgba(0,0,0,0.23);
+  -webkit-transition: font-size .2s; /* Safari */
+  transition: font-size .2s;
+  animation-timing-function:ease-out;
+  
+  
+}
+
+.login-btn:active {
+  color: darkmagenta;
+}

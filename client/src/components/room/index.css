@@ -1,0 +1,10 @@
+.location {
+    position:absolute;
+    top: 5px;
+    left: 10px;
+    font-size: .8em;
+}
+
+.exit-button {
+    font-family: 'Sarala', sans-serif;
+}

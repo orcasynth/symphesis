@@ -7,13 +7,8 @@ import Drums from '../drums';
 import ElectricGuitar from '../electric-guitar';
 import BassSynth from '../bass-synth'
 import Mic from '../mic';
-
+import MiscSounds from '../misc-sounds';
 class AudioWrapper extends React.Component {
-  // componentWillMount() {
-  //   this.audioContext = new AudioContext()
-  //   let timerID = 0
-  // }
-
   componentDidMount () {
     this.play();
   }
@@ -47,22 +42,19 @@ class AudioWrapper extends React.Component {
         let muteButtonText = (this.props.muted[user]) ? 
           "Unmute" : 
           "Mute";
-        let muteText = (this.props.muted[user]) ? 
-          "(Muted)" : 
-          null;
         let thatsYou = (this.props.displayName === this.props.roommates[user].displayName) ? 
-          "(that's you!)" :
+          "(ME)" :
           null;
         roommates.push(
-          <li key={user}>{this.props.roommates[user].displayName} {thatsYou} {muteText}
-            <button onClick={() => this.mute(user)}>{muteButtonText}</button>
+          <li key={user}><i className="fa fa-user fa-lg" aria-hidden="true"></i> {this.props.roommates[user].displayName} {thatsYou}
+            <div className="mute-person" onClick={() => this.mute(user)}> <i className="fa fa-pause-circle fa-lg" aria-hidden="true"></i> {muteButtonText}</div>
           </li>
         )
       }
     })
 
     let sendRecording = (this.props.enableSendRecording) ? 
-      (<button onClick={() => this.sendRecording()}>send recording</button>) :
+      (<button className="send-button" onClick={() => this.sendRecording()}>Press me to send your recording! Press &mdash; to trash it...</button>) :
       null;
 
     let instrument;
@@ -82,16 +74,22 @@ class AudioWrapper extends React.Component {
       case "bass-synth":
         instrument = <BassSynth />;
         break;
+      case "misc-sounds":
+        instrument = <MiscSounds />;
+        break;
+      default:
+        instrument = undefined;
     }
     return (
-      <div>
+      <main className="main">
         {sendRecording}
         <div className="transport">        
-          <div className="play-button" onClick={() => this.play()}> play </div>
-          <div className="stop-button" onClick={() => this.stop()}> stop </div>
+          <div className="play-button" onClick={() => this.play()}> <i className="fa fa-play-circle fa-3x" aria-hidden="true"></i> </div>
+          <div className="stop-button" onClick={() => this.stop()}> <i className="fa fa-stop-circle fa-3x" aria-hidden="true"></i> </div>
+          <div className="plus-button" onClick={() => this.props.dispatch(requestToRecord())}><i className="fa fa-plus-circle fa-3x" aria-hidden="true" ></i></div>
+          <div className="minus-button" onClick={() => this.props.dispatch(trashRecording())}><i className="fa fa-minus-circle fa-3x" aria-hidden="true" ></i></div>
         </div>
         <div className="instrument-container">
-          <p>{this.props.recordingMessage}</p>
           <select className="instrument-select" onChange={(e) => {
             this.props.dispatch(changeInstrument(e.target.value))
           }}>
@@ -100,20 +98,18 @@ class AudioWrapper extends React.Component {
             <option value="drums">🥁 Drums</option>
             <option value="mic">🎤 Mic</option>
             <option value="bass-synth">🎹 Bass Synth</option>
-          </select>        
+            <option value="misc-sounds">❓Misc</option>
+          </select> 
+
           {instrument}
-          <button onClick={() => this.props.dispatch(requestToRecord())}>
-            record
-          </button>
-          <button onClick={() => this.props.dispatch(trashRecording())}>
-            undo
-          </button> 
+
+          <p className="status-msg">{this.props.recordingMessage}</p>
         </div>
         <div className="users">       
           <p>Roommates</p>
-          <ul>{roommates}</ul>   
+          <ul className="roommates-list">{roommates}</ul>   
         </div>     
-      </div>
+      </main>
     )
   }
 }

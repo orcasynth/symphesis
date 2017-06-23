@@ -1,3 +1,89 @@
 /** {
   background-color: whitesmoke;
 }*/
+
+.overlay {
+	background: rgba(0, 0, 0, 0.9);
+	color: lightgray;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 0;
+	text-align: center;
+	overflow: auto;
+}
+
+.modal-btn {
+    font-weight: bold;
+    color: #5a5a5a;
+    position: absolute;
+    font-size:1em;
+    left: 10px;
+    top: 5px;
+    text-decoration: none;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}
+
+.overlay .modal-btn {
+  color: white;
+}
+
+.overlay-child {
+  margin: auto;
+  padding-top: 10%;
+  width: 600px;
+  text-align: center;
+}
+
+.overlay-child h2 {
+  text-transform: none;
+}
+.modal-btn:hover {
+    font-size: 1.25em;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}
+
+.socket-display {
+  list-style: none;
+  padding: 0;
+  margin-top: 16%;
+}
+
+.socket-display li {
+  text-align:center;
+}
+
+.socket-display li h1 {
+  display: inline-block;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding: 13px;
+  color:teal;
+  -webkit-transition: background-color .75s; /* Safari */
+  transition: background-color .75s;
+}
+
+.socket-display li h1 span {
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: teal;
+  color: white;
+  width: 1em;
+  height: 1em;
+  padding: 6px;
+  line-height: 1em;
+  display: inline-block;
+}
+
+.socket-display li h1:hover {
+  background-color: #adefe4;
+  font-size: 2.05em;
+  -webkit-transition: font-size .2s; /* Safari */
+  transition: font-size .2s;
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
+}

@@ -1,0 +1,14 @@
+.eGuitar .row-btn {
+    margin-bottom: 10px;
+}
+
+.eGuitar .row-btn .key {
+    color: white;
+    background-color: #bb94de;
+    border: purple 1px solid;
+    cursor: pointer;
+}
+
+.eGuitar .row-btn span {
+    color: purple;
+}

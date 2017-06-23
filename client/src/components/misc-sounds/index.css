@@ -1,0 +1,18 @@
+.misc-sounds {
+    min-width: 910px;
+}
+.misc-sounds .row-btn {
+    margin-bottom: 10px;
+}
+
+.misc-sounds .row-btn .key {
+    color: white;
+    background-color: #a9ae6f;
+    border: #7b8136 1px solid;
+    cursor: pointer;
+    width: 80px;
+}
+
+.misc-sounds .row-btn span {
+    color: #7b8136;
+}

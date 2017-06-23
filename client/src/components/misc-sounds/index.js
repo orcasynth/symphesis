@@ -4,9 +4,9 @@ import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
-import './index.css'
+import './index.css';
 
-export class Drums extends React.Component{
+export class MiscSounds extends React.Component{
   constructor(props) {
     super(props);
     this.onKeyDown = this.onKeyDown.bind(this)
@@ -57,24 +57,28 @@ export class Drums extends React.Component{
 
   render(){
     return ( 
-      <div id="keyboard" className="drums">
-        <div id="keyboard-row" className="row-btn">         
-          <Key note="hihat2" />
-          <Key note="hihat1" />
-          <Key note="snareroll" />
-          <Key note="ridecrash" />
-          <Key note="ride1" /> 
-          <Key note="ride2" /> 
-          <Key note="ridebell" /> 
+      <div id="keyboard" className="misc-sounds" >
+        <div id="keyboard-row" className="row-btn">
+          <Key note="space" />          
+          <Key note="count" /> 
+          <Key note="baby" /> 
+          <Key note="evil" /> 
+          <Key note="ftbb" /> 
+          <Key note="hrd" /> 
+          <Key note="houston" /> 
+          <Key note="igtbf" /> 
+          <Key note="hot" /> 
         </div>
         <div id="keyboard-row" className="row-btn">          
-          <Key note="kick" />
-          <Key note="snare1" /> 
-          <Key note="snare2" /> 
-          <Key note="lowtom1" /> 
-          <Key note="lowtom2" />          
-          <Key note="hitom1" /> 
-          <Key note="hitom2" /> 
+          <Key note="ltbk" />
+          <Key note="nnn" /> 
+          <Key note="hand" /> 
+          <Key note="rtcw" /> 
+          <Key note="scream" />          
+          <Key note="subway" /> 
+          <Key note="ttb" /> 
+          <Key note="up" /> 
+          <Key note="wneic" /> 
         </div>
       </div>
     )
@@ -107,4 +111,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Drums);
+)(MiscSounds);

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import './index.css';
 
 export function LoginPage() {
-    return <a href={'/api/auth/google'}>Login with Google</a>;
+    return <a href={'/api/auth/google'} className='login-btn' >START</a>;
 }
 
 const mapStateToProps = (state)  => ({

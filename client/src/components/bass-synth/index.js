@@ -4,7 +4,7 @@ import Key from '../keyboard/key';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
-
+import './index.css'
 
 class BassSynth extends React.Component {
   constructor(props) {
@@ -57,7 +57,7 @@ class BassSynth extends React.Component {
   render() {
     return (
 
-      <div id="keyboard" >
+      <div id="keyboard" className="bass-synth" >
         <div id="keyboard-row">
           <Key note="C#1" />
           <Key note="D#1" className="space-between"/>

@@ -4,6 +4,7 @@ import Key from '../keyboard/key';
 import convertFromKeycode from '../../utilities/convertFromKeycode';
 import convertToDetune from '../../utilities/convertToDetune';
 import { startPlaying, stopPlaying, recordNote, stopRecordingNote } from '../audio-wrapper/actions';
+import './index.css'
 
 export class ElectricGuitar extends React.Component{
   constructor(props) {
@@ -57,8 +58,8 @@ export class ElectricGuitar extends React.Component{
   render(){
     return( 
       
-      <div id="keyboard" >
-        <div id="keyboard-row">
+      <div id="keyboard" className="eGuitar">
+        <div id="keyboard-row" className="row-btn">
           <Key note="G"/>  
           <Key note="A"/> 
           <Key note="B"/> 
@@ -67,7 +68,7 @@ export class ElectricGuitar extends React.Component{
           <Key note="E"/> 
           <Key note="F"/>           
         </div>
-        <div id="keyboard-row">
+        <div id="keyboard-row" className="row-btn">
           <Key note="G7"/>           
           <Key note="A7"/> 
           <Key note="B7"/>     
@@ -76,7 +77,7 @@ export class ElectricGuitar extends React.Component{
           <Key note="E7"/> 
           <Key note="F7"/>           
         </div>
-        <div id="keyboard-row">
+        <div id="keyboard-row" className="row-btn">
           <Key note="Gm"/>         
           <Key note="Am"/> 
           <Key note="Bm"/> 

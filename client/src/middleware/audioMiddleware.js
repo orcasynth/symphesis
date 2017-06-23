@@ -51,7 +51,7 @@ export const audioMiddleware = store => {
 
     osc.type = 'sine';
 
-    amp.gain.value = 0.5;
+    amp.gain.value = 0.2;
     // amp.gain.setTargetAtTime(1, audioContext.currentTime, 0.1)
     osc.frequency.value = 440;
     osc.detune.value = detune;
@@ -73,9 +73,9 @@ export const audioMiddleware = store => {
       let player = audioContext.createBufferSource()
       player.buffer = buffer
       let amp = audioContext.createGain();
-      amp.gain.value = 0.1;
+      amp.gain.value = 0.15;
       player.connect(amp);
-      player.connect(audioContext.destination)
+      amp.connect(audioContext.destination)
       start ?
         player.start(start) :
         player.start(audioContext.currentTime);
@@ -161,10 +161,10 @@ export const audioMiddleware = store => {
           })
         }
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
-          playMetronomeTone(nextTickTime, .6);
+          playMetronomeTone(nextTickTime, .3);
         }
         else if (currentSubdivision % action.timeSignature === 2) {
-          playMetronomeTone(nextTickTime, .2);
+          playMetronomeTone(nextTickTime, .07);
         }
       }
       action.currentSubdivision = currentSubdivision
@@ -186,8 +186,8 @@ export const audioMiddleware = store => {
       let timeUntilRecordingStop = recordingInterval * secondsPerBeat * timeSignature * 1000
       recordingStartTime = audioContext.currentTime;
       if (store.getState().audioWrapper.instrument === "mic") {
-        store.dispatch({type: micActions.START_MIC_RECORDING})
-        setTimeout(() => store.dispatch({ type: micActions.STOP_MIC_RECORDING }), timeUntilRecordingStop)        
+        store.dispatch({ type: micActions.START_MIC_RECORDING })
+        setTimeout(() => store.dispatch({ type: micActions.STOP_MIC_RECORDING }), timeUntilRecordingStop)
       }
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 3...' }), timeUntilRecordingStop - 3000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 2...' }), timeUntilRecordingStop - 2000);
@@ -195,22 +195,29 @@ export const audioMiddleware = store => {
       setTimeout(() => {
         Object.keys(oscillators).forEach(oscillator => {
           oscillators[oscillator].stop(0)
-        })}, timeUntilRecordingStop - 25)
+        })
+      }, timeUntilRecordingStop - 25)
+      setTimeout(() => {
+                recording.forEach(note => {
+          if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
+            note.stopTime = (audioContext.currentTime - recordingStartTime)
+          }
+        })}, timeUntilRecordingStop - 25);
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
-      if (!store.getState().audioWrapper.instrument === "mic") {
+      if (store.getState().audioWrapper.instrument !== "mic") {
         store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
-        recording.forEach(note => {
-        if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
-          note.stopTime = (audioContext.currentTime - recordingStartTime)
-        }
-      })
+        // recording.forEach(note => {
+        //   if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
+        //     note.stopTime = (audioContext.currentTime - recordingStartTime)
+        //   }
+        // })
       }
       else {
-        recording = [{instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime)}]
+        recording = [{ instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime) }]
       }
-      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Not recording" })
+      store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "Press + to Record." })
     }
     else if (action.type === actions.RECEIVE_RECORDING) {
       //POTENTIALLY REFACTOR TO REMOVE RECORDINGS FROM LIST OF ROOMMATES

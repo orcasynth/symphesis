@@ -2,11 +2,11 @@ import { SET_IS_PLAYING, SET_NOT_PLAYING, RECEIVE_RECORDING, START_RECORDING, ST
 
 const initialState = {
     isPlaying: false,
-    bpm: 60,
+    bpm: 78,
     timeSignature: 4,
     //IS "RECORDING" BEING USED BY REACT?
     recording: false,
-    recordingMessage: 'Not recording',
+    recordingMessage: 'Press + To Record.',
     enableSendRecording: false,
     roommates: false,
     muted: {},

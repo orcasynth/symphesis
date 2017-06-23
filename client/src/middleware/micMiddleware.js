@@ -6,8 +6,6 @@ export const micMiddleware = store => {
 
   let mediaRecorder;
   let chunks;
-  let request;
-  let stream;
 
   function initializeMic() {
     navigator.getUserMedia = (
@@ -42,12 +40,6 @@ export const micMiddleware = store => {
     mediaRecorder.onstop = function (e) {
       let blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
       chunks = [];
-
-      // request = new XMLHttpRequest();
-      // request.open("POST", 'http://localhost:3001/audioupload', true);
-      // request.responseType = "blob";
-      // request.setRequestHeader("Content-Type", "audio/ogg");
-      // request.send(file);
       let fd = new FormData();
       let room = store.getState().socketWrapper.room;
       let yourDisplayName = store.getState().socketWrapper.displayName;

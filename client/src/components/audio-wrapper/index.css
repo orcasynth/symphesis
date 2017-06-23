@@ -1,17 +1,39 @@
-.play-button{ 
+body {
+  background: #dfdfdf url('/images/background.jpg') center 0px no-repeat;
+  background-size:  cover;
+}
+
+main {
+  margin-top: 16%;
+}
+.play-button, .stop-button, 
+.plus-button, .minus-button{ 
   display: inline-block; 
   width:40px; 
   height: 40px; 
   line-height: 2.5em;
   border-radius:50%;
-  background-color: #8c8c8c; 
   cursor:pointer;
-  border: 1px solid #e3e3e3;
   text-align:center;
+  color:#c9ab2a;
+  margin-left: 30px;
+}
+.play-button:hover, 
+.stop-button:hover,
+.plus-button:hover,
+.minus-button:hover{ 
+  color:#eace5c;
 }
 
-.play-button:active{ 
-  background-color: #e6e6e6;
+.play-button:active, 
+.stop-button:active,
+.plus-button:active,
+.minus-button:active{ 
+  color: #84701b;
+}
+
+.play-button {
+  margin-left: 0;
 }
 
 .stop-button{ 
@@ -19,27 +41,55 @@
   width:40px; 
   height: 40px; 
   line-height: 2.5em;
-  border-radius: 50%;
-  background-color: red; 
   cursor:pointer;
-  border: 1px solid #e3e3e3;
   text-align:center;
+  color:#c9ab2a;
 }
 
-.stop-button:active{ 
-  background-color: darkred;
+.send-button {
+  display: block;
+  margin: auto;
+  font-family: 'Sarala', sans-serif;
+  margin-bottom: 16px;
+  padding: 1px 6px;
 }
 
 .instrument-select {
-  width: 120px;
+  width: 130px;
   height: 3em;
   margin-bottom: 20px;
 }
 
 .transport {
   text-align: center;
+  margin-bottom: 16px;
 }
 
 .instrument-container {
   text-align: center;
+  min-width: 900px;
+}
+
+.status-msg {
+  color:#5a5a5a;
+  font-size: 1.24em;
+}
+
+.users {
+  position: absolute;
+  left: 13px;
+  bottom: 0px;
+}
+
+.roommates-list {
+  list-style:none;
+}
+.roommates-list li {
+  font-size: .8em;
+  display: block;
+}
+
+.mute-person {
+  display: inline-block;
+  margin-left: 15px;
 }

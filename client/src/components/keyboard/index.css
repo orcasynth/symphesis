@@ -3,7 +3,7 @@
 	padding: 0px; 
 	position: relative; 
 	list-style: none; 
-	margin: 0px; 
+	margin: 0px 0px 35px;
 	user-select: none;
 }
 
@@ -13,7 +13,7 @@
 	height: 60px;
 	width: 60px;
 	border: .5px solid black;
-  padding: 5px;
+  	padding: 5px;
 	position: relative;
 	font-size: 1em;
 	font-weight: bold;
@@ -59,10 +59,14 @@
 }
 
 .qwerty-key {
-	color: #e3e3e3;
+	color: #777;
 	position: absolute;
 	bottom: 5px;
 	left: 5px;
 	font-weight: normal;
 	font-size: .8em;
+}
+
+.black .qwerty-key {
+	color: #e3e3e3;
 }
