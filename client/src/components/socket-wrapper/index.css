@@ -1,0 +1,17 @@
+.signout-btn {
+    font-weight: bold;
+    color: deeppink;
+    position: absolute;
+    font-size:1em;
+    right: 10px;
+    top: 5px;
+    text-decoration: none;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}
+
+.signout-btn:hover {
+    font-size: 1.25em;
+    -webkit-transition: font-size .2s; /* Safari */
+    transition: font-size .2s;
+}

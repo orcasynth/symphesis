@@ -1,3 +1,9 @@
+body {
+  background: #dfdfdf url('/images/background.jpg') center 0px no-repeat;
+  background-size:  cover;
+}
+
+
 .play-button{ 
   display: inline-block; 
   width:40px; 

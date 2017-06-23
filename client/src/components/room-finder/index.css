@@ -1,3 +1,45 @@
 /** {
   background-color: whitesmoke;
 }*/
+
+
+.socket-display {
+  list-style: none;
+  padding: 0;
+  margin-top: 16%;
+}
+
+.socket-display li {
+  text-align:center;
+}
+
+.socket-display li h1 {
+  display: inline-block;
+  margin-bottom: 0;
+  cursor: pointer;
+  padding: 13px;
+  color:teal;
+  -webkit-transition: background-color .75s; /* Safari */
+  transition: background-color .75s;
+}
+
+.socket-display li h1 span {
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: teal;
+  color: white;
+  width: 1em;
+  height: 1em;
+  padding: 6px;
+  line-height: 1em;
+  display: inline-block;
+}
+
+.socket-display li h1:hover {
+  background-color: #adefe4;
+  font-size: 2.05em;
+  -webkit-transition: font-size .2s; /* Safari */
+  transition: font-size .2s;
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
+}

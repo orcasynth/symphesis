@@ -11,20 +11,17 @@ export class RoomFinder extends React.Component {
         ? obj[key]
         : "Full";
       rooms.push(
-      <li key={key}> Room {key}: {number}
-        <button onClick={() => this.props.joinRoom(key)}>Join</button>
+      <li key={key}> 
+        <h1 onClick={() => this.props.joinRoom(key)}>Room {key}: <span>{number}</span> </h1>
       </li>)
-    }
-    if (rooms.length < 1) {
-      rooms = (<li>No rooms exist</li>)
     }
     let socketError = (this.props.socketError) 
       ? (<li>Error: {this.props.socketError}</li>) 
       : ''
     return (
       <div>
-        <button onClick={() => this.props.createRoom()}>Create a new room</button>
-        <ul>
+        <ul className="socket-display">
+          <li><h1 onClick={() => this.props.createRoom()}>CREATE A ROOM</h1></li>
           {socketError}
           {rooms}
         </ul>

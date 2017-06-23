@@ -28,7 +28,7 @@ export class SocketWrapper extends React.Component {
     if (!this.props.room) {
       return (
       <div>
-        <a href="/api/auth/logout">Sign out?</a>
+        <a href="/api/auth/logout" className="signout-btn">QUIT</a>
         <RoomFinder 
         createRoom={(e) => this.createRoom(e)} 
         listRooms={() => this.listRooms()} 
@@ -36,7 +36,7 @@ export class SocketWrapper extends React.Component {
       />
       </div>)
     }
-    return (<div><a href="/api/auth/logout">Sign out?</a><Room leaveRoom={() => this.leaveRoom()} /></div>)
+    return (<div><a href="/api/auth/logout" className="signout-btn">QUIT</a><Room leaveRoom={() => this.leaveRoom()} /></div>)
   }
 }
 

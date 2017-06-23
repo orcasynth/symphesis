@@ -16,7 +16,9 @@ class App extends React.Component {
 
   render() {
     if (!this.props.currentUser) {
-      return <LoginPage />;
+      return (
+        <section className="login-section"><LoginPage /></section>
+      );
     }
 
     return <SocketWrapper />;
