@@ -71,9 +71,9 @@ class AudioWrapper extends React.Component {
       case "electric-guitar":
         instrument = <ElectricGuitar />;
         break;
-      // case "mic":
-      //   instrument = <Mic />;
-      //   break;
+      case "mic":
+        instrument = <Mic />;
+        break;
       case "bass-synth":
         instrument = <BassSynth />;
         break;
