@@ -56,6 +56,7 @@ export const micMiddleware = store => {
           store.dispatch({type: audioWrapperActions.SEND_RECORDING, room: res})
         }
       })
+      .catch(e => console.log(e))
 
     }
   }

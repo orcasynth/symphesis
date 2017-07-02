@@ -134,6 +134,7 @@ app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
     res.status(201).json(sliceString)
   }
   catch (e) {
+    console.log(e)
     res.sendStatus(400);
   }
 });
