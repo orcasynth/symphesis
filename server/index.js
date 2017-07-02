@@ -127,6 +127,7 @@ app.use(
 );
 
 app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
+  console.log('body', req.body)
   try {
     let obj = req.file;
     let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('_'))

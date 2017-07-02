@@ -38,19 +38,24 @@ export const micMiddleware = store => {
     }
 
     mediaRecorder.onstop = function (e) {
+      console.log(chunks)
       let blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
       chunks = [];
       let fd = new FormData();
       let room = store.getState().socketWrapper.room;
       let yourDisplayName = store.getState().socketWrapper.displayName;
       fd.append('mic', blob, `${room}_${yourDisplayName}.ogg` );
-
+      console.log('blob', blob)
+      console.log("fd", fd)
       fetch('/api/audioupload',
       {
         method: 'post',
         body: fd
       })
-      .then((res => res.json()))
+      .then((res => {
+        console.log('res', res)
+        return res.json()
+      }))
       .then((res) => {
         if (res) {
           store.dispatch({type: audioWrapperActions.SEND_RECORDING, room: res})
