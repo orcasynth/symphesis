@@ -22,13 +22,29 @@ export class RoomFinder extends React.Component {
     let modal;
     if (this.props.displayModal) {
       modal = (
-      <div className='overlay'>
-        <div className="overlay-child">
+      <div className="overlay" onClick={() => this.props.dispatch(displayModal())}>
+        <div className="overlay-child" >
         <h2>
-          SYMPHESIS is a collaborative music-making web app. Join a room with your old friends or new friends, pick your instruments, make your recording and go! The app will loop your music and combine it with everyone else's. To record, click on the + button and wait for the countdown. If you like how your loop mashes up with everyone else's, press the send button to send it to everyone else!
+          SYMPHESIS is a collaborative music-making web app.
         </h2>
+        <ol className="instruction-list"> 
+          <li>Join a room with your old friends or new friends, pick your instruments, make your recording and go!
+          </li>
+  
+          <li> The app will loop your music and combine it with everyone else's.
+          </li>
+          
+          <li>To record, click on the <i className="fa fa-plus-circle fa-1x" aria-hidden="true" ></i> button and wait for the countdown. 
+          </li>
+
+          <li> If you like how your loop mashes up with everyone else's, press the send button to send it to everyone else!
+          </li>
+        </ol>
+        <p className="exit-message">
+        Click anywhere to exit!
+        </p>
         </div>
-        <a className="modal-btn" onClick={() => this.props.dispatch(displayModal())}>X</a>
+
       </div> 
       )
     } 

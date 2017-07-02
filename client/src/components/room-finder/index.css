@@ -11,7 +11,6 @@
 	left: 0;
 	right: 0;
 	margin: 0;
-	text-align: center;
 	overflow: auto;
 }
 
@@ -27,6 +26,11 @@
     transition: font-size .2s;
 }
 
+.instruction-list li{
+  margin-bottom: 20px;
+  color: #d0b233;
+}
+
 .overlay .modal-btn {
   color: white;
 }
@@ -35,7 +39,6 @@
   margin: auto;
   padding-top: 10%;
   width: 600px;
-  text-align: center;
 }
 
 .overlay-child h2 {
@@ -45,6 +48,11 @@
     font-size: 1.25em;
     -webkit-transition: font-size .2s; /* Safari */
     transition: font-size .2s;
+}
+
+.exit-message {
+  text-align: left;
+  margin-top: 20px;
 }
 
 .socket-display {
