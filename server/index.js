@@ -14,15 +14,17 @@ const fs = require('fs');
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(path.resolve(__dirname, '/client/public/samples/mic'))
+    console.log(path.resolve(__dirname, '../client/public/samples/mic'))
+    console.log(__dirname)
     if (process.env.NODE_ENV != 'production') {
       cb(null, '../client/public/samples/mic')
     }
     else {
-      cb(null, path.resolve(__dirname, '/client/public/samples/mic'))
+      cb(null, path.resolve(__dirname, '../client/public/samples/mic'))
     }
   },
   filename: function (req, file, cb) {
+    console.log(file.originalname)
     cb(null, file.originalname)
   }
 });
