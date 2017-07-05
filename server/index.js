@@ -13,9 +13,14 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 
 let storage = multer.diskStorage({
-  // destination: function (req, file, cb) {
-  //   cb(null, '../client/public/samples/mic')
-  // },
+  destination: function (req, file, cb) {
+    if (process.env.PUBLIC_URL) {
+      cb(null, process.env.PUBLIC_URL+'/client/public/samples/mic')
+    }
+    else {
+      cb(null, '../client/public/samples/mic')
+    }
+  },
   filename: function (req, file, cb) {
     cb(null, file.originalname)
   }
