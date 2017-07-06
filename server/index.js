@@ -14,8 +14,6 @@ const fs = require('fs');
 
 let storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    console.log(path.resolve(__dirname, '../client/public/samples/mic'))
-    console.log(__dirname)
     if (process.env.NODE_ENV != 'production') {
       cb(null, '../client/public/samples/mic')
     }
@@ -24,7 +22,6 @@ let storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
-    console.log(file.originalname)
     cb(null, file.originalname)
   }
 });
@@ -135,7 +132,6 @@ app.use(
 );
 
 app.post('/api/audioupload', upload.single('mic'), function (req, res, next) {
-  console.log('body', req.body)
   try {
     let obj = req.file;
     let sliceString = obj.originalname.substr(0, obj.originalname.indexOf('_'))
