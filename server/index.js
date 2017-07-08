@@ -18,7 +18,7 @@ let storage = multer.diskStorage({
       cb(null, '../client/public/samples/mic')
     }
     else {
-      cb(null, path.resolve(__dirname, '../tmp'))
+      cb(null, path.resolve(__dirname, '../client/public/samples/mic'))
     }
   },
   filename: function (req, file, cb) {
