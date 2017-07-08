@@ -1,6 +1,6 @@
 # SYMPHESIS
 
-Symphesis is a music collaboration app that allows you to make music with others online asynchronously. With some inspiration from Ben Pardo for suggesting african drumming as a model for asynchrounousity. The live version may be found on [Heroku](orcasynth.herokuapp.com).
+Symphesis is a music collaboration app that allows you to make music with others online asynchronously. With some inspiration from Ben Pardo for suggesting african drumming as a model for asynchrounousity. The live version may be found on [Heroku](http://symphesis.herokuapp.com).
 
 # Features
 
