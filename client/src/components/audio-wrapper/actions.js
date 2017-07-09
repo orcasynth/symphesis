@@ -1,3 +1,13 @@
+export const FLASH_METRONOME_RED = "FLASH_METRONOME_RED"
+export const flashMetronomeRed = () => ({
+    type: FLASH_METRONOME_RED
+})
+
+export const FLASH_METRONOME_WHITE = "FLASH_METRONOME_WHITE"
+export const flashMetronomeWhite = () => ({
+    type: FLASH_METRONOME_WHITE
+})
+
 export const SET_IS_PLAYING = "SET_IS_PLAYING"
 export const setIsPlaying = (bpm, timeSignature) => ({
     type: SET_IS_PLAYING,
