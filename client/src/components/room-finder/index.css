@@ -1,7 +1,15 @@
-/** {
-  background-color: whitesmoke;
-}*/
-
+.metronome {
+  text-align: center;
+  margin: 0 auto;
+  border: 1px solid black;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+.metronome-red  {
+  background: red;
+}
 .overlay {
 	background: rgba(0, 0, 0, 0.9);
 	color: lightgray;

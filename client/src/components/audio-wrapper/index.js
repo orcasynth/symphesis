@@ -83,9 +83,13 @@ class AudioWrapper extends React.Component {
       default:
         instrument = undefined;
     }
+    let metronome = (this.props.metronomeRed) ? 
+      <div className="metronome metronome-red"> </div> : 
+      <div className="metronome"> </div>
     return (
       <main className="main">
         {sendRecording}
+        {metronome}
         <div className="transport">        
           <div className="play-button" onClick={() => this.play()}> <i className="fa fa-play-circle fa-3x" aria-hidden="true"></i> </div>
           <div className="stop-button" onClick={() => this.stop()}> <i className="fa fa-stop-circle fa-3x" aria-hidden="true"></i> </div>
@@ -119,6 +123,7 @@ class AudioWrapper extends React.Component {
 
 const mapStateToProps = function (state, props) {
   return {
+    metronomeRed: state.audioWrapper.metronomeRed,
     isPlaying: state.audioWrapper.isPlaying,
     bpm: state.audioWrapper.bpm,
     timeSignature: state.audioWrapper.timeSignature,

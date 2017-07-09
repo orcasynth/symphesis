@@ -2,13 +2,11 @@ import * as actions from '../components/audio-wrapper/actions'
 import * as micActions from '../components/mic/actions'
 
 export const audioMiddleware = store => {
-  //CONSIDER ADDING THESE INTO REDUX, ACCESSING VIA store.getState
   let audioContext
   let currentSubdivision = 1;
   let tickLength;
   let secondsPerBeat;
   let timeSignature;
-  // let oscillators = [];
   let oscillators = {};
   let recording = [];
   let recordingInterval = 2;
@@ -52,7 +50,6 @@ export const audioMiddleware = store => {
     osc.type = 'sine';
 
     amp.gain.value = 0.2;
-    // amp.gain.setTargetAtTime(1, audioContext.currentTime, 0.1)
     osc.frequency.value = 440;
     osc.detune.value = detune;
     start ?
@@ -161,10 +158,14 @@ export const audioMiddleware = store => {
           })
         }
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
-          playMetronomeTone(nextTickTime, .3);
+          // playMetronomeTone(nextTickTime, .3);
+          store.dispatch({type: actions.FLASH_METRONOME_RED})
+          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)
         }
         else if (currentSubdivision % action.timeSignature === 2) {
-          playMetronomeTone(nextTickTime, .07);
+          // playMetronomeTone(nextTickTime, .07);
+          store.dispatch({type: actions.FLASH_METRONOME_RED})
+          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)          
         }
       }
       action.currentSubdivision = currentSubdivision
@@ -248,6 +249,7 @@ export const audioMiddleware = store => {
       setTimeout(() => store.dispatch({ type: actions.START_RECORDING }), timeUntilRecordInMS);
     }
     else if (action.type === actions.TRASH_RECORDING) {
+      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false});      
       recording = [];
     }
     return next(action);
