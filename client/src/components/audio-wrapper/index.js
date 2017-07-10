@@ -56,8 +56,20 @@ class AudioWrapper extends React.Component {
       }
     })
 
+    let recordingMessage
+    if(this.props.recordingMessage === "To Record, Press "){
+      recordingMessage = <i className="fa fa-dot-circle-o fa-1x" aria-hidden="true" ></i>
+    }
+
+    let trashMessage, trashIcon, sendMessage, sendIcon
+    if (this.props.enableSendRecording) {
+      trashMessage = " ・ To Trash, Press ";
+      trashIcon = <i className="fa fa-times-circle-o fa-1x" aria-hidden="true" ></i> 
+      sendMessage = " ・ To Send, Press "
+      sendIcon = <i className="fa fa-arrow-circle-o-up fa-1x" aria-hidden="true" ></i> 
+    }
     let sendRecording = (this.props.enableSendRecording) ? 
-      (<button className="send-button" onClick={() => this.sendRecording()}>Press me to send your recording! Press &mdash; to trash it...</button>) :
+      (<div title="send recording" className="send-button" onClick={() => this.sendRecording()}><i className="fa fa-arrow-circle-o-up fa-3x" aria-hidden="true" ></i></div>) :
       null;
 
     let instrument;
@@ -88,13 +100,14 @@ class AudioWrapper extends React.Component {
       <div className="metronome"> </div>
     return (
       <main className="main">
-        {sendRecording}
         {metronome}
         <div className="transport">        
-          <div className="play-button" onClick={() => this.play()}> <i className="fa fa-play-circle fa-3x" aria-hidden="true"></i> </div>
-          <div className="stop-button" onClick={() => this.stop()}> <i className="fa fa-stop-circle fa-3x" aria-hidden="true"></i> </div>
-          <div className="plus-button" onClick={() => this.props.dispatch(requestToRecord())}><i className="fa fa-plus-circle fa-3x" aria-hidden="true" ></i></div>
-          <div className="minus-button" onClick={() => this.props.dispatch(trashRecording())}><i className="fa fa-minus-circle fa-3x" aria-hidden="true" ></i></div>
+          {/*<div className="play-button" onClick={() => this.play()}> <i className="fa fa-play-circle fa-3x" aria-hidden="true"></i> </div>
+          <div className="stop-button" onClick={() => this.stop()}> <i className="fa fa-stop-circle fa-3x" aria-hidden="true"></i> </div>*/}
+          <div alt="record button" title="record button" className="plus-button" onClick={() => this.props.dispatch(requestToRecord())}><i className="fa fa-dot-circle-o fa-3x" aria-hidden="true" ></i></div>
+          <div alt="cancel recording button" title="cancel recording "className="minus-button" onClick={() => this.props.dispatch(trashRecording())}><i className="fa fa-times-circle-o fa-3x" aria-hidden="true" ></i></div>
+          {sendRecording}
+          
         </div>
         <div className="instrument-container">
           <select className="instrument-select" onChange={(e) => {
@@ -110,7 +123,7 @@ class AudioWrapper extends React.Component {
 
           {instrument}
 
-          <p className="status-msg">{this.props.recordingMessage}</p>
+          <p className="status-msg">{this.props.recordingMessage}{recordingMessage}{trashMessage}{trashIcon}{sendMessage}{sendIcon}</p>
         </div>
         <div className="users">       
           <p>Roommates</p>

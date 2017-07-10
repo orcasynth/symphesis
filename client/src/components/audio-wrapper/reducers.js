@@ -7,7 +7,7 @@ const initialState = {
     timeSignature: 4,
     //IS "RECORDING" BEING USED BY REACT?
     recording: false,
-    recordingMessage: 'Press + To Record.',
+    recordingMessage: 'To Record, Press ',
     enableSendRecording: false,
     roommates: false,
     muted: {},
