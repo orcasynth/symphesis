@@ -148,8 +148,10 @@ export const audioMiddleware = store => {
         currentSubdivision++;
         //subdivision 2 is treated as the "first" beat of the measure
         if (currentSubdivision === 2) {
+          //plays the current recording if it's not sent to room
           recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
           let currentUser = store.getState().socketWrapper.socketID;
+          //plays all other sent recordings, except user's sent recording if user is recording or has an unsent recording
           Object.keys(roommates).forEach((user) => {
             if (user === currentUser && (isRecording || recording.length > 0)) {
               return;
