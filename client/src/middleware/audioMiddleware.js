@@ -14,6 +14,7 @@ export const audioMiddleware = store => {
   let roommates;
   let interval;
   let nextTickTime;
+  let muted = {};
 
   //helper functions
   function playMetronomeTone(time, velocity) {
@@ -30,7 +31,15 @@ export const audioMiddleware = store => {
   }
 
   //used to play notes both with and without pre-defined stopping times
-  function playNote(instrument, detune, start, stop) {
+  function playNote(instrument, detune, start, stop, user) {
+    console.log('user', user)
+    console.log('muteduser', muted[user])
+    if (user) {
+      if (muted[user]) {
+        return;
+      }
+    }
+    console.log('got past return!')
     switch (instrument) {
       case "keyboard":
         playKeyboard(detune, start, stop);
@@ -59,8 +68,6 @@ export const audioMiddleware = store => {
       osc.stop(stop);
     }
     else {
-      // let pushItem = { oscillator: osc, detune }
-      // oscillators.push(pushItem)
       oscillators[detune] = osc;
     }
   }
@@ -80,8 +87,6 @@ export const audioMiddleware = store => {
         player.stop(stop);
       }
       else {
-        // let pushItem = { oscillator: player, detune }
-        // oscillators.push(pushItem)
         oscillators[detune] = player;
       }
     })
@@ -149,26 +154,27 @@ export const audioMiddleware = store => {
         if (currentSubdivision === 2) {
           recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
           Object.keys(roommates).forEach((user) => {
-            if (!store.getState().audioWrapper.muted[user]) {
-              let roommateRecording = roommates[user].recording;
-              if (roommateRecording) {
-                roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime))
-              }
+            let roommateRecording = roommates[user].recording;
+            if (roommateRecording) {
+              // roommateRecording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime, user))
+              roommateRecording.forEach((note) => setTimeout(() => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime, user), note.startTime + nextTickTime - 50)
+              )
             }
           })
         }
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
-          // playMetronomeTone(nextTickTime, .3);
-          store.dispatch({type: actions.FLASH_METRONOME_RED})
-          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)
+          store.dispatch({ type: actions.FLASH_METRONOME_RED })
+          setTimeout(() => store.dispatch({ type: actions.FLASH_METRONOME_WHITE }), 100)
         }
         else if (currentSubdivision % action.timeSignature === 2) {
-          // playMetronomeTone(nextTickTime, .07);
-          store.dispatch({type: actions.FLASH_METRONOME_RED})
-          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)          
+          store.dispatch({ type: actions.FLASH_METRONOME_RED })
+          setTimeout(() => store.dispatch({ type: actions.FLASH_METRONOME_WHITE }), 100)
         }
       }
       action.currentSubdivision = currentSubdivision
+    }
+    else if (action.type === actions.MUTE) {
+      muted = action.obj;
     }
     else if (action.type === actions.START_PLAYING) {
       playNote(action.instrument, action.detune)
@@ -199,21 +205,17 @@ export const audioMiddleware = store => {
         })
       }, timeUntilRecordingStop - 25)
       setTimeout(() => {
-                recording.forEach(note => {
+        recording.forEach(note => {
           if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
             note.stopTime = (audioContext.currentTime - recordingStartTime)
           }
-        })}, timeUntilRecordingStop - 25);
+        })
+      }, timeUntilRecordingStop - 25);
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
       if (store.getState().audioWrapper.instrument !== "mic") {
         store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: true })
-        // recording.forEach(note => {
-        //   if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
-        //     note.stopTime = (audioContext.currentTime - recordingStartTime)
-        //   }
-        // })
       }
       else {
         recording = [{ instrument: "mic", startTime: 0, detune: `${store.getState().socketWrapper.room}_${store.getState().socketWrapper.displayName}.ogg`, stopTime: (audioContext.currentTime - recordingStartTime) }]
@@ -249,7 +251,7 @@ export const audioMiddleware = store => {
       setTimeout(() => store.dispatch({ type: actions.START_RECORDING }), timeUntilRecordInMS);
     }
     else if (action.type === actions.TRASH_RECORDING) {
-      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false});      
+      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false });
       recording = [];
     }
     return next(action);

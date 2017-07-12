@@ -32,6 +32,7 @@ class AudioWrapper extends React.Component {
   mute (user) {
     let newObj = {...this.props.muted};
     newObj[user] = !newObj[user];
+    console.log(newObj)
     this.props.dispatch(mute(newObj));
   }
 
