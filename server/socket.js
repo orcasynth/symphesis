@@ -14,7 +14,7 @@ function socketRooms(io) {
       let displayName = usernameGenerator(room);
       rooms[room][socket.id] = { recording: null, displayName };
       rooms[room].length = io.sockets.adapter.rooms[room].length;
-      socket.emit('hasJoined', { room, displayName });
+      socket.emit('hasJoined', { room, displayName, socketID: socket.id });
       io.emit('listRooms', returnRoomList(rooms));
       io.in(room).emit('receiveRecording', rooms[room]);
     });
@@ -31,7 +31,7 @@ function socketRooms(io) {
         let displayName = usernameGenerator(data.room);
         rooms[data.room][socket.id] = { recording: null, displayName };
         rooms[data.room].length = io.sockets.adapter.rooms[data.room].length;
-        socket.emit('hasJoined', { room: data.room, displayName });
+        socket.emit('hasJoined', { room: data.room, displayName, socketID: socket.id });
         io.in(data.room).emit('receiveRecording', rooms[data.room]);
         io.emit('listRooms', returnRoomList(rooms));
       }

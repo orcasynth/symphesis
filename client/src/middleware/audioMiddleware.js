@@ -14,6 +14,7 @@ export const audioMiddleware = store => {
   let roommates;
   let interval;
   let nextTickTime;
+  let isRecording = false;
 
   //helper functions
   function playMetronomeTone(time, velocity) {
@@ -147,8 +148,14 @@ export const audioMiddleware = store => {
         currentSubdivision++;
         //subdivision 2 is treated as the "first" beat of the measure
         if (currentSubdivision === 2) {
+          //plays the current recording if it's not sent to room
           recording.forEach((note) => playNote(note.instrument, note.detune, note.startTime + nextTickTime, note.stopTime + nextTickTime));
+          let currentUser = store.getState().socketWrapper.socketID;
+          //plays all other sent recordings, except user's sent recording if user is recording or has an unsent recording
           Object.keys(roommates).forEach((user) => {
+            if (user === currentUser && (isRecording || recording.length > 0)) {
+              return;
+            }
             if (!store.getState().audioWrapper.muted[user]) {
               let roommateRecording = roommates[user].recording;
               if (roommateRecording) {
@@ -159,13 +166,13 @@ export const audioMiddleware = store => {
         }
         if (currentSubdivision === 2 || currentSubdivision === (2 + (4 * timeSignature))) {
           // playMetronomeTone(nextTickTime, .3);
-          store.dispatch({type: actions.FLASH_METRONOME_RED})
-          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)
+          store.dispatch({ type: actions.FLASH_METRONOME_RED })
+          setTimeout(() => store.dispatch({ type: actions.FLASH_METRONOME_WHITE }), 100)
         }
         else if (currentSubdivision % action.timeSignature === 2) {
           // playMetronomeTone(nextTickTime, .07);
-          store.dispatch({type: actions.FLASH_METRONOME_RED})
-          setTimeout(() => store.dispatch({type: actions.FLASH_METRONOME_WHITE}), 100)          
+          store.dispatch({ type: actions.FLASH_METRONOME_RED })
+          setTimeout(() => store.dispatch({ type: actions.FLASH_METRONOME_WHITE }), 100)
         }
       }
       action.currentSubdivision = currentSubdivision
@@ -193,17 +200,19 @@ export const audioMiddleware = store => {
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 3...' }), timeUntilRecordingStop - 3000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 2...' }), timeUntilRecordingStop - 2000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Stopping recording in 1...' }), timeUntilRecordingStop - 1000);
+      setTimeout(() => isRecording = false, timeUntilRecordingStop - 25);
       setTimeout(() => {
         Object.keys(oscillators).forEach(oscillator => {
           oscillators[oscillator].stop(0)
         })
       }, timeUntilRecordingStop - 25)
       setTimeout(() => {
-                recording.forEach(note => {
+        recording.forEach(note => {
           if (!note.stopTime || note.stopTime > (audioContext.currentTime - recordingStartTime)) {
             note.stopTime = (audioContext.currentTime - recordingStartTime)
           }
-        })}, timeUntilRecordingStop - 25);
+        })
+      }, timeUntilRecordingStop - 25);
       setTimeout(() => store.dispatch({ type: actions.STOP_RECORDING }), timeUntilRecordingStop)
     }
     else if (action.type === actions.STOP_RECORDING) {
@@ -245,11 +254,12 @@ export const audioMiddleware = store => {
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 3...' }), timeUntilRecordInMS - 3000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 2...' }), timeUntilRecordInMS - 2000);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: 'Recording in 1...' }), timeUntilRecordInMS - 1000);
+      setTimeout(() => isRecording = true, timeUntilRecordInMS - 25);
       setTimeout(() => store.dispatch({ type: actions.UPDATE_RECORDING_MESSAGE, recordingMessage: "You're recording!" }), timeUntilRecordInMS);
       setTimeout(() => store.dispatch({ type: actions.START_RECORDING }), timeUntilRecordInMS);
     }
     else if (action.type === actions.TRASH_RECORDING) {
-      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false});      
+      store.dispatch({ type: actions.ENABLE_SEND_RECORDING, enableSendRecording: false });
       recording = [];
     }
     return next(action);

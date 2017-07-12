@@ -8,7 +8,8 @@ export const SET_ROOM_AND_USER = 'SET_ROOM_AND_USER';
 export const setRoomAndUser = (data) => ({
   type: SET_ROOM_AND_USER,
   room: data.room,
-  displayName: data.displayName
+  displayName: data.displayName,
+  socketID: data.socketID
 });
 
 export const SOCKET_ERROR = 'SOCKET_ERROR';
