@@ -4,7 +4,8 @@ const initialState = {
   availableRooms: false,
   room: false,
   displayName: false,
-  socketError: false
+  socketError: false,
+  socketID: false,
 }
 
 export default (state = initialState, action) => {
@@ -19,7 +20,8 @@ export default (state = initialState, action) => {
       ...state,
       socketError: false,
       room: action.room,
-      displayName: action.displayName
+      displayName: action.displayName,
+      socketID: action.socketID
     }
   }
   if (action.type === LEAVE_ROOM) {
